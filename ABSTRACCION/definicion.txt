@@ -1,0 +1,212 @@
+una publicacion = una pagina web 
+publicar contenido
+	escribir un archivo html
+	colocar dicho html en el servidor
+
+manejadores de contenido
+	generan paginas web 
+		permiten agregar contenido a las paginas de forma grafica
+
+objetivo
+	crear un manejador de contenido
+	permite crear contenido desde un cliente para un servidor
+
+entidades
+	servidor
+	editor: es la persona que crea contenido para publicar
+	lector: es quien lee las publicaciones
+	
+servidor 
+	protocolo: http
+	puerto: 80
+	
+sitio.xml
+	lenguaje: xml
+	contiene la informacion de un sitio
+		nombre 
+		paginas
+	pagina index:
+		es el nodo raiz de un sitio 
+		puede anidar paginas
+
+paginator
+	sinonimo: nucleo
+	se ejecuta dentro del servidor
+	manipula archivos sitio.xml
+	acciones
+		son mensajes desde enviados desde el editor
+		se crean con los elementos
+			<accion>
+			<acciones>
+
+editor-app
+	plataforma: escritorio
+	vistas 
+		para acciones: para escribir <accion> o <acciones>
+		para resultados de acciones
+			errores lexicos, sintacticos: con linea, columna, token/simbolo
+			servidor: respuestas desde el servidor en formato xml
+		para estadisticas: ??
+	acciones
+		crear sitios
+			<accion nombre="NUEVO_SITIO_WEB">
+			<parametros>
+				<parametro nombre="ID*">: idSitio
+			opcionales
+				<parametro nombre="USUARIO_CREACION">: idUsuario
+				<parametro nombre="FECHA_CREACION">: yyyy-MM-dd
+				<parametro nombre="USUARIO_MODIFICACION">: idUsuario
+				<parametro nombre="FECHA_MODIFICACION">: yyyy-MM-dd
+		eliminar sitios
+			<accion nombre="BORRAR_SITIO_WEB">
+			<parametros>
+				<parametro nombre="ID*">: idSitio
+		crear paginas 
+			<accion nombre="NUEVA_PAGINA">
+			<parametros>
+				<parametro nombre="ID*">
+				<parametro nombre="TITULO">
+				<parametro nombre="SITIO*">
+				<parametro nombre="PADRE*">
+			opcional
+				<parametro nombre="USUARIO_CREACION">: idUsuario
+				<parametro nombre="FECHA_CREACION">: yyyy-MM-dd
+				<parametro nombre="USUARIO_MODIFICACION">: idUsuario
+				<parametro nombre="FECHA_MODIFICACION">: yyyy-MM-dd
+		eliminar paginas
+			<accion nombre="BORRAR_PAGINA">
+			<parametros>
+				<parametro nombre="ID*">
+		modificar paginas
+			permite remplazar los parametros
+				TITULO
+				ETIQUETAS
+			<accion nombre="MODIFICAR_PAGINA">
+			<parametros>
+				<parametro nombre="ID">
+			requerido: uno o mas de los parametros
+				<parametro nombre="TITULO">
+				<parametro nombre="ETIQUETAS">
+		crear componentes
+			<accion nombre="AGREGAR_COMPONENTE">
+			<parametros>
+				<parametro nombre="ID*">: idComponente
+				<parametro nombre="PAGINA*">: idPagina
+				<parametro nombre="CLASE*">
+					[TITULO]
+					[PARRAFO]
+					[IMAGEN]
+					[VIDEO]
+					[MENU]
+			<atributos>
+		eliminar componentes
+			<accion nombre="BORRAR_COMPONENTE">
+			<parametros>
+				<parametro nombre="ID*">: idComponente
+				<parametro nombre="PAGINA*">: idPagina
+		modificar componentes
+			<accion nombre="MODIFICAR_COMPONENTE">
+			<parametros>
+				<parametro nombre="ID*">: idComponente
+				<parametro nombre="PAGINA*">: idPagina
+				<parametro nombre="CLASE*">
+					[TITULO]
+					[PARRAFO]
+					[IMAGEN]
+					[VIDEO]
+					[MENU]
+			<atributos>
+		etiquetas
+			son palabras clave
+			se agregan a las paginas
+			se crean con los elementos
+				<etiquetas>
+			se pueden anidar en los elementos
+				<accion nombre="NUEVA_PAGINA">
+				<accion nombre="MODIFICAR_PAGINA">
+		componentes
+			[TITULO]
+				traduccion: <h1>
+				<atributos>
+					<atributo nombre="TEXTO*"> [abcxyz]
+					<atributo nombre="ALINEACION"> 
+						[CENTRAR]
+						[IZQUIERDA]
+						[DERECHA]
+						[JUSTIFICAR]
+					<atributo nombre="COLOR"> [#5A5A5A]
+			[PARRAFO]
+				traduccion: <p>
+				<atributos>
+					<atributo nombre="TEXTO*"> [abcxyz]
+					<atributo nombre="ALINEACION"> 
+						[CENTRAR]
+						[IZQUIERDA]
+						[DERECHA]
+						[JUSTIFICAR]
+					<atributo nombre="COLOR"> [#5A5A5A]
+			[IMAGEN]
+				traduccion: <img>
+				<atributos>
+					<atributo nombre="ORIGEN*"> [https://example.com/imagen.png]
+					<atributo nombre="ALINEACION"> 
+						[CENTRAR]
+						[IZQUIERDA]
+						[DERECHA]
+						[JUSTIFICAR]
+					<atributo nombre="ALTURA*"> [240]
+					<atributo nombre="ANCHO*"> [360]
+			[VIDEO]
+				traduccion: <video>
+				<atributos>
+					<atributo nombre="ORIGEN*"> [https://example.com/video.mp4]
+					<atributo nombre="ALTURA*"> [240]
+					<atributo nombre="ANCHO*"> [360]
+			[MENU]
+				traduccion: una o mas <a>
+				para cada pagina anidada de la pagina [idPagina]
+					si esta pagina tiene una de las etiquetas [ grupo1 | ... ] 
+						esta pagina se agrega al menu
+				<atributos>
+					<atributo nombre="PADRE"> [idPagina]
+					<atributo nombre="ETIQUETAS"> [ grupo1 | grupo2 | grupo3 ]
+
+estadisticas
+	lenguaje: sqcms, no es case sensitive
+	comandos
+		consultar visitas_sitio "sitio1", "sitio2";
+		consultar visitas_pagina "sitio1.pagina3", "sitio2.pagina2";
+		consultar PAGINAS_POPULARES "sitio2";
+		consultar COMPONENTE <clase> "sitio1.pagina1";
+			<clase>: TODOS | TITULO | MENU | ...
+
+%#%#%#%#%#%#%#%#%# LENGUAJE %#%#%#%#%#%#%#%#%#
+parametros
+	<parametros>
+		<parametro nombre=""> [ ]
+acciones
+	<accion nombre="">
+		<parametros>
+	<acciones>
+		<accion>
+etiquetas
+	<etiquetas>
+		<etiqueta valor=""/>
+atributos
+	<atributos>
+		<atributo nombre=""> [ ]
+
+lexemas
+	idX = _ | - | $ 
+	id = {idX}[a-Z0-9{idX}]*
+
+
+%#%#%#%#%#%#%#%#%# DUDAS %#%#%#%#%#%#%#%#%#
+en lexemas: idX es prefijo obligatorio o es prefijo opcional??
+la sintaxis para la anidacion de paginas para un sitio queda a nuestro criterio??
+
+
+
+
+
+
