@@ -1,4 +1,4 @@
-package josq.paginador;
+package josq.cms;
 
 import java.io.IOException;
 import javafx.fxml.FXML;

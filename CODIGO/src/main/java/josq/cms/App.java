@@ -1,4 +1,4 @@
-package josq.paginador;
+package josq.cms;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

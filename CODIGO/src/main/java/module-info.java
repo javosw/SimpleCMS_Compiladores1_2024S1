@@ -1,7 +1,7 @@
-module josq.paginador {
+module josq.cms {
     requires javafx.controls;
     requires javafx.fxml;
 
-    opens josq.paginador to javafx.fxml;
-    exports josq.paginador;
+    opens josq.cms to javafx.fxml;
+    exports josq.cms;
 }
