@@ -56,7 +56,78 @@ editor-app
 				escritura: para escribir el lenguaje sqcms
 				servidor: respuestas desde el servidor
 
-%#%#%#%#%#%#%#%#%# LENGUAJES %#%#%#%#%#%#%#%#%#
+%#%#%#%#%# LEXICO %#%#%#%#%#
+regex
+	idX = _ | - | $ 
+	id = {idX}[a-Z0-9{idX}]*
+	miTextoAZ09 = 
+	idSitio = 
+	idUsuario = 
+	fecha = yyyy-MM-dd
+	atributo.ETIQUETAS = [ grupo1 | grupo2 | grupo3 ]
+escritura literal
+	permitido
+		acciones
+		parametros
+		atributos
+	no permitido
+		etiquetas
+		atributos xml 
+reservados
+	accion.nombre
+		NUEVO_SITIO_WEB
+		BORRAR_SITIO_WEB
+		NUEVA_PAGINA
+		MODIFICAR_PAGINA
+		BORRAR_PAGINA
+		AGREGAR_COMPONENTE
+		MODIFICAR_COMPONENTE
+		BORRAR_COMPONENTE
+	acciones
+	accion
+	parametros
+	parametro
+	parametro.nombre
+		ID
+		TITULO
+		SITIO
+		PADRE
+		PAGINA
+		CLASE
+		USUARIO_CREACION
+		FECHA_CREACION
+		USUARIO_MODIFICACION
+		FECHA_MODIFICACION
+	atributos
+	atributo
+	atributo.nombre
+		TEXTO
+		ALINEACION
+		COLOR
+		ORIGEN
+		ALTURA
+		ANCHO
+		PADRE
+		ETIQUETAS
+	etiquetas
+	etiqueta
+	valor
+	nombre
+puntuacion
+	<
+	>
+	</
+	/>
+	[
+	]
+	"
+operadores
+
+
+%#%#%#%#%#%#%#%#%# SINTACTICO %#%#%#%#%#%#%#%#%#
+	xml 
+		<nodo atr=""> </nodo>
+		<nodo atr=""/>
 	acciones (informal)
 		<acciones>
 			<accion nombre="">
@@ -128,7 +199,7 @@ editor-app
 				<parametros>
 					<parametro nombre="CLASE"> [TITULO]
 				<atributos>
-					* <atributo nombre="TEXTO"> [abcxyz]
+					* <atributo nombre="TEXTO"> [miTextoAZ09]
 					<atributo nombre="ALINEACION"> 
 						[CENTRAR]
 						[IZQUIERDA]
@@ -139,7 +210,7 @@ editor-app
 				<parametros>
 					<parametro nombre="CLASE"> [PARRAFO]
 				<atributos>
-					* <atributo nombre="TEXTO"> [abcxyz]
+					* <atributo nombre="TEXTO"> [miTextoAZ09]
 					<atributo nombre="ALINEACION"> 
 						[CENTRAR]
 						[IZQUIERDA]
@@ -188,17 +259,6 @@ editor-app
 			consultar PAGINAS_POPULARES "sitio2";
 			consultar COMPONENTE <clase> "sitio1.pagina1";
 				<clase>: TODOS | TITULO | MENU | ...
-
-lexemas
-	idX = _ | - | $ 
-	id = {idX}[a-Z0-9{idX}]*
-escritura literal
-	acciones
-	parametros
-	atributos
-escritura no literal
-	etiquetas
-	atributos xml 
 
 
 %#%#%#%#%#%#%#%#%# SEMANTICA %#%#%#%#%#%#%#%#%#
