@@ -26,17 +26,29 @@ action code {:
 
 :}
 
-// simbolos terminales
+// SIMBOLOS
+
+// TERMINALES
+
+// palabras reservadas
 terminal ACCIS, ACCI, PARAMS, PARAM, ATRIBS, ATRIB, ETIQS, ETIQ ;
 // puntuacion
 terminal IZQ, DER, BARRA, IGUAL, IZQCOR, DERCOR, COMI, ;
 // literal
 terminal MI_ID, MI_TEXTO, MI_NUMERO, MI_COLOR, MI_URL, MI_FECHA, MI_ETIQUETA ;
 
-// simbolos no terminales
+// NO TERMINALES
 // non terminal Type2 mySymbol1, mySymbol2 ;
+non terminal acciones, accionesIZQ, accionesMID, accionesDER, ;
+non terminal accion, accionIZQ, accionMID, accionDER, accionNombre, ;
+non terminal parametros, parametrosIZQ, parametrosMID, parametrosDER, ;
+non terminal parametro, parametroIZQ, parametroMID, parametroDER, parametroNombre;
+non terminal atributos, atributosIZQ, atributosMID, atributosDER, ;
+non terminal atributo, atributoIZQ, atributoMID, atributoDER, atributoNombre, ;
+non terminal etiquetas, etiquetasIZQ, etiquetasMID, etiquetasDER, ;
+non terminal etiqueta, etiquetaValor; 
 
-// producciones
+// PRODUCCIONES
 
 // definicion de la produccion inicial
 start with cms ;
