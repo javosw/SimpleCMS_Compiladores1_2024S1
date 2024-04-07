@@ -58,13 +58,26 @@ editor-app
 
 %#%#%#%#%# LEXICO %#%#%#%#%#
 regex
-	idX = _ | - | $ 
-	id = {idX}[a-Z0-9{idX}]*
-	miTextoAZ09 = 
+	pre = _ | - | $ 
+	id = {pre}([a-Z0-9]|{pre})*
 	idSitio = 
+	idPagina = 
+	idComponente = 
 	idUsuario = 
-	fecha = yyyy-MM-dd
-	atributo.ETIQUETAS = [ grupo1 | grupo2 | grupo3 ]
+
+	miTextoAZ09 = 
+	miTitulo = 
+
+	miNumero =
+	miColor = 
+	miURL = 
+	miFecha = yyyy-MM-dd
+
+	miComponente = TITULO | PARRAFO | IMAGEN | VIDEO | MENU
+	miAlineacion = CENTRAR | IZQUIERDA | DERECHA | JUSTIFICAR
+	miEtiqueta = 
+	misEtiquetas = miEtiqueta (\| miEtiqueta)*
+
 escritura literal
 	permitido
 		acciones
@@ -74,6 +87,19 @@ escritura literal
 		etiquetas
 		atributos xml 
 reservados
+	nodos
+		acciones
+		accion
+		parametros
+		parametro
+		atributos
+		atributo
+		etiquetas
+		etiqueta
+	nodo.atributo
+		valor
+			miEtiqueta
+		nombre
 	accion.nombre
 		NUEVO_SITIO_WEB
 		BORRAR_SITIO_WEB
@@ -83,44 +109,55 @@ reservados
 		AGREGAR_COMPONENTE
 		MODIFICAR_COMPONENTE
 		BORRAR_COMPONENTE
-	acciones
-	accion
-	parametros
-	parametro
 	parametro.nombre
 		ID
+			[idSitio] | [idPagina] | [idComponente]
 		TITULO
+			[miTitulo]
 		SITIO
+			[idSitio]
 		PADRE
+			[idPagina]
 		PAGINA
+			[idPagina]
 		CLASE
+			[miComponente]
 		USUARIO_CREACION
+			[idUsuario]
 		FECHA_CREACION
+			[miFecha]
 		USUARIO_MODIFICACION
+			[idUsuario]
 		FECHA_MODIFICACION
-	atributos
-	atributo
+			[miFecha]
 	atributo.nombre
 		TEXTO
+			[miTextoAZ09]
 		ALINEACION
+			[miAlineacion]
 		COLOR
+			[miColor]
 		ORIGEN
+			[miURL]
 		ALTURA
+			[miNumero]
 		ANCHO
+			[miNumero]
 		PADRE
+			[idPagina]
 		ETIQUETAS
-	etiquetas
-	etiqueta
-	valor
-	nombre
+			[misEtiquetas]
+
 puntuacion
 	<
 	>
+	/
 	</
 	/>
 	[
 	]
 	"
+	=
 operadores
 
 
@@ -263,16 +300,16 @@ operadores
 
 %#%#%#%#%#%#%#%#%# SEMANTICA %#%#%#%#%#%#%#%#%#
 
-%#%#%#%#%# SITIOS %#%#%#%#%#
+	%#%#%#%#%# SITIOS %#%#%#%#%#
 
 	accion: {
 		nombre: NUEVO_SITIO_WEB
 		parametros: {
 			* ID: [idSitio]
 			USUARIO_CREACION: [idUsuario]
-			FECHA_CREACION: [yyyy-MM-dd]
+			FECHA_CREACION: [fecha]
 			USUARIO_MODIFICACION: [idUsuario]
-			FECHA_MODIFICACION: [yyyy-MM-dd]
+			FECHA_MODIFICACION: [fecha]
 		}
 	}
 	accion: {
@@ -282,26 +319,26 @@ operadores
 		}
 	}
 
-%#%#%#%#%# PAGINAS %#%#%#%#%#
+	%#%#%#%#%# PAGINAS %#%#%#%#%#
 
 	accion: {
 		nombre: NUEVA_PAGINA
 		parametros: {
-			* ID: [idSitio]
+			* ID: [idPagina]
 			TITULO: [miTitulo]
 			* SITIO: [idSitio]
 			* PADRE: [idPagina]
 			USUARIO_CREACION: [idUsuario]
-			FECHA_CREACION: [yyyy-MM-dd]
+			FECHA_CREACION: [fecha]
 			USUARIO_MODIFICACION: [idUsuario]
-			FECHA_MODIFICACION: [yyyy-MM-dd]
+			FECHA_MODIFICACION: [fecha]
 		}
 		etiquetas: {}
 	}
 	accion: {
 		nombre: MODIFICAR_PAGINA
 		parametros: {
-			* ID: [idSitio]
+			* ID: [idPagina]
 			*? TITULO: [miTitulo]
 		}
 		*? etiquetas: { }
@@ -313,7 +350,7 @@ operadores
 		}
 	}
 
-%#%#%#%#%# COMPONENTES %#%#%#%#%#
+	%#%#%#%#%# COMPONENTES %#%#%#%#%#
 
 	accion: {
 		nombre: AGREGAR_COMPONENTE | MODIFICAR_COMPONENTE
@@ -375,9 +412,3 @@ operadores
 		}
 	}
 
-
-%#%#%#%#%#%#%#%#%# DUDAS %#%#%#%#%#%#%#%#%#
-
-<sitios>
-	<sitio>
-		<pagina>
