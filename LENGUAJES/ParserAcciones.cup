@@ -87,13 +87,28 @@ carpeta ::=
 ;
 
 
-// BORBAOBROABRBAORBABRBAORBAORBOABROARASKDJAJLSKD ALKSJD LAKSDJ LASD
+// INICIO
 cms ::= 
     accion:w1 {}
     | acciones:w1 {}
 ;
 
 // ACCIONES
+acciones ::=
+    accionesIZQ:w1 accionesMID:w2 accionesDER:w3 {}
+;
+accionesIZQ ::=
+    IZQ ACCIS DER
+;
+accionesMID ::=
+    accion:w1
+    | accionesMID:w1 accion:w2
+;
+accionesDER ::=
+    IZQ BARRA ACCIS DER
+;
+
+// ACCION
 accion ::=
     accionIZQ:w1 accionMID:w2 accionDER:w3 {}
 ;
@@ -111,36 +126,67 @@ accionMID ::=
 accionDER ::=
     IZQ BARRA ACCI DER
 ;
-
-acciones ::=
-    accionesIZQ:w1 accionesMID:w2 accionesDER:w3 {}
-;
-accionesIZQ ::=
-    IZQ ACCIS DER
-;
-accionesMID ::=
-    accion:w1
-    | accionesMID:w1 accion:w2
-;
-accionesDER ::=
-    IZQ BARRA ACCIS DER
+accionNombre ::=
 ;
 
 // PARAMETROS
 parametros ::= 
     parametrosIZQ parametrosMID parametrosDER
 ;
+parametrosIZQ ::=
+    IZQ PARAMS DER
+;
 parametrosMID ::=
     parametro
     | parametrosMID parametro
 ;
+parametrosDER ::=
+    IZQ BARRA PARAMS DER
+;
+
+// PARAMETRO
+parametro ::=
+    parametroIZQ parametroMID parametroDER
+;
+parametroIZQ ::=
+    IZQ PARAM parametroNombre:w1 DER
+;
+parametroMID ::=
+;
+parametroDER ::=
+    IZQ BARRA PARAM DER
+;
+parametroNombre ::=
+;
+
 // ATRIBUTOS
 atributos ::=
     atributosIZQ atributosMID atributosDER
 ;
+atributosIZQ ::=
+    IZQ ATRIBS DER
+;
 atributosMID ::=
     atributo
     | atributosMID atributo
+;
+atributosDER ::=
+    IZQ BARRA ATRIBS DER
+;
+
+// ATRIBUTO
+atributo ::=
+    atributoIZQ atributoMID atributoDER
+;
+atributoIZQ ::=
+    IZQ ATRIB atributoNombre:w1 DER
+;
+atributoMID ::=
+;
+atributoDER ::=
+    IZQ BARRA ATRIB DER
+;
+atributoNombre ::=
 ;
 
 // ETIQUETAS
@@ -152,6 +198,11 @@ etiquetasMID ::=
     | etiquetasMID etiqueta
 ;
 
+// ETIQUETA
+etiqueta ::= 
+    IZQ etiquetaValor BARRA DER
+;
 
-
+etiquetaValor ::=
+;
 
