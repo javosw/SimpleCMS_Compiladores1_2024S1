@@ -44,6 +44,8 @@ non terminal Nodo contenido, carpeta, proyecto ;
 non terminal proyectoDer, carpetaDer ;
 
 // producciones
+
+// produccion inicial
 start with cms ;
 
 atrNombre ::= NOM IGUAL NOMBRE:w1 {:RESULT=w1;:} // -> RESULT = NOMBRE:String
@@ -83,4 +85,73 @@ carpeta ::=
     carpetaIzq:w1 carpetaDer {:RESULT=w1;:} // -> new nodo -> nodo.hijos=null -> nodo.addAtrib(...) -> RESULT=nodo
     | carpetaIzq:w1 contenidos:w2 carpetaDer {:w1.setHijos(w2); RESULT=w1;:}// -> new nodo -> nodo.hijos=contenidos -> nodo.addAtrib(...) -> RESULT=nodo
 ;
+
+
+// BORBAOBROABRBAORBABRBAORBAORBOABROARASKDJAJLSKD ALKSJD LAKSDJ LASD
+cms ::= 
+    accion:w1 {}
+    | acciones:w1 {}
+;
+
+// ACCIONES
+accion ::=
+    accionIZQ:w1 accionMID:w2 accionDER:w3 {}
+;
+accionIZQ ::=
+    IZQ ACCI accionNombre:w1 DER
+;
+accionMID ::= 
+    parametros atributos etiquetas
+    | parametros etiquetas atributos
+    | atributos parametros etiquetas
+    | atributos etiquetas parametros
+    | etiquetas parametros atributos
+    | etiquetas atributos parametros
+;
+accionDER ::=
+    IZQ BARRA ACCI DER
+;
+
+acciones ::=
+    accionesIZQ:w1 accionesMID:w2 accionesDER:w3 {}
+;
+accionesIZQ ::=
+    IZQ ACCIS DER
+;
+accionesMID ::=
+    accion:w1
+    | accionesMID:w1 accion:w2
+;
+accionesDER ::=
+    IZQ BARRA ACCIS DER
+;
+
+// PARAMETROS
+parametros ::= 
+    parametrosIZQ parametrosMID parametrosDER
+;
+parametrosMID ::=
+    parametro
+    | parametrosMID parametro
+;
+// ATRIBUTOS
+atributos ::=
+    atributosIZQ atributosMID atributosDER
+;
+atributosMID ::=
+    atributo
+    | atributosMID atributo
+;
+
+// ETIQUETAS
+etiquetas ::=
+    etiquetasIZQ etiquetasMID etiquetasDER
+;
+etiquetasMID ::= 
+    etiqueta 
+    | etiquetasMID etiqueta
+;
+
+
+
 

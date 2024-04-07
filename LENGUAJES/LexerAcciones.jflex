@@ -195,7 +195,7 @@ miEtiqueta    =  [a-zA-Z0-9]+
 }
 <MIS_ETIQUETAS> {
     {miEtiqueta}  { print(); }
-    \| { print(); }
+    \|  { print(); }
 }
 
 // puntuacion
