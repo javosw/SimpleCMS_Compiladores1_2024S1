@@ -26,23 +26,34 @@ action code {:
 
 :}
 
-// SIMBOLOS
+// #%#%#%#% SIMBOLOS #%#%#%#%
 
-// TERMINALES
+// #%#%#%#% TERMINALES #%#%#%#%
 
 // palabras reservadas
-terminal ACCIS, ACCI, PARAMS, PARAM, ATRIBS, ATRIB, ETIQS, ETIQ ;
-// puntuacion
+// > puntuacion
 terminal IZQ, DER, BARRA, IGUAL, IZQCOR, DERCOR, COMI, ;
-// literal
-terminal MI_ID, MI_TEXTO, MI_NUMERO, MI_COLOR, MI_URL, MI_FECHA, MI_ETIQUETA ;
+// > nodos
+terminal ACCIS, ACCI, PARAMS, PARAM, ATRIBS, ATRIB, ETIQS, ETIQ, ;
+// > nodo.atributo
+terminal VALOR, NOMBRE, ;
+// > acciones.nombre
+terminal SITE_NEW, SITE_DEL, PAGE_NEW, PAGE_DEL, PAGE_MOD, COMP_NEW, COMP_DEL, COMP_MOD, ;
+// > parametro.nombre
+terminal P_ID, P_TITULO, P_SITIO, P_PADRE, P_PAGINA, P_CLASE, ;
+terminal P_FECHA_NEW, P_FECHA_MOD, P_USER_NEW, P_USER_MOD, ;
+// > atributo.nombre
+terminal A_TEXTO, A_ALIGN, A_COLOR, A_ORIGEN, A_ALTO, A_ANCHO, A_PADRE, A_ETIQS, ;
+// literales
+terminal MI_ID, MI_TEXTO, MI_NUMERO, MI_COLOR, MI_URL, MI_FECHA, MI_ETIQUETA, ;
 
-// NO TERMINALES
+// #%#%#%#% NO TERMINALES #%#%#%#%
 // non terminal Type2 mySymbol1, mySymbol2 ;
+
 non terminal acciones, accionesIZQ, accionesMID, accionesDER, ;
 non terminal accion, accionIZQ, accionMID, accionDER, accionNombre, ;
 non terminal parametros, parametrosIZQ, parametrosMID, parametrosDER, ;
-non terminal parametro, parametroIZQ, parametroMID, parametroDER, parametroNombre;
+non terminal parametro, parametroIZQ, parametroMID, parametroDER, parametroNombre, ;
 non terminal atributos, atributosIZQ, atributosMID, atributosDER, ;
 non terminal atributo, atributoIZQ, atributoMID, atributoDER, atributoNombre, ;
 non terminal etiquetas, etiquetasIZQ, etiquetasMID, etiquetasDER, ;
