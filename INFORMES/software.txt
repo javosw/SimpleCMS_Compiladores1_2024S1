@@ -1,0 +1,4 @@
+javafx 17.0.10
+javafx-maven-plugin 0.0.8
+
+
