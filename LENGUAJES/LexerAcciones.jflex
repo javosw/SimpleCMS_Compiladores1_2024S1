@@ -3,11 +3,12 @@
 // codigo antes de la clase lexer
 package josq.cms.lenguajes.lexer;
 
+import java.io.Reader;
+
 //import java_cup.runtime.Symbol;
 import java_cup.runtime.SymbolFactory;
 //import java_cup.runtime.*;
 import josq.cms.lenguajes.parser.ParserXMLSym;
-
 %%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
 
@@ -28,7 +29,7 @@ import josq.cms.lenguajes.parser.ParserXMLSym;
 %{
     ComplexSymbolFactory fact = null;
 
-    public LexerAcciones(java.io.Reader in, ComplexSymbolFactory sf)
+    public LexerAcciones(Reader in, ComplexSymbolFactory sf)
     { this(in); fact = sf; }
 
     private Symbol symbol(String name, int sym) {
@@ -50,6 +51,7 @@ import josq.cms.lenguajes.parser.ParserXMLSym;
     StringBuffer buff = new StringBuffer();
 
     void print(String texto){ System.out.print(texto); }
+    void print(){ print(yytext()+" "); }
     void cleanBuffer()
     {
         buff.delete(0, buff.length());
@@ -80,22 +82,23 @@ _               =  {Invisibles}
 
 pre  =  _ | - | $
 id   =  {pre}([a-zA-Z0-9]|{pre})*
+//idSitio 
+//idPagina 
+//idComponente 
+//idUsuario
 
 miTexto  =  [a-zA-Z0-9]+
+//miTitulo
 
 miNumero      =  [1-9][0-9]*
 miColor       =  #[0-9a-fA-F]{6}
 miURL         =  ((http|https)\:\/\/)?[a-zA-Z]+(\.[a-zA-Z0-9]+)*(\/|\/[a-zA-Z0-9]+)*
 miFecha       =  [0-9]{4}\-[0-9]{2}\-[0-9]{2}
 miEtiqueta    =  [a-zA-Z0-9]+
-misEtiquetas  =  {miEtiqueta}(\|{miEtiqueta})*
+//misEtiquetas
 
-miComponente  =  "TITULO"|"PARRAFO"|"IMAGEN"|"VIDEO"|"MENU"
-miAlineacion  =  "CENTRAR"|"IZQUIERDA"|"DERECHA"|"JUSTIFICAR"
-
-tipoAccion = 
-tipoParam = 
-tipoAtrib = 
+//miComponente  =  "TITULO"|"PARRAFO"|"IMAGEN"|"VIDEO"|"MENU"
+//miAlineacion  =  "CENTRAR"|"IZQUIERDA"|"DERECHA"|"JUSTIFICAR"
 
 %%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
@@ -103,104 +106,106 @@ tipoAtrib =
 <YYINITIAL> {
 
 // nodos
-"acciones"    {}
-"accion"      {}
-"parametros"  {}
-"parametro"   {}
-"atributos"   {}
-"atributo"    {}
-"etiquetas"   {}
-"etiqueta"    {}
+"acciones"    { print(); }
+"accion"      { print(); }
+"parametros"  { print(); }
+"parametro"   { print(); }
+"atributos"   { print(); }
+"atributo"    { print(); }
+"etiquetas"   { print(); }
+"etiqueta"    { print(); }
 
 // nodo.atributo
-"valor" //miEtiqueta
-"nombre"
+"valor"  { print(); yybegin(MI_ETIQUETA); }
+"nombre" { print(); }
 
 // accion.nombre
-"NUEVO_SITIO_WEB"       {}
-"BORRAR_SITIO_WEB"      {}
-"NUEVA_PAGINA"          {}
-"MODIFICAR_PAGINA"      {}
-"BORRAR_PAGINA"         {}
-"AGREGAR_COMPONENTE"    {}
-"MODIFICAR_COMPONENTE"  {}
-"BORRAR_COMPONENTE"     {}
+"NUEVO_SITIO_WEB"       { print(); }
+"BORRAR_SITIO_WEB"      { print(); }
+"NUEVA_PAGINA"          { print(); }
+"MODIFICAR_PAGINA"      { print(); }
+"BORRAR_PAGINA"         { print(); }
+"AGREGAR_COMPONENTE"    { print(); }
+"MODIFICAR_COMPONENTE"  { print(); }
+"BORRAR_COMPONENTE"     { print(); }
 
 // parametro.nombre
-"ID"                    {yybegin(ID);}
-"TITULO"                {yybegin(MI_TITULO);}
-"SITIO"                 {yybegin(ID);}
-"PADRE"                 {yybegin(ID);}
-"PAGINA"                {yybegin(ID);}
-"CLASE"                 {}
-"USUARIO_CREACION"      {yybegin(ID_USUARIO);}
-"FECHA_CREACION"        {yybegin(MI_FECHA);}
-"USUARIO_MODIFICACION"  {yybegin(ID_USUARIO);}
-"FECHA_MODIFICACION"    {yybegin(MI_FECHA);}
+"ID"                    { print(); yybegin(ID);}
+"TITULO"                { print(); yybegin(MI_TITULO);}
+"SITIO"                 { print(); yybegin(ID);}
+"PADRE"                 { print(); yybegin(ID);}
+"PAGINA"                { print(); yybegin(ID);}
+"CLASE"                 { print(); }
+"USUARIO_CREACION"      { print(); yybegin(ID_USUARIO);}
+"FECHA_CREACION"        { print(); yybegin(MI_FECHA);}
+"USUARIO_MODIFICACION"  { print(); yybegin(ID_USUARIO);}
+"FECHA_MODIFICACION"    { print(); yybegin(MI_FECHA);}
 
 // atributo.nombre
-"TEXTO"       {yybegin(MI_TEXTO);}
-"ALINEACION"  {}
-"COLOR"       {yybegin(MI_COLOR);}
-"ORIGEN"      {yybegin(MI_URL);}
-"ALTURA"      {yybegin(MI_NUMERO);}
-"ANCHO"       {yybegin(MI_NUMERO);}
-"PADRE"       {yybegin(ID);}
-"ETIQUETAS"   {yybegin(MIS_ETIQUETAS);}
+"TEXTO"       { print(); yybegin(MI_TEXTO);}
+"ALINEACION"  { print(); }
+"COLOR"       { print(); yybegin(MI_COLOR);}
+"ORIGEN"      { print(); yybegin(MI_URL);}
+"ALTURA"      { print(); yybegin(MI_NUMERO);}
+"ANCHO"       { print(); yybegin(MI_NUMERO);}
+"PADRE"       { print(); yybegin(ID);}
+"ETIQUETAS"   { print(); yybegin(MIS_ETIQUETAS);}
 
 // miComponente
 //"TITULO"   {}
-"PARRAFO"  {}
-"IMAGEN"   {}
-"VIDEO"    {}
-"MENU"     {}
+"PARRAFO"  { print(); }
+"IMAGEN"   { print(); }
+"VIDEO"    { print(); }
+"MENU"     { print(); }
 
 // miAlineacion 
-"CENTRAR"     {}
-"IZQUIERDA"   {}
-"DERECHA"     {}
-"JUSTIFICAR"  {}
+"CENTRAR"     { print(); }
+"IZQUIERDA"   { print(); }
+"DERECHA"     { print(); }
+"JUSTIFICAR"  { print(); }
 
 }
 
 <ID> {
-    {id} {}
+    {id}  { print(); }
 }
 <ID_USUARIO> {
-    {id} {}
-
+    {id}  { print(); }
 }
 <MI_FECHA> {
-    {miFecha} {}
+    {miFecha}  { print(); }
 }
 <MI_TEXTO> {
-    {miTexto} {}
+    {miTexto}  { print(); }
 }
 <MI_TITULO> {
-    {miTexto} {}
+    {miTexto}  { print(); }
 }
 <MI_COLOR> {
-    {miColor} {}
+    {miColor}  { print(); }
 }
 <MI_NUMERO> {
-    {miNumero} {}
+    {miNumero}  { print(); }
 }
 <MI_URL> {
-    {miURL} {}
+    {miURL}  { print(); }
+}
+<MI_ETIQUETA> {
+    {miEtiqueta}  { print(); yybegin(YYINITIAL); }
 }
 <MIS_ETIQUETAS> {
-    {miEtiqueta} {}
-    \| {}
+    {miEtiqueta}  { print(); }
+    \| { print(); }
 }
 
 // puntuacion
-"<"
-">"
-"/"
-\"
-"["
-"]"
-\=
+"<"  { print(); }
+">"  { print(); }
+"/"  { print(); }
+\"   { print(); }
+"["  { print(); }
+"]"  { print(); yybegin(YYINITIAL);}
+\=   { print(); }
 
 // ignorados
 {Invisibles}  { }

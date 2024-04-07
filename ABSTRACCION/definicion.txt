@@ -65,7 +65,7 @@ regex
 	idComponente = 
 	idUsuario = 
 
-	miTextoAZ09 = 
+	miTexto = 
 	miTitulo = 
 
 	miNumero =
@@ -76,7 +76,7 @@ regex
 	miComponente = TITULO | PARRAFO | IMAGEN | VIDEO | MENU
 	miAlineacion = CENTRAR | IZQUIERDA | DERECHA | JUSTIFICAR
 	miEtiqueta = 
-	misEtiquetas = miEtiqueta (\| miEtiqueta)*
+	misEtiquetas = miEtiqueta (| miEtiqueta)*
 
 escritura literal
 	permitido
@@ -132,7 +132,7 @@ reservados
 			[miFecha]
 	atributo.nombre
 		TEXTO
-			[miTextoAZ09]
+			[miTexto]
 		ALINEACION
 			[miAlineacion]
 		COLOR

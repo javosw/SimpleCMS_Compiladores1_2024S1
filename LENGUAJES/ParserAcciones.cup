@@ -1,0 +1,86 @@
+
+package josq.cms.lenguajes.parser;
+
+// antes de la clase parser
+//import java_cup.runtime.*;
+import josq.cms.lenguajes.modelos.arbol.*;
+import josq.cms.lenguajes.modelos.Indicador;
+import java.util.ArrayList;
+
+// NOTA: %cupsym en jflex
+// parser=MyParser, sym=MyParserSym
+class ParserAcciones;
+
+// dentro de la clase parser
+// parser code {: :}
+
+// metodo user_init() de la clase parser generada
+// init with {: :}
+
+// metodo scan() de la clase parser generada
+// scan with {: :}
+
+// dentro de la clase action
+action code {:
+    void print(String texto){ System.out.print(texto); } 
+
+:}
+
+// simbolos terminales
+
+// reservados
+terminal PROY, ARCH, CARP, NOM, UBI ;
+// operadores
+// puntuacion
+terminal IZQ, DER, IGUAL, BARRA ;
+// literal
+terminal String RUTA, NOMBRE ;
+
+// simbolos no terminales
+non terminal String atrNombre, atrUbicacion ;
+non terminal Nodo proyectoIzq, carpetaIzq, archivo ;
+non terminal ArrayList<Nodo> contenidos ;
+non terminal Nodo contenido, carpeta, proyecto ;
+non terminal proyectoDer, carpetaDer ;
+
+// producciones
+start with cms ;
+
+atrNombre ::= NOM IGUAL NOMBRE:w1 {:RESULT=w1;:} // -> RESULT = NOMBRE:String
+;
+atrUbicacion ::= UBI IGUAL RUTA:w1 {:RESULT=w1;:} // -> RESULT= RUTA:String
+;
+archivo ::= IZQ ARCH atrNombre:w1 atrUbicacion:w2 BARRA DER {:Nodo n1=newArchivo(); addAtributo(n1,"nombre",w1); addAtributo(n1,"ubicacion",w2); RESULT=n1;:}// -> new nodo -> nodo.hijos=null -> nodo.addAtrib(...) -> RESULT=nodo
+;
+proyectoIzq ::= IZQ PROY atrNombre:w1 DER {:Nodo n1=newProyecto(); addAtributo(n1,"nombre",w1); RESULT=n1;:} // -> RESULT = atrNombre
+;
+carpetaIzq ::= IZQ CARP atrNombre:w1 DER {:Nodo n1=newCarpeta(); addAtributo(n1,"nombre",w1); RESULT=n1;:}// -> RESULT = atrNombre
+;
+proyectoDer ::= IZQ BARRA PROY DER
+;
+carpetaDer ::= IZQ BARRA CARP DER
+;
+
+// contenido NO DEBE tener EPSILON porque hay otras produccion que ya lo tienen implicitamente
+
+contenidos ::= 
+    contenido:w1 {:ArrayList<Nodo> a1 = new ArrayList<Nodo>(); if(w1!=null) a1.add(w1); RESULT=a1;:} // -> new array -> array.add(contenido) -> RESULT=array
+    | contenidos:w1 contenido:w2 {:w1.add(w2); RESULT=w1;:} // -> contenidos.add(contenido) -> RESULT=contenidos
+;
+contenido ::= 
+    carpeta:w1 {:RESULT=w1;:} // RESULT=carpeta
+    | archivo:w1 {:RESULT=w1;:} // RESULT=archivo
+    | error:w1 DER {:Nodo n1=newError(); addAtributo(n1,"nombre","@ERROR!"); RESULT=n1;:}
+    | error:w1 BARRA DER {:Nodo n1=newError(); addAtributo(n1,"nombre","@ERROR!"); RESULT=n1;:}
+;
+
+cms ::= 
+    proyectoIzq:w1 proyectoDer {:RESULT=w1;:} // -> new nodo -> nodo.hijos=null -> nodo.addAtrib(...) -> RESULT=nodo
+    | proyectoIzq:w1 contenidos:w2 proyectoDer {:w1.setHijos(w2); RESULT=w1;:} // -> new nodo -> nodo.hijos=contenidos -> nodo.addAtrib(...) -> RESULT=nodo
+;
+
+carpeta ::= 
+    carpetaIzq:w1 carpetaDer {:RESULT=w1;:} // -> new nodo -> nodo.hijos=null -> nodo.addAtrib(...) -> RESULT=nodo
+    | carpetaIzq:w1 contenidos:w2 carpetaDer {:w1.setHijos(w2); RESULT=w1;:}// -> new nodo -> nodo.hijos=contenidos -> nodo.addAtrib(...) -> RESULT=nodo
+;
+
