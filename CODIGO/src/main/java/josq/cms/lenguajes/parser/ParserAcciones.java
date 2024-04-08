@@ -5,8 +5,6 @@
 
 package josq.cms.lenguajes.parser;
 
-import josq.cms.lenguajes.modelos.arbol.*;
-import josq.cms.lenguajes.modelos.Indicador;
 import java.util.ArrayList;
 import java_cup.runtime.XMLElement;
 

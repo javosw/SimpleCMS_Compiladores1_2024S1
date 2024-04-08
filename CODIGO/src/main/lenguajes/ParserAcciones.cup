@@ -2,10 +2,11 @@
 package josq.cms.lenguajes.parser;
 
 // antes de la clase parser
-//import java_cup.runtime.*;
-import josq.cms.lenguajes.modelos.arbol.*;
-import josq.cms.lenguajes.modelos.Indicador;
+
 import java.util.ArrayList;
+//import java_cup.runtime.*;
+//import josq.cms.lenguajes.modelos.arbol.*;
+//import josq.cms.lenguajes.modelos.Indicador;
 
 // NOTA: %cupsym en jflex
 // parser=MyParser, sym=MyParserSym

@@ -9,11 +9,12 @@ package josq.cms.lenguajes.lexer;
 
 import java.io.Reader;
 
-//import java_cup.runtime.Symbol;
+//import java_cup.runtime.*;
+import java_cup.runtime.Symbol;
 import java_cup.runtime.SymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
-//import java_cup.runtime.*;
+
 import josq.cms.lenguajes.parser.ParserAccionesSym;
 
 @SuppressWarnings("fallthrough")
@@ -448,13 +449,13 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
     { this(in); fact = sf; }
 
     private Symbol symbol(String name, int sym) {
-        Location izq = new Location(yyline+1, yycolumn+1,yychar);
-        Location der = new Location(yyline+1, yycolumn+yylength(), yychar+yylength());
+        Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
+        Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
         return fact.newSymbol(name, sym, izq, der);
     }
     private Symbol symbol(String name, int sym, Object val) {
-        Location izq = new Location(yyline+1, yycolumn+1,yychar);
-        Location der = new Location(yyline+1, yycolumn+yylength(), yychar+yylength());
+        Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
+        Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
         return fact.newSymbol(name, sym, izq, der, val);
     }
     private void error(String message) {

@@ -5,11 +5,12 @@ package josq.cms.lenguajes.lexer;
 
 import java.io.Reader;
 
-//import java_cup.runtime.Symbol;
+//import java_cup.runtime.*;
+import java_cup.runtime.Symbol;
 import java_cup.runtime.SymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
-//import java_cup.runtime.*;
+
 import josq.cms.lenguajes.parser.ParserAccionesSym;
 %%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
@@ -35,13 +36,13 @@ import josq.cms.lenguajes.parser.ParserAccionesSym;
     { this(in); fact = sf; }
 
     private Symbol symbol(String name, int sym) {
-        Location izq = new Location(yyline+1, yycolumn+1,yychar);
-        Location der = new Location(yyline+1, yycolumn+yylength(), yychar+yylength());
+        Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
+        Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
         return fact.newSymbol(name, sym, izq, der);
     }
     private Symbol symbol(String name, int sym, Object val) {
-        Location izq = new Location(yyline+1, yycolumn+1,yychar);
-        Location der = new Location(yyline+1, yycolumn+yylength(), yychar+yylength());
+        Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
+        Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
         return fact.newSymbol(name, sym, izq, der, val);
     }
     private void error(String message) {
@@ -143,7 +144,7 @@ miEtiqueta    =  [a-zA-Z0-9]+
 "CLASE"                 { print(); yybegin(UI_WEB); }
 
 // atributo.nombre
-"PADRE"       { print(); yybegin(MI_ID);}
+//"PADRE"       { print(); yybegin(MI_ID);}
 "TEXTO"       { print(); yybegin(MI_TEXTO);}
 "ALTURA"      { print(); yybegin(MI_NUMERO);}
 "ANCHO"       { print(); yybegin(MI_NUMERO);}
