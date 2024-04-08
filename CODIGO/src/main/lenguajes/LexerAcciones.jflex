@@ -84,7 +84,7 @@ import josq.cms.lenguajes.parser.ParserAccionesSym;
 %state MI_NUMERO
 %state MI_TEXTO, MI_TITULO, MIS_ETIQUETAS
 %state MI_COLOR, MI_FECHA, MI_URL
-%state UI_WEB
+%state UI_WEB, MI_ALIGN
 
 // macros para regex
 
@@ -115,45 +115,45 @@ miEtiqueta    =  [a-zA-Z0-9]+
 <YYINITIAL> {
 
 // nodos
-"acciones"    { return symbol("",ParserAccionesSym.ACCIS); }
-"parametros"  { return symbol("",ParserAccionesSym.PARAMS); }
-"atributos"   { return symbol("",ParserAccionesSym.ATRIBS); }
-"etiquetas"   { return symbol("",ParserAccionesSym.ETIQS); }
-"accion"      { return symbol("",ParserAccionesSym.ACCI); }
-"parametro"   { return symbol("",ParserAccionesSym.PARAM); }
-"atributo"    { return symbol("",ParserAccionesSym.ATRIB); }
-"etiqueta"    { return symbol("",ParserAccionesSym.ETIQ); }
+"acciones"    {                        return symbol("",ParserAccionesSym.ACCIS); }
+"parametros"  {                        return symbol("",ParserAccionesSym.PARAMS); }
+"atributos"   {                        return symbol("",ParserAccionesSym.ATRIBS); }
+"etiquetas"   {                        return symbol("",ParserAccionesSym.ETIQS); }
+"accion"      { yybegin(MI_ACCION);    return symbol("",ParserAccionesSym.ACCI); }
+"parametro"   { yybegin(MI_PARAMETRO); return symbol("",ParserAccionesSym.PARAM); }
+"atributo"    { yybegin(MI_ATRIBUTO);  return symbol("",ParserAccionesSym.ATRIB); }
+"etiqueta"    {                        return symbol("",ParserAccionesSym.ETIQ); }
 
 // nodo.atributo
-"valor"  { yybegin(MI_ETIQUETA); return symbol("",ParserAccionesSym.VALOR); }
-"nombre" {                       return symbol("",ParserAccionesSym.NOMBRE); }
+"valor"  { yybegin(MI_ETIQUETA);       return symbol("",ParserAccionesSym.VALOR); }
+"nombre" {                             return symbol("",ParserAccionesSym.NOMBRE); }
 
 }
 <MI_ACCION>{
 // accion.nombre
-"NUEVO_SITIO_WEB"       { return symbol("",ParserAccionesSym.SITE_NEW); }
-"BORRAR_SITIO_WEB"      { return symbol("",ParserAccionesSym.SITE_DEL); }
-"NUEVA_PAGINA"          { return symbol("",ParserAccionesSym.PAGE_NEW); }
-"MODIFICAR_PAGINA"      { return symbol("",ParserAccionesSym.PAGE_MOD); }
-"BORRAR_PAGINA"         { return symbol("",ParserAccionesSym.PAGE_DEL); }
-"AGREGAR_COMPONENTE"    { return symbol("",ParserAccionesSym.COMP_NEW); }
-"MODIFICAR_COMPONENTE"  { return symbol("",ParserAccionesSym.COMP_MOD); }
-"BORRAR_COMPONENTE"     { return symbol("",ParserAccionesSym.COMP_DEL); }
+"NUEVO_SITIO_WEB"       {                     return symbol("",ParserAccionesSym.SITE_NEW); }
+"BORRAR_SITIO_WEB"      {                     return symbol("",ParserAccionesSym.SITE_DEL); }
+"NUEVA_PAGINA"          {                     return symbol("",ParserAccionesSym.PAGE_NEW); }
+"MODIFICAR_PAGINA"      {                     return symbol("",ParserAccionesSym.PAGE_MOD); }
+"BORRAR_PAGINA"         {                     return symbol("",ParserAccionesSym.PAGE_DEL); }
+"AGREGAR_COMPONENTE"    {                     return symbol("",ParserAccionesSym.COMP_NEW); }
+"MODIFICAR_COMPONENTE"  {                     return symbol("",ParserAccionesSym.COMP_MOD); }
+"BORRAR_COMPONENTE"     {                     return symbol("",ParserAccionesSym.COMP_DEL); }
 \"                      { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMI); }
 }
 
 <MI_PARAMETRO>{
 // parametro.nombre
-"ID"                    { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_ID); }
-"SITIO"                 { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_SITIO); }
-"PADRE"                 { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_PADRE); }
-"PAGINA"                { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_PAGINA); }
-"USUARIO_CREACION"      { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_USER_NEW); }
-"USUARIO_MODIFICACION"  { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_USER_MOD); }
-"TITULO"                { yybegin(MI_TEXTO); return symbol("",ParserAccionesSym.P_TITULO); }
-"FECHA_CREACION"        { yybegin(MI_FECHA); return symbol("",ParserAccionesSym.P_FECHA_NEW); }
-"FECHA_MODIFICACION"    { yybegin(MI_FECHA); return symbol("",ParserAccionesSym.P_FECHA_MOD); }
-"CLASE"                 { yybegin(UI_WEB);   return symbol("",ParserAccionesSym.P_CLASE); }
+"ID"                    { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_ID); }
+"SITIO"                 { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_SITIO); }
+"PADRE"                 { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_PADRE); }
+"PAGINA"                { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_PAGINA); }
+"USUARIO_CREACION"      { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_USER_NEW); }
+"USUARIO_MODIFICACION"  { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_USER_MOD); }
+"TITULO"                { yybegin(MI_TEXTO);  return symbol("",ParserAccionesSym.P_TITULO); }
+"FECHA_CREACION"        { yybegin(MI_FECHA);  return symbol("",ParserAccionesSym.P_FECHA_NEW); }
+"FECHA_MODIFICACION"    { yybegin(MI_FECHA);  return symbol("",ParserAccionesSym.P_FECHA_MOD); }
+"CLASE"                 { yybegin(UI_WEB);    return symbol("",ParserAccionesSym.P_CLASE); }
 \"                      { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMI); }
 }
 
@@ -216,39 +216,16 @@ miEtiqueta    =  [a-zA-Z0-9]+
 }
 
 // puntuacion
-"<"  { return symbol("",ParserAccionesSym.IZQ); }
-">"  { return symbol("",ParserAccionesSym.DER); }
-"/"  { return symbol("",ParserAccionesSym.BARRA); }
-\"   { return symbol("",ParserAccionesSym.COMI); }
-"["  { return symbol("",ParserAccionesSym.IZQCOR); }
+"<"  {                     return symbol("",ParserAccionesSym.IZQ); }
+">"  {                     return symbol("",ParserAccionesSym.DER); }
+"/"  {                     return symbol("",ParserAccionesSym.BARRA); }
+\"   {                     return symbol("",ParserAccionesSym.COMI); }
+"["  {                     return symbol("",ParserAccionesSym.IZQCOR); }
 "]"  { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.DERCOR); }
-\=   { return symbol("",ParserAccionesSym.IGUAL); }
+\=   {                     return symbol("",ParserAccionesSym.IGUAL); }
 
 // ignorados
 {Invisibles}  { }
 
 // error
 [^]  { yybegin(YYINITIAL); }
-
-
-
-
-// puntuacion
-terminal IZQ, DER, BARRA, IGUAL, IZQCOR, DERCOR, COMI, OR ;
-// nodos
-terminal ACCIS, ACCI, PARAMS, PARAM, ATRIBS, ATRIB, ETIQS, ETIQ ;
-// nodo.atributo
-terminal VALOR, NOMBRE ;
-// acciones.nombre
-terminal SITE_NEW, SITE_DEL, PAGE_NEW, PAGE_DEL, PAGE_MOD, COMP_NEW, COMP_DEL, COMP_MOD ;
-// parametro.nombre
-terminal P_ID, P_TITULO, P_SITIO, P_PADRE, P_PAGINA, P_CLASE ;
-terminal P_FECHA_NEW, P_FECHA_MOD, P_USER_NEW, P_USER_MOD ;
-// parametro.nombre.clase
-terminal UI_TITULO, UI_PARRAFO, UI_IMAGEN, UI_VIDEO, UI_MENU ;
-// atributo.nombre
-terminal A_TEXTO, A_ALIGN, A_COLOR, A_ORIGEN, A_ALTO, A_ANCHO, A_PADRE, A_ETIQS ;
-// atributo.nombre.alineacion
-terminal T_CENTRAR, T_IZQUIERDA, T_DERECHA, T_JUSTIFICAR ;
-// literales
-terminal MI_ID, MI_TEXTO, MI_NUMERO, MI_COLOR, MI_URL, MI_FECHA, MI_ETIQUETA ;
