@@ -10,7 +10,7 @@ import java_cup.runtime.SymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 //import java_cup.runtime.*;
-import josq.cms.lenguajes.parser.ParserXMLSym;
+import josq.cms.lenguajes.parser.ParserAccionesSym;
 %%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
 
@@ -132,26 +132,25 @@ miEtiqueta    =  [a-zA-Z0-9]+
 
 // parametro.nombre
 "ID"                    { print(); yybegin(MI_ID);}
-"TITULO"                { print(); yybegin(MI_TEXTO);}
 "SITIO"                 { print(); yybegin(MI_ID);}
 "PADRE"                 { print(); yybegin(MI_ID);}
 "PAGINA"                { print(); yybegin(MI_ID);}
-"CLASE"                 { print(); yybegin(UI_WEB); }
 "USUARIO_CREACION"      { print(); yybegin(MI_ID);}
-"FECHA_CREACION"        { print(); yybegin(MI_FECHA);}
 "USUARIO_MODIFICACION"  { print(); yybegin(MI_ID);}
+"TITULO"                { print(); yybegin(MI_TEXTO);}
+"FECHA_CREACION"        { print(); yybegin(MI_FECHA);}
 "FECHA_MODIFICACION"    { print(); yybegin(MI_FECHA);}
+"CLASE"                 { print(); yybegin(UI_WEB); }
 
 // atributo.nombre
+"PADRE"       { print(); yybegin(MI_ID);}
 "TEXTO"       { print(); yybegin(MI_TEXTO);}
-"ALINEACION"  { print(); }
-"COLOR"       { print(); yybegin(MI_COLOR);}
-"ORIGEN"      { print(); yybegin(MI_URL);}
 "ALTURA"      { print(); yybegin(MI_NUMERO);}
 "ANCHO"       { print(); yybegin(MI_NUMERO);}
-"PADRE"       { print(); yybegin(ID);}
+"COLOR"       { print(); yybegin(MI_COLOR);}
+"ORIGEN"      { print(); yybegin(MI_URL);}
 "ETIQUETAS"   { print(); yybegin(MIS_ETIQUETAS);}
-
+"ALINEACION"  { print(); }
 
 // atributo.nombre.alineacion 
 "CENTRAR"     { print(); }
@@ -164,16 +163,10 @@ miEtiqueta    =  [a-zA-Z0-9]+
 <MI_ID> {
     {id}  { print(); }
 }
-<MI_ID_USER> {
-    {id}  { print(); }
-}
 <MI_FECHA> {
     {miFecha}  { print(); }
 }
 <MI_TEXTO> {
-    {miTexto}  { print(); }
-}
-<MI_TITULO> {
     {miTexto}  { print(); }
 }
 <MI_COLOR> {
