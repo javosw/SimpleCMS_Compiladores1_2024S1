@@ -7,6 +7,8 @@ import java.io.Reader;
 
 //import java_cup.runtime.Symbol;
 import java_cup.runtime.SymbolFactory;
+import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.ComplexSymbolFactory.Location;
 //import java_cup.runtime.*;
 import josq.cms.lenguajes.parser.ParserXMLSym;
 %%
@@ -83,7 +85,7 @@ InvisiblesHorizontal  =  [ \t\f]
 Invisibles            =  ({InvisiblesHorizontal} | {InvisiblesVertical})+
 _                     =  {Invisibles}
 
-pre  =  _ | - | $
+pre  =  _ | - | \$
 id   =  {pre}([a-zA-Z0-9]|{pre})*
 //idSitio 
 //idPagina 
@@ -98,9 +100,6 @@ miColor       =  #[0-9a-fA-F]{6}
 miURL         =  ((http|https)\:\/\/)?[a-zA-Z]+(\.[a-zA-Z0-9]+)*(\/|\/[a-zA-Z0-9]+)*
 miFecha       =  [0-9]{4}\-[0-9]{2}\-[0-9]{2}
 miEtiqueta    =  [a-zA-Z0-9]+
-//misEtiquetas
-
-//miAlineacion  =  "CENTRAR"|"IZQUIERDA"|"DERECHA"|"JUSTIFICAR"
 
 %%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
