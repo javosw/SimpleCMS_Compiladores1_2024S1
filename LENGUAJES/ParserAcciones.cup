@@ -27,31 +27,34 @@ action code {:
 :}
 
 // #%#%#%#% SIMBOLOS #%#%#%#%
+// non terminal Type2 mySymbol1, mySymbol2 ;
 
 // #%#%#%#% TERMINALES #%#%#%#%
 
-// palabras reservadas
-// > puntuacion
-terminal IZQ, DER, BARRA, IGUAL, IZQCOR, DERCOR, COMI, ;
-// > nodos
+// puntuacion
+terminal IZQ, DER, BARRA, IGUAL, IZQCOR, DERCOR, COMI, OR, ;
+// nodos
 terminal ACCIS, ACCI, PARAMS, PARAM, ATRIBS, ATRIB, ETIQS, ETIQ, ;
-// > nodo.atributo
+// nodo.atributo
 terminal VALOR, NOMBRE, ;
-// > acciones.nombre
+// acciones.nombre
 terminal SITE_NEW, SITE_DEL, PAGE_NEW, PAGE_DEL, PAGE_MOD, COMP_NEW, COMP_DEL, COMP_MOD, ;
-// > parametro.nombre
+// parametro.nombre
 terminal P_ID, P_TITULO, P_SITIO, P_PADRE, P_PAGINA, P_CLASE, ;
 terminal P_FECHA_NEW, P_FECHA_MOD, P_USER_NEW, P_USER_MOD, ;
-// > atributo.nombre
+// parametro.nombre.clase
+terminal UI_TITULO, UI_PARRAFO, UI_IMAGEN, UI_VIDEO, UI_MENU, ;
+// atributo.nombre
 terminal A_TEXTO, A_ALIGN, A_COLOR, A_ORIGEN, A_ALTO, A_ANCHO, A_PADRE, A_ETIQS, ;
+// atributo.nombre.alineacion
+terminal T_CENTRAR, T_IZQUIERDA, T_DERECHA, T_JUSTIFICAR, ;
 // literales
 terminal MI_ID, MI_TEXTO, MI_NUMERO, MI_COLOR, MI_URL, MI_FECHA, MI_ETIQUETA, ;
 
 // #%#%#%#% NO TERMINALES #%#%#%#%
-// non terminal Type2 mySymbol1, mySymbol2 ;
 
 non terminal acciones, accionesIZQ, accionesMID, accionesDER, ;
-non terminal accion, accionIZQ, accionMID, accionDER, accionNombre, ;
+non terminal accion, accionIZQ, accionMID, accionDER, accionNombre, accionTipo, ;
 non terminal parametros, parametrosIZQ, parametrosMID, parametrosDER, ;
 non terminal parametro, parametroIZQ, parametroMID, parametroDER, parametroNombre, ;
 non terminal atributos, atributosIZQ, atributosMID, atributosDER, ;
@@ -66,126 +69,191 @@ start with cms ;
 
 // INICIO
 cms ::= 
-    accion:w1 {}
-    | acciones:w1 {}
+    accion:w1  {:  :}
+    | acciones:w1  {:  :}
 ;
 
 // ACCIONES
 acciones ::=
-    accionesIZQ:w1 accionesMID:w2 accionesDER:w3 {}
+    accionesIZQ:w1 accionesMID:w2 accionesDER:w3  {:  :}
 ;
 accionesIZQ ::=
-    IZQ ACCIS DER
+    IZQ ACCIS DER  {:  :}
 ;
 accionesMID ::=
     accion:w1
-    | accionesMID:w1 accion:w2
+    | accionesMID:w1 accion:w2  {:  :}
 ;
 accionesDER ::=
-    IZQ BARRA ACCIS DER
+    IZQ BARRA ACCIS DER  {:  :}
 ;
 
 // ACCION
 accion ::=
-    accionIZQ:w1 accionMID:w2 accionDER:w3 {}
+    accionIZQ:w1 accionMID:w2 accionDER:w3  {:  :}
 ;
 accionIZQ ::=
-    IZQ ACCI accionNombre:w1 DER
+    IZQ ACCI accionNombre:w1 DER  {:  :}
 ;
 accionMID ::= 
-    parametros atributos etiquetas
-    | parametros etiquetas atributos
-    | atributos parametros etiquetas
-    | atributos etiquetas parametros
-    | etiquetas parametros atributos
-    | etiquetas atributos parametros
+    parametros  {:  :}
+    | atributos  {:  :}
+    | etiquetas  {:  :}
+    | accionMID parametros  {:  :}
+    | accionMID atributos  {:  :}
+    | accionMID etiquetas  {:  :}
 ;
 accionDER ::=
-    IZQ BARRA ACCI DER
+    IZQ BARRA ACCI DER  {:  :}
 ;
 accionNombre ::=
+    NOMBRE IGUAL COMI accionTipo COMI
+;
+accionTipo ::=
+    SITE_NEW
+    | SITE_DEL
+    | PAGE_NEW
+    | PAGE_DEL
+    | PAGE_MOD
+    | COMP_NEW
+    | COMP_DEL
+    | COMP_MOD
 ;
 
 // PARAMETROS
 parametros ::= 
-    parametrosIZQ parametrosMID parametrosDER
+    parametrosIZQ parametrosMID parametrosDER  {:  :}
 ;
 parametrosIZQ ::=
     IZQ PARAMS DER
 ;
 parametrosMID ::=
-    parametro
-    | parametrosMID parametro
+    parametro  {:  :}
+    | parametrosMID parametro  {:  :}
 ;
 parametrosDER ::=
-    IZQ BARRA PARAMS DER
+    IZQ BARRA PARAMS DER  {:  :}
 ;
 
 // PARAMETRO
 parametro ::=
-    parametroIZQ parametroMID parametroDER
+    parametroIZQ parametroMID parametroDER  {:  :}
 ;
 parametroIZQ ::=
-    IZQ PARAM parametroNombre:w1 DER
+    IZQ PARAM parametroNombre:w1 DER  {:  :}
 ;
 parametroMID ::=
+    IZQCOR parametroValor DERCOR
+;
+parametroValor ::=
+    MI_ID
+    | MI_TEXTO
+    | MI_FECHA
+    | UI_TITULO 
+    | UI_PARRAFO 
+    | UI_IMAGEN 
+    | UI_VIDEO 
+    | UI_MENU
 ;
 parametroDER ::=
-    IZQ BARRA PARAM DER
+    IZQ BARRA PARAM DER  {:  :}
 ;
 parametroNombre ::=
+    NOMBRE IGUAL COMI parametroTipo COMI
+;
+parametroTipo ::=
+    P_ID
+    | P_TITULO
+    | P_SITIO
+    | P_PADRE
+    | P_PAGINA
+    | P_CLASE
+    | P_USER_NEW
+    | P_USER_MOD
+    | P_FECHA_NEW
+    | P_FECHA_MOD
 ;
 
 // ATRIBUTOS
 atributos ::=
-    atributosIZQ atributosMID atributosDER
+    atributosIZQ atributosMID atributosDER  {:  :}
 ;
 atributosIZQ ::=
-    IZQ ATRIBS DER
+    IZQ ATRIBS DER  {:  :}
 ;
 atributosMID ::=
-    atributo
-    | atributosMID atributo
+    atributo  {:  :}
+    | atributosMID atributo  {:  :}
 ;
 atributosDER ::=
-    IZQ BARRA ATRIBS DER
+    IZQ BARRA ATRIBS DER  {:  :}
 ;
 
 // ATRIBUTO
 atributo ::=
-    atributoIZQ atributoMID atributoDER
+    atributoIZQ atributoMID atributoDER  {:  :}
 ;
 atributoIZQ ::=
-    IZQ ATRIB atributoNombre:w1 DER
+    IZQ ATRIB atributoNombre:w1 DER  {:  :}
 ;
 atributoMID ::=
+    IZQCOR atributoValor DERCOR
+;
+atributoValor ::= 
+    misEtiquetas
+    | MI_TEXTO
+    | MI_COLOR
+    | MI_URL
+    | MI_NUMERO
+    | T_CENTRAR
+    | T_DERECHA
+    | T_IZQUIERDA
+    | T_JUSTIFICAR
+;
+
+misEtiquetas ::=
+    MI_ETIQUETA
+    | misEtiquetas OR MI_ETIQUETA
 ;
 atributoDER ::=
-    IZQ BARRA ATRIB DER
+    IZQ BARRA ATRIB DER  {:  :}
 ;
 atributoNombre ::=
+    NOMBRE IGUAL COMI atributoTipo COMI
+;
+
+atributoTipo ::=
+    A_TEXTO
+    | A_ALIGN
+    | A_COLOR
+    | A_ORIGEN
+    | A_ALTO
+    | A_ANCHO
+    | A_PADRE
+    | A_ETIQS
 ;
 
 // ETIQUETAS
 etiquetas ::=
-    etiquetasIZQ etiquetasMID etiquetasDER
+    etiquetasIZQ etiquetasMID etiquetasDER  {:  :}
 ;
 etiquetasIZQ ::=
-    IZQ ETIQS DER
+    IZQ ETIQS DER  {:  :}
 ;
 etiquetasMID ::= 
-    etiqueta 
-    | etiquetasMID etiqueta
+    etiqueta  {:  :}
+    | etiquetasMID etiqueta  {:  :}
 ;
 etiquetasDER ::=
-    IZQ BARRA ETIQS DER
+    IZQ BARRA ETIQS DER  {:  :}
 ;
 
 // ETIQUETA
 etiqueta ::= 
-    IZQ etiquetaValor BARRA DER
+    IZQ etiquetaValor BARRA DER  {:  :}
 ;
 
 etiquetaValor ::=
+    VALOR IGUAL COMI MI_ETIQUETA:w1 COMI  {:  :}
 ;
 

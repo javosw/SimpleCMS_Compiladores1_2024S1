@@ -70,15 +70,18 @@ import josq.cms.lenguajes.parser.ParserXMLSym;
 %}
 
 // estados lexicos
-%state MI_ETIQUETA, ID, MI_TITULO, ID_USUARIO, MI_FECHA //, MI_COMPONENTE
-%state MI_TEXTO, MI_COLOR, MI_URL, MI_NUMERO, MIS_ETIQUETAS //, MI_ALINEACION
 //%xstate CONTEXTO_1
+%state MI_ID, MI_ID_USER  
+%state MI_TEXTO, MI_TITULO, MI_ETIQUETA, MIS_ETIQUETAS
+%state MI_NUMERO, MI_COLOR, MI_FECHA, MI_URL
+%state UI_WEB
 
 // macros para regex
 
-LineTerminator  =  \r|\n|\r\n
-Invisibles      =  ({LineTerminator} | [ \t\f])+
-_               =  {Invisibles}
+InvisiblesVertical    =  \r|\n|\r\n
+InvisiblesHorizontal  =  [ \t\f]
+Invisibles            =  ({InvisiblesHorizontal} | {InvisiblesVertical})+
+_                     =  {Invisibles}
 
 pre  =  _ | - | $
 id   =  {pre}([a-zA-Z0-9]|{pre})*
@@ -87,7 +90,7 @@ id   =  {pre}([a-zA-Z0-9]|{pre})*
 //idComponente 
 //idUsuario
 
-miTexto  =  [a-zA-Z0-9]+
+miTexto  =  ({_}|[a-zA-Z0-9])+
 //miTitulo
 
 miNumero      =  [1-9][0-9]*
@@ -97,7 +100,6 @@ miFecha       =  [0-9]{4}\-[0-9]{2}\-[0-9]{2}
 miEtiqueta    =  [a-zA-Z0-9]+
 //misEtiquetas
 
-//miComponente  =  "TITULO"|"PARRAFO"|"IMAGEN"|"VIDEO"|"MENU"
 //miAlineacion  =  "CENTRAR"|"IZQUIERDA"|"DERECHA"|"JUSTIFICAR"
 
 %%
@@ -130,15 +132,15 @@ miEtiqueta    =  [a-zA-Z0-9]+
 "BORRAR_COMPONENTE"     { print(); }
 
 // parametro.nombre
-"ID"                    { print(); yybegin(ID);}
-"TITULO"                { print(); yybegin(MI_TITULO);}
-"SITIO"                 { print(); yybegin(ID);}
-"PADRE"                 { print(); yybegin(ID);}
-"PAGINA"                { print(); yybegin(ID);}
-"CLASE"                 { print(); }
-"USUARIO_CREACION"      { print(); yybegin(ID_USUARIO);}
+"ID"                    { print(); yybegin(MI_ID);}
+"TITULO"                { print(); yybegin(MI_TEXTO);}
+"SITIO"                 { print(); yybegin(MI_ID);}
+"PADRE"                 { print(); yybegin(MI_ID);}
+"PAGINA"                { print(); yybegin(MI_ID);}
+"CLASE"                 { print(); yybegin(UI_WEB); }
+"USUARIO_CREACION"      { print(); yybegin(MI_ID);}
 "FECHA_CREACION"        { print(); yybegin(MI_FECHA);}
-"USUARIO_MODIFICACION"  { print(); yybegin(ID_USUARIO);}
+"USUARIO_MODIFICACION"  { print(); yybegin(MI_ID);}
 "FECHA_MODIFICACION"    { print(); yybegin(MI_FECHA);}
 
 // atributo.nombre
@@ -151,14 +153,8 @@ miEtiqueta    =  [a-zA-Z0-9]+
 "PADRE"       { print(); yybegin(ID);}
 "ETIQUETAS"   { print(); yybegin(MIS_ETIQUETAS);}
 
-// miComponente
-//"TITULO"   {}
-"PARRAFO"  { print(); }
-"IMAGEN"   { print(); }
-"VIDEO"    { print(); }
-"MENU"     { print(); }
 
-// miAlineacion 
+// atributo.nombre.alineacion 
 "CENTRAR"     { print(); }
 "IZQUIERDA"   { print(); }
 "DERECHA"     { print(); }
@@ -166,10 +162,10 @@ miEtiqueta    =  [a-zA-Z0-9]+
 
 }
 
-<ID> {
+<MI_ID> {
     {id}  { print(); }
 }
-<ID_USUARIO> {
+<MI_ID_USER> {
     {id}  { print(); }
 }
 <MI_FECHA> {
@@ -196,6 +192,14 @@ miEtiqueta    =  [a-zA-Z0-9]+
 <MIS_ETIQUETAS> {
     {miEtiqueta}  { print(); }
     \|  { print(); }
+}
+<UI_WEB> {
+// parametro.nombre.clase
+"TITULO"   { print(); }
+"PARRAFO"  { print(); }
+"IMAGEN"   { print(); }
+"VIDEO"    { print(); }
+"MENU"     { print(); }
 }
 
 // puntuacion
