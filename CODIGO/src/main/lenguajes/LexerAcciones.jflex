@@ -30,20 +30,24 @@ import josq.cms.lenguajes.parser.ParserAccionesSym;
 
 // codigo dentro de la clase lexer
 %{
-    ComplexSymbolFactory fact = null;
+    ComplexSymbolFactory myFactory = null;
 
     public LexerAcciones(Reader in, ComplexSymbolFactory sf)
-    { this(in); fact = sf; }
+    { this(in); myFactory = sf; }
 
     private Symbol symbol(String name, int sym) {
         Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
         Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
-        return fact.newSymbol(name, sym, izq, der);
+        Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der);
+        mySymbol.toString();
+        return mySymbol;
     }
     private Symbol symbol(String name, int sym, Object val) {
         Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
         Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
-        return fact.newSymbol(name, sym, izq, der, val);
+        Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der, val);
+        mySymbol.toString();
+        return mySymbol;
     }
     private void error(String message) {
         System.out.println("Error at line "+(yyline+1)+", column "+(yycolumn+1)+" : "+message);
@@ -55,6 +59,7 @@ import josq.cms.lenguajes.parser.ParserAccionesSym;
 
     void print(String texto){ System.out.print(texto); }
     void print(){ print(yytext()+" "); }
+    void print(ParserAccionesSym tipo){ print(yytext()+":"+tipo+" "); }
     void cleanBuffer()
     {
         buff.delete(0, buff.length());
@@ -74,9 +79,11 @@ import josq.cms.lenguajes.parser.ParserAccionesSym;
 
 // estados lexicos
 //%xstate CONTEXTO_1
-%state MI_ID, MI_ID_USER  
-%state MI_TEXTO, MI_TITULO, MI_ETIQUETA, MIS_ETIQUETAS
-%state MI_NUMERO, MI_COLOR, MI_FECHA, MI_URL
+%state MI_ACCION, MI_PARAMETRO, MI_ETIQUETA, MI_ATRIBUTO
+%state MI_ID, MI_ID_USER
+%state MI_NUMERO
+%state MI_TEXTO, MI_TITULO, MIS_ETIQUETAS
+%state MI_COLOR, MI_FECHA, MI_URL
 %state UI_WEB
 
 // macros para regex
@@ -108,104 +115,140 @@ miEtiqueta    =  [a-zA-Z0-9]+
 <YYINITIAL> {
 
 // nodos
-"acciones"    { print(); }
-"accion"      { print(); }
-"parametros"  { print(); }
-"parametro"   { print(); }
-"atributos"   { print(); }
-"atributo"    { print(); }
-"etiquetas"   { print(); }
-"etiqueta"    { print(); }
+"acciones"    { return symbol("",ParserAccionesSym.ACCIS); }
+"parametros"  { return symbol("",ParserAccionesSym.PARAMS); }
+"atributos"   { return symbol("",ParserAccionesSym.ATRIBS); }
+"etiquetas"   { return symbol("",ParserAccionesSym.ETIQS); }
+"accion"      { return symbol("",ParserAccionesSym.ACCI); }
+"parametro"   { return symbol("",ParserAccionesSym.PARAM); }
+"atributo"    { return symbol("",ParserAccionesSym.ATRIB); }
+"etiqueta"    { return symbol("",ParserAccionesSym.ETIQ); }
 
 // nodo.atributo
-"valor"  { print(); yybegin(MI_ETIQUETA); }
-"nombre" { print(); }
+"valor"  { yybegin(MI_ETIQUETA); return symbol("",ParserAccionesSym.VALOR); }
+"nombre" {                       return symbol("",ParserAccionesSym.NOMBRE); }
 
+}
+<MI_ACCION>{
 // accion.nombre
-"NUEVO_SITIO_WEB"       { print(); }
-"BORRAR_SITIO_WEB"      { print(); }
-"NUEVA_PAGINA"          { print(); }
-"MODIFICAR_PAGINA"      { print(); }
-"BORRAR_PAGINA"         { print(); }
-"AGREGAR_COMPONENTE"    { print(); }
-"MODIFICAR_COMPONENTE"  { print(); }
-"BORRAR_COMPONENTE"     { print(); }
+"NUEVO_SITIO_WEB"       { return symbol("",ParserAccionesSym.SITE_NEW); }
+"BORRAR_SITIO_WEB"      { return symbol("",ParserAccionesSym.SITE_DEL); }
+"NUEVA_PAGINA"          { return symbol("",ParserAccionesSym.PAGE_NEW); }
+"MODIFICAR_PAGINA"      { return symbol("",ParserAccionesSym.PAGE_MOD); }
+"BORRAR_PAGINA"         { return symbol("",ParserAccionesSym.PAGE_DEL); }
+"AGREGAR_COMPONENTE"    { return symbol("",ParserAccionesSym.COMP_NEW); }
+"MODIFICAR_COMPONENTE"  { return symbol("",ParserAccionesSym.COMP_MOD); }
+"BORRAR_COMPONENTE"     { return symbol("",ParserAccionesSym.COMP_DEL); }
+\"                      { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMI); }
+}
 
+<MI_PARAMETRO>{
 // parametro.nombre
-"ID"                    { print(); yybegin(MI_ID);}
-"SITIO"                 { print(); yybegin(MI_ID);}
-"PADRE"                 { print(); yybegin(MI_ID);}
-"PAGINA"                { print(); yybegin(MI_ID);}
-"USUARIO_CREACION"      { print(); yybegin(MI_ID);}
-"USUARIO_MODIFICACION"  { print(); yybegin(MI_ID);}
-"TITULO"                { print(); yybegin(MI_TEXTO);}
-"FECHA_CREACION"        { print(); yybegin(MI_FECHA);}
-"FECHA_MODIFICACION"    { print(); yybegin(MI_FECHA);}
-"CLASE"                 { print(); yybegin(UI_WEB); }
+"ID"                    { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_ID); }
+"SITIO"                 { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_SITIO); }
+"PADRE"                 { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_PADRE); }
+"PAGINA"                { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_PAGINA); }
+"USUARIO_CREACION"      { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_USER_NEW); }
+"USUARIO_MODIFICACION"  { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_USER_MOD); }
+"TITULO"                { yybegin(MI_TEXTO); return symbol("",ParserAccionesSym.P_TITULO); }
+"FECHA_CREACION"        { yybegin(MI_FECHA); return symbol("",ParserAccionesSym.P_FECHA_NEW); }
+"FECHA_MODIFICACION"    { yybegin(MI_FECHA); return symbol("",ParserAccionesSym.P_FECHA_MOD); }
+"CLASE"                 { yybegin(UI_WEB);   return symbol("",ParserAccionesSym.P_CLASE); }
+\"                      { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMI); }
+}
 
+<MI_ATRIBUTO>{
 // atributo.nombre
-//"PADRE"       { print(); yybegin(MI_ID);}
-"TEXTO"       { print(); yybegin(MI_TEXTO);}
-"ALTURA"      { print(); yybegin(MI_NUMERO);}
-"ANCHO"       { print(); yybegin(MI_NUMERO);}
-"COLOR"       { print(); yybegin(MI_COLOR);}
-"ORIGEN"      { print(); yybegin(MI_URL);}
-"ETIQUETAS"   { print(); yybegin(MIS_ETIQUETAS);}
-"ALINEACION"  { print(); }
+"PADRE"       { yybegin(MI_ID);         return symbol("",ParserAccionesSym.A_PADRE); }
+"TEXTO"       { yybegin(MI_TEXTO);      return symbol("",ParserAccionesSym.A_TEXTO); }
+"ALTURA"      { yybegin(MI_NUMERO);     return symbol("",ParserAccionesSym.A_ALTO); }
+"ANCHO"       { yybegin(MI_NUMERO);     return symbol("",ParserAccionesSym.A_ANCHO); }
+"COLOR"       { yybegin(MI_COLOR);      return symbol("",ParserAccionesSym.A_COLOR); }
+"ORIGEN"      { yybegin(MI_URL);        return symbol("",ParserAccionesSym.A_ORIGEN); }
+"ETIQUETAS"   { yybegin(MIS_ETIQUETAS); return symbol("",ParserAccionesSym.A_ETIQS); }
+"ALINEACION"  {                         return symbol("",ParserAccionesSym.A_ALIGN); }
+\"            { yybegin(YYINITIAL);     return symbol("",ParserAccionesSym.COMI); }
+}
 
+<MI_ETIQUETA> {
+{miEtiqueta}  { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.MI_ETIQUETA);  }
+\"            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMI); }
+}
+
+<UI_WEB> {
+// parametro.nombre.clase
+"TITULO"   { return symbol("",ParserAccionesSym.UI_TITULO); }
+"PARRAFO"  { return symbol("",ParserAccionesSym.UI_PARRAFO); }
+"IMAGEN"   { return symbol("",ParserAccionesSym.UI_IMAGEN); }
+"VIDEO"    { return symbol("",ParserAccionesSym.UI_VIDEO); }
+"MENU"     { return symbol("",ParserAccionesSym.UI_MENU); }
+}
+
+<MI_ALIGN>{
 // atributo.nombre.alineacion 
-"CENTRAR"     { print(); }
-"IZQUIERDA"   { print(); }
-"DERECHA"     { print(); }
-"JUSTIFICAR"  { print(); }
-
+"IZQUIERDA"   { return symbol("",ParserAccionesSym.T_IZQUIERDA); }
+"CENTRAR"     { return symbol("",ParserAccionesSym.T_CENTRAR); }
+"DERECHA"     { return symbol("",ParserAccionesSym.T_DERECHA); }
+"JUSTIFICAR"  { return symbol("",ParserAccionesSym.T_JUSTIFICAR); }
 }
 
 <MI_ID> {
-    {id}  { print(); }
+    {id}          { return symbol("",ParserAccionesSym.MI_ID); }
 }
 <MI_FECHA> {
-    {miFecha}  { print(); }
+    {miFecha}     { return symbol("",ParserAccionesSym.MI_FECHA); }
 }
 <MI_TEXTO> {
-    {miTexto}  { print(); }
+    {miTexto}     { return symbol("",ParserAccionesSym.MI_TEXTO); }
 }
 <MI_COLOR> {
-    {miColor}  { print(); }
+    {miColor}     { return symbol("",ParserAccionesSym.MI_COLOR); }
 }
 <MI_NUMERO> {
-    {miNumero}  { print(); }
+    {miNumero}    { return symbol("",ParserAccionesSym.MI_NUMERO); }
 }
 <MI_URL> {
-    {miURL}  { print(); }
-}
-<MI_ETIQUETA> {
-    {miEtiqueta}  { print(); yybegin(YYINITIAL); }
+    {miURL}       { return symbol("",ParserAccionesSym.MI_URL); }
 }
 <MIS_ETIQUETAS> {
-    {miEtiqueta}  { print(); }
-    \|  { print(); }
-}
-<UI_WEB> {
-// parametro.nombre.clase
-"TITULO"   { print(); }
-"PARRAFO"  { print(); }
-"IMAGEN"   { print(); }
-"VIDEO"    { print(); }
-"MENU"     { print(); }
+    {miEtiqueta}  { return symbol("",ParserAccionesSym.MI_ETIQUETA); }
+    \|            { return symbol("",ParserAccionesSym.OR); }
 }
 
 // puntuacion
-"<"  { print(); }
-">"  { print(); }
-"/"  { print(); }
-\"   { print(); }
-"["  { print(); }
-"]"  { print(); yybegin(YYINITIAL);}
-\=   { print(); }
+"<"  { return symbol("",ParserAccionesSym.IZQ); }
+">"  { return symbol("",ParserAccionesSym.DER); }
+"/"  { return symbol("",ParserAccionesSym.BARRA); }
+\"   { return symbol("",ParserAccionesSym.COMI); }
+"["  { return symbol("",ParserAccionesSym.IZQCOR); }
+"]"  { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.DERCOR); }
+\=   { return symbol("",ParserAccionesSym.IGUAL); }
 
 // ignorados
 {Invisibles}  { }
 
 // error
-[^]  { }
+[^]  { yybegin(YYINITIAL); }
+
+
+
+
+// puntuacion
+terminal IZQ, DER, BARRA, IGUAL, IZQCOR, DERCOR, COMI, OR ;
+// nodos
+terminal ACCIS, ACCI, PARAMS, PARAM, ATRIBS, ATRIB, ETIQS, ETIQ ;
+// nodo.atributo
+terminal VALOR, NOMBRE ;
+// acciones.nombre
+terminal SITE_NEW, SITE_DEL, PAGE_NEW, PAGE_DEL, PAGE_MOD, COMP_NEW, COMP_DEL, COMP_MOD ;
+// parametro.nombre
+terminal P_ID, P_TITULO, P_SITIO, P_PADRE, P_PAGINA, P_CLASE ;
+terminal P_FECHA_NEW, P_FECHA_MOD, P_USER_NEW, P_USER_MOD ;
+// parametro.nombre.clase
+terminal UI_TITULO, UI_PARRAFO, UI_IMAGEN, UI_VIDEO, UI_MENU ;
+// atributo.nombre
+terminal A_TEXTO, A_ALIGN, A_COLOR, A_ORIGEN, A_ALTO, A_ANCHO, A_PADRE, A_ETIQS ;
+// atributo.nombre.alineacion
+terminal T_CENTRAR, T_IZQUIERDA, T_DERECHA, T_JUSTIFICAR ;
+// literales
+terminal MI_ID, MI_TEXTO, MI_NUMERO, MI_COLOR, MI_URL, MI_FECHA, MI_ETIQUETA ;
