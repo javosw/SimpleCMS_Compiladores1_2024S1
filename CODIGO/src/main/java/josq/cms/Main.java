@@ -29,7 +29,11 @@ public class Main
         }
         catch (Exception ex)
         {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            print("\n<%#%#%#%#%#%#%#% ERRORES %#%#%#%#%#%#%#%>\n");
+            print(ex.getMessage());
         }
     }
+    
+    private static void print(String txt){ System.out.println(txt); }
+    
 }

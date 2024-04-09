@@ -39,27 +39,26 @@ import josq.cms.lenguajes.parser.ParserAccionesSym;
         Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
         Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der);
-        mySymbol.toString();
+        print(sym);
         return mySymbol;
     }
     private Symbol symbol(String name, int sym, Object val) {
         Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
         Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der, val);
-        mySymbol.toString();
+        print(sym);
         return mySymbol;
     }
     private void error(String message) {
         System.out.println("Error at line "+(yyline+1)+", column "+(yycolumn+1)+" : "+message);
     }
 
+    void print(String txt){ System.out.print(txt); }
+    void print(int sym){ print(yytext()+":"+ParserAccionesSym.terminalNames[sym]+" "); }
 
 
     StringBuffer buff = new StringBuffer();
 
-    void print(String texto){ System.out.print(texto); }
-    void print(){ print(yytext()+" "); }
-    void print(ParserAccionesSym tipo){ print(yytext()+":"+tipo+" "); }
     void cleanBuffer()
     {
         buff.delete(0, buff.length());
