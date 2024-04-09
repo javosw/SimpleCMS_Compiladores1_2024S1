@@ -75,11 +75,13 @@ start with cms ;
 cms ::= 
     accion:w1  {:  :}
     | acciones:w1  {:  :}
+    | error:w1 {: print("@CMS "); :}
 ;
 
 // ACCIONES
 acciones ::=
     accionesIZQ:w1 accionesMID:w2 accionesDER:w3  {:  :}
+    | error:w1 DER {: print("@ACCIONES> "); :}
 ;
 accionesIZQ ::=
     IZQ ACCIS DER  {:  :}
@@ -106,6 +108,7 @@ accionMID ::=
     | accionMID parametros  {:  :}
     | accionMID atributos  {:  :}
     | accionMID etiquetas  {:  :}
+    | error:w1 DER {: print("@ACCION<> "); :}
 ;
 accionDER ::=
     IZQ BARRA ACCI DER  {:  :}
@@ -205,6 +208,7 @@ atributoMID ::=
 ;
 atributoValor ::= 
     misEtiquetas
+    | MI_ID
     | MI_TEXTO
     | MI_COLOR
     | MI_URL

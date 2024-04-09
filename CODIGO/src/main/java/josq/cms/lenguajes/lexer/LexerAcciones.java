@@ -16,6 +16,8 @@ import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 import josq.cms.lenguajes.parser.ParserAccionesSym;
+import josq.cms.archivos.Texto;
+
 
 @SuppressWarnings("fallthrough")
 public class LexerAcciones implements java_cup.runtime.Scanner {
@@ -516,14 +518,16 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
         Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
         Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der);
-        print(sym);
+        //saveLexema(infoLexema(sym));
+        //print(sym);
         return mySymbol;
     }
     private Symbol symbol(String name, int sym, Object val) {
         Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
         Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der, val);
-        print(sym);
+        //saveLexema(infoLexema(sym));
+        //print(sym);
         return mySymbol;
     }
     private void error(String message) {
@@ -531,7 +535,9 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
     }
 
     void print(String txt){ System.out.print(txt); }
-    void print(int sym){ print(yytext()+":"+ParserAccionesSym.terminalNames[sym]+" "); }
+    void print(int sym){ print(infoLexema(sym)); }
+
+    String infoLexema(int sym) { return yytext()+":"+ParserAccionesSym.terminalNames[sym]+" "; }
 
 
     StringBuffer buff = new StringBuffer();
@@ -578,11 +584,12 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
         }
     }
 
-    void resetContextos()
+    void saveLexema(String txt)
     {
-        accioncEsInpar = false;
-        parametroEsInpar = false;
-        atributoEsInpar = false;
+        String file = "C:\\Users\\JavierOswaldo\\Desktop\\LEXER.txt";
+        
+        try {Texto.addTexto(file, txt);}
+        catch (Exception ex) {print(ex.getMessage());}
     }
 
 
@@ -1014,7 +1021,7 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { symbol("",ParserAccionesSym.error);
+            { return symbol("",ParserAccionesSym.error);
             }
           // fall through
           case 65: break;
@@ -1024,312 +1031,312 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
           // fall through
           case 66: break;
           case 3:
-            { symbol("",ParserAccionesSym.COMI);
+            { return symbol("",ParserAccionesSym.COMI);
             }
           // fall through
           case 67: break;
           case 4:
-            { symbol("",ParserAccionesSym.BARRA);
+            { return symbol("",ParserAccionesSym.BARRA);
             }
           // fall through
           case 68: break;
           case 5:
-            { symbol("",ParserAccionesSym.IZQ);
+            { return symbol("",ParserAccionesSym.IZQ);
             }
           // fall through
           case 69: break;
           case 6:
-            { symbol("",ParserAccionesSym.IGUAL);
+            { return symbol("",ParserAccionesSym.IGUAL);
             }
           // fall through
           case 70: break;
           case 7:
-            { symbol("",ParserAccionesSym.DER);
+            { return symbol("",ParserAccionesSym.DER);
             }
           // fall through
           case 71: break;
           case 8:
-            { symbol("",ParserAccionesSym.IZQCOR);
+            { return symbol("",ParserAccionesSym.IZQCOR);
             }
           // fall through
           case 72: break;
           case 9:
-            { symbol("",ParserAccionesSym.DERCOR);
+            { return symbol("",ParserAccionesSym.DERCOR);
             }
           // fall through
           case 73: break;
           case 10:
-            { symbol("",ParserAccionesSym.MI_ID);
+            { return symbol("",ParserAccionesSym.MI_ID);
             }
           // fall through
           case 74: break;
           case 11:
-            { yybegin(YYINITIAL);  symbol("",ParserAccionesSym.DERCOR);
+            { yybegin(YYINITIAL);  return symbol("",ParserAccionesSym.DERCOR);
             }
           // fall through
           case 75: break;
           case 12:
-            { symbol("",ParserAccionesSym.MI_NUMERO);
+            { return symbol("",ParserAccionesSym.MI_NUMERO);
             }
           // fall through
           case 76: break;
           case 13:
-            { yybegin(YYINITIAL);  symbol("",ParserAccionesSym.MI_ETIQUETA);
+            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.MI_ETIQUETA);
             }
           // fall through
           case 77: break;
           case 14:
-            { symbol("",ParserAccionesSym.MI_ETIQUETA);
+            { return symbol("",ParserAccionesSym.MI_ETIQUETA);
             }
           // fall through
           case 78: break;
           case 15:
-            { symbol("",ParserAccionesSym.OR);
+            { return symbol("",ParserAccionesSym.OR);
             }
           // fall through
           case 79: break;
           case 16:
-            { symbol("",ParserAccionesSym.MI_URL);
+            { return symbol("",ParserAccionesSym.MI_URL);
             }
           // fall through
           case 80: break;
           case 17:
-            { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_ID);
+            { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_ID);
             }
           // fall through
           case 81: break;
           case 18:
-            { symbol("",ParserAccionesSym.MI_TEXTO);
+            { return symbol("",ParserAccionesSym.MI_TEXTO);
             }
           // fall through
           case 82: break;
           case 19:
-            { symbol("",ParserAccionesSym.UI_MENU);
+            { return symbol("",ParserAccionesSym.UI_MENU);
             }
           // fall through
           case 83: break;
           case 20:
-            { yybegin(MI_ETIQUETA); symbol("",ParserAccionesSym.VALOR);
+            { yybegin(MI_ETIQUETA); return symbol("",ParserAccionesSym.VALOR);
             }
           // fall through
           case 84: break;
           case 21:
-            { yybegin(UI_WEB);     symbol("",ParserAccionesSym.P_CLASE);
+            { yybegin(UI_WEB);   return symbol("",ParserAccionesSym.P_CLASE);
             }
           // fall through
           case 85: break;
           case 22:
-            { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_PADRE);
+            { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_PADRE);
             }
           // fall through
           case 86: break;
           case 23:
-            { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_SITIO);
+            { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_SITIO);
             }
           // fall through
           case 87: break;
           case 24:
-            { yybegin(MI_NUMERO);      symbol("",ParserAccionesSym.A_ANCHO);
+            { yybegin(MI_NUMERO);     return symbol("",ParserAccionesSym.A_ANCHO);
             }
           // fall through
           case 88: break;
           case 25:
-            { yybegin(MI_COLOR);       symbol("",ParserAccionesSym.A_COLOR);
+            { yybegin(MI_COLOR);      return symbol("",ParserAccionesSym.A_COLOR);
             }
           // fall through
           case 89: break;
           case 26:
-            { yybegin(MI_ID);          symbol("",ParserAccionesSym.A_PADRE);
+            { yybegin(MI_ID);         return symbol("",ParserAccionesSym.A_PADRE);
             }
           // fall through
           case 90: break;
           case 27:
-            { symbol("",ParserAccionesSym.UI_VIDEO);
+            { return symbol("",ParserAccionesSym.UI_VIDEO);
             }
           // fall through
           case 91: break;
           case 28:
-            { setContextoDe(ParserAccionesSym.ACCI);   symbol("",ParserAccionesSym.ACCI);
+            { setContextoDe(ParserAccionesSym.ACCI);   return symbol("",ParserAccionesSym.ACCI);
             }
           // fall through
           case 92: break;
           case 29:
-            { symbol("",ParserAccionesSym.NOMBRE);
+            { return symbol("",ParserAccionesSym.NOMBRE);
             }
           // fall through
           case 93: break;
           case 30:
-            { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_PAGINA);
+            { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_PAGINA);
             }
           // fall through
           case 94: break;
           case 31:
-            { yybegin(MI_TEXTO);   symbol("",ParserAccionesSym.P_TITULO);
+            { yybegin(MI_TEXTO); return symbol("",ParserAccionesSym.P_TITULO);
             }
           // fall through
           case 95: break;
           case 32:
-            { yybegin(MI_NUMERO);      symbol("",ParserAccionesSym.A_ALTO);
+            { yybegin(MI_NUMERO);     return symbol("",ParserAccionesSym.A_ALTO);
             }
           // fall through
           case 96: break;
           case 33:
-            { yybegin(MI_URL);         symbol("",ParserAccionesSym.A_ORIGEN);
+            { yybegin(MI_URL);        return symbol("",ParserAccionesSym.A_ORIGEN);
             }
           // fall through
           case 97: break;
           case 34:
-            { yybegin(MI_TEXTO);       symbol("",ParserAccionesSym.A_TEXTO);
+            { yybegin(MI_TEXTO);      return symbol("",ParserAccionesSym.A_TEXTO);
             }
           // fall through
           case 98: break;
           case 35:
-            { symbol("",ParserAccionesSym.UI_IMAGEN);
+            { return symbol("",ParserAccionesSym.UI_IMAGEN);
             }
           // fall through
           case 99: break;
           case 36:
-            { symbol("",ParserAccionesSym.UI_TITULO);
+            { return symbol("",ParserAccionesSym.UI_TITULO);
             }
           // fall through
           case 100: break;
           case 37:
-            { symbol("",ParserAccionesSym.MI_COLOR);
+            { return symbol("",ParserAccionesSym.MI_COLOR);
             }
           // fall through
           case 101: break;
           case 38:
-            { symbol("",ParserAccionesSym.UI_PARRAFO);
+            { return symbol("",ParserAccionesSym.UI_PARRAFO);
             }
           // fall through
           case 102: break;
           case 39:
-            { symbol("",ParserAccionesSym.T_CENTRAR);
+            { return symbol("",ParserAccionesSym.T_CENTRAR);
             }
           // fall through
           case 103: break;
           case 40:
-            { symbol("",ParserAccionesSym.T_DERECHA);
+            { return symbol("",ParserAccionesSym.T_DERECHA);
             }
           // fall through
           case 104: break;
           case 41:
-            { symbol("",ParserAccionesSym.ACCIS);
+            { return symbol("",ParserAccionesSym.ACCIS);
             }
           // fall through
           case 105: break;
           case 42:
-            { setContextoDe(ParserAccionesSym.ATRIB);  symbol("",ParserAccionesSym.ATRIB);
+            { setContextoDe(ParserAccionesSym.ATRIB);  return symbol("",ParserAccionesSym.ATRIB);
             }
           // fall through
           case 106: break;
           case 43:
-            { symbol("",ParserAccionesSym.ETIQ);
+            { return symbol("",ParserAccionesSym.ETIQ);
             }
           // fall through
           case 107: break;
           case 44:
-            { symbol("",ParserAccionesSym.ATRIBS);
+            { return symbol("",ParserAccionesSym.ATRIBS);
             }
           // fall through
           case 108: break;
           case 45:
-            { symbol("",ParserAccionesSym.ETIQS);
+            { return symbol("",ParserAccionesSym.ETIQS);
             }
           // fall through
           case 109: break;
           case 46:
-            { setContextoDe(ParserAccionesSym.PARAM);  symbol("",ParserAccionesSym.PARAM);
+            { setContextoDe(ParserAccionesSym.PARAM);  return symbol("",ParserAccionesSym.PARAM);
             }
           // fall through
           case 110: break;
           case 47:
-            { yybegin(MIS_ETIQUETAS);  symbol("",ParserAccionesSym.A_ETIQS);
+            { yybegin(MIS_ETIQUETAS); return symbol("",ParserAccionesSym.A_ETIQS);
             }
           // fall through
           case 111: break;
           case 48:
-            { symbol("",ParserAccionesSym.T_IZQUIERDA);
+            { return symbol("",ParserAccionesSym.T_IZQUIERDA);
             }
           // fall through
           case 112: break;
           case 49:
-            { symbol("",ParserAccionesSym.PARAMS);
+            { return symbol("",ParserAccionesSym.PARAMS);
             }
           // fall through
           case 113: break;
           case 50:
-            { yybegin(MI_ALIGN);       symbol("",ParserAccionesSym.A_ALIGN);
+            { yybegin(MI_ALIGN);      return symbol("",ParserAccionesSym.A_ALIGN);
             }
           // fall through
           case 114: break;
           case 51:
-            { symbol("",ParserAccionesSym.MI_FECHA);
+            { return symbol("",ParserAccionesSym.MI_FECHA);
             }
           // fall through
           case 115: break;
           case 52:
-            { symbol("",ParserAccionesSym.T_JUSTIFICAR);
+            { return symbol("",ParserAccionesSym.T_JUSTIFICAR);
             }
           // fall through
           case 116: break;
           case 53:
-            { yybegin(YYINITIAL);   symbol("",ParserAccionesSym.PAGE_NEW);
+            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.PAGE_NEW);
             }
           // fall through
           case 117: break;
           case 54:
-            { yybegin(YYINITIAL);   symbol("",ParserAccionesSym.PAGE_DEL);
+            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.PAGE_DEL);
             }
           // fall through
           case 118: break;
           case 55:
-            { yybegin(MI_FECHA);   symbol("",ParserAccionesSym.P_FECHA_NEW);
+            { yybegin(MI_FECHA); return symbol("",ParserAccionesSym.P_FECHA_NEW);
             }
           // fall through
           case 119: break;
           case 56:
-            { yybegin(YYINITIAL);   symbol("",ParserAccionesSym.SITE_NEW);
+            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.SITE_NEW);
             }
           // fall through
           case 120: break;
           case 57:
-            { yybegin(YYINITIAL);   symbol("",ParserAccionesSym.SITE_DEL);
+            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.SITE_DEL);
             }
           // fall through
           case 121: break;
           case 58:
-            { yybegin(YYINITIAL);   symbol("",ParserAccionesSym.PAGE_MOD);
+            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.PAGE_MOD);
             }
           // fall through
           case 122: break;
           case 59:
-            { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_USER_NEW);
+            { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_USER_NEW);
             }
           // fall through
           case 123: break;
           case 60:
-            { yybegin(YYINITIAL);   symbol("",ParserAccionesSym.COMP_DEL);
+            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMP_DEL);
             }
           // fall through
           case 124: break;
           case 61:
-            { yybegin(YYINITIAL);   symbol("",ParserAccionesSym.COMP_NEW);
+            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMP_NEW);
             }
           // fall through
           case 125: break;
           case 62:
-            { yybegin(MI_FECHA);   symbol("",ParserAccionesSym.P_FECHA_MOD);
+            { yybegin(MI_FECHA); return symbol("",ParserAccionesSym.P_FECHA_MOD);
             }
           // fall through
           case 126: break;
           case 63:
-            { yybegin(YYINITIAL);   symbol("",ParserAccionesSym.COMP_MOD);
+            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMP_MOD);
             }
           // fall through
           case 127: break;
           case 64:
-            { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_USER_MOD);
+            { yybegin(MI_ID);    return symbol("",ParserAccionesSym.P_USER_MOD);
             }
           // fall through
           case 128: break;

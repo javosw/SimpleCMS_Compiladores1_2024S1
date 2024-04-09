@@ -6,6 +6,7 @@ package josq.cms;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import josq.cms.archivos.Texto;
 import josq.cms.lenguajes.Procesar;
 
 /**
@@ -22,16 +23,33 @@ public class Main
 
     static void pruebas1() 
     {
-        String ruta = "C:\\Users\\JavierOswaldo\\Desktop\\PROCESADORES-LENGUAJE\\CODIFICACION\\PROYECTO-1\\PRUEBAS\\acciones.xml";
+        String xml = "acciones.xml";
+        String ruta = "C:\\Users\\JavierOswaldo\\Desktop\\PROCESADORES-LENGUAJE\\CODIFICACION\\PROYECTO-1\\PRUEBAS\\"+xml;
         try
         {
             Procesar.accionesDesdeArchivo(ruta);
         }
         catch (Exception ex)
         {
-            print("\n<%#%#%#%#%#%#%#% ERRORES %#%#%#%#%#%#%#%>\n");
+            print("\n    <%#%#%#%#%#%#%#% ERRORES %#%#%#%#%#%#%#%>\n");
             print(ex.getMessage());
         }
+    }
+    
+    static void pruebas2()
+    {
+        try
+        {
+            String file = "C:\\Users\\JavierOswaldo\\Desktop\\LEXER.txt";
+            Texto.newTexto(file, " 111 ");
+            Texto.addTexto(file, "222 ");
+            Texto.addTexto(file, "333 ");
+            Texto.newTexto(file, "444 ");
+        }
+        catch (Exception ex)
+        {
+        }
+        
     }
     
     private static void print(String txt){ System.out.println(txt); }
