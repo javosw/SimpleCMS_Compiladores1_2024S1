@@ -74,14 +74,49 @@ import josq.cms.lenguajes.parser.ParserAccionesSym;
         return temp;
     }
 
+
+    boolean accioncEsInpar = false;
+    boolean parametroEsInpar = false;
+    boolean atributoEsInpar = false;
+
+    void setContextoDe(int sym)
+    {
+        if(sym == ParserAccionesSym.ACCI)
+        { 
+            if (accioncEsInpar) { yybegin(YYINITIAL); }
+            else { yybegin(MI_ACCION); }
+            accioncEsInpar = !accioncEsInpar;
+        }
+        if(sym == ParserAccionesSym.PARAM)
+        { 
+            if (parametroEsInpar) { yybegin(YYINITIAL); }
+            else { yybegin(MI_PARAMETRO); }
+            parametroEsInpar = !parametroEsInpar;
+        }
+        if(sym == ParserAccionesSym.ATRIB)
+        { 
+            if (atributoEsInpar) { yybegin(YYINITIAL); }
+            else { yybegin(MI_ATRIBUTO); }
+            atributoEsInpar = !atributoEsInpar;
+        }
+    }
+
+    void resetContextos()
+    {
+        accioncEsInpar = false;
+        parametroEsInpar = false;
+        atributoEsInpar = false;
+    }
+
+
 %}
 
 // estados lexicos
 //%xstate CONTEXTO_1
-%state MI_ACCION, MI_PARAMETRO, MI_ETIQUETA, MI_ATRIBUTO
+%state MI_ACCION, MI_PARAMETRO, MI_ATRIBUTO
 %state MI_ID, MI_ID_USER
 %state MI_NUMERO
-%state MI_TEXTO, MI_TITULO, MIS_ETIQUETAS
+%state MI_TEXTO, MI_TITULO, MI_ETIQUETA, MIS_ETIQUETAS
 %state MI_COLOR, MI_FECHA, MI_URL
 %state UI_WEB, MI_ALIGN
 
@@ -99,7 +134,7 @@ id   =  {pre}([a-zA-Z0-9]|{pre})*
 //idComponente 
 //idUsuario
 
-miTexto  =  ({_}|[a-zA-Z0-9])+
+miTexto  =  [a-zA-Z0-9]({_}|[a-zA-Z0-9])+
 //miTitulo
 
 miNumero      =  [1-9][0-9]*
@@ -112,119 +147,123 @@ miEtiqueta    =  [a-zA-Z0-9]+
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
 
 <YYINITIAL> {
-
 // nodos
-"acciones"    {                        return symbol("",ParserAccionesSym.ACCIS); }
-"parametros"  {                        return symbol("",ParserAccionesSym.PARAMS); }
-"atributos"   {                        return symbol("",ParserAccionesSym.ATRIBS); }
-"etiquetas"   {                        return symbol("",ParserAccionesSym.ETIQS); }
-"accion"      { yybegin(MI_ACCION);    return symbol("",ParserAccionesSym.ACCI); }
-"parametro"   { yybegin(MI_PARAMETRO); return symbol("",ParserAccionesSym.PARAM); }
-"atributo"    { yybegin(MI_ATRIBUTO);  return symbol("",ParserAccionesSym.ATRIB); }
-"etiqueta"    {                        return symbol("",ParserAccionesSym.ETIQ); }
+"acciones"    { symbol("",ParserAccionesSym.ACCIS); }
+"parametros"  { symbol("",ParserAccionesSym.PARAMS); }
+"atributos"   { symbol("",ParserAccionesSym.ATRIBS); }
 
-// nodo.atributo
-"valor"  { yybegin(MI_ETIQUETA);       return symbol("",ParserAccionesSym.VALOR); }
-"nombre" {                             return symbol("",ParserAccionesSym.NOMBRE); }
+"accion"      { setContextoDe(ParserAccionesSym.ACCI);   symbol("",ParserAccionesSym.ACCI); }
+"parametro"   { setContextoDe(ParserAccionesSym.PARAM);  symbol("",ParserAccionesSym.PARAM); }
+"atributo"    { setContextoDe(ParserAccionesSym.ATRIB);  symbol("",ParserAccionesSym.ATRIB); }
 
+"etiquetas"   { symbol("",ParserAccionesSym.ETIQS); }
+"etiqueta"    { symbol("",ParserAccionesSym.ETIQ); }
+// etiqueta.valor
+"valor"       { yybegin(MI_ETIQUETA); symbol("",ParserAccionesSym.VALOR); }
 }
+
+
+<MI_ACCION, MI_PARAMETRO, MI_ATRIBUTO> {
+// nodo.nombre
+"nombre" { symbol("",ParserAccionesSym.NOMBRE); }
+}
+
 <MI_ACCION>{
-// accion.nombre
-"NUEVO_SITIO_WEB"       {                     return symbol("",ParserAccionesSym.SITE_NEW); }
-"BORRAR_SITIO_WEB"      {                     return symbol("",ParserAccionesSym.SITE_DEL); }
-"NUEVA_PAGINA"          {                     return symbol("",ParserAccionesSym.PAGE_NEW); }
-"MODIFICAR_PAGINA"      {                     return symbol("",ParserAccionesSym.PAGE_MOD); }
-"BORRAR_PAGINA"         {                     return symbol("",ParserAccionesSym.PAGE_DEL); }
-"AGREGAR_COMPONENTE"    {                     return symbol("",ParserAccionesSym.COMP_NEW); }
-"MODIFICAR_COMPONENTE"  {                     return symbol("",ParserAccionesSym.COMP_MOD); }
-"BORRAR_COMPONENTE"     {                     return symbol("",ParserAccionesSym.COMP_DEL); }
-\"                      { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMI); }
+// accion.nombre="MI_ACCION"
+"NUEVO_SITIO_WEB"       {  yybegin(YYINITIAL);   symbol("",ParserAccionesSym.SITE_NEW); }
+"BORRAR_SITIO_WEB"      {  yybegin(YYINITIAL);   symbol("",ParserAccionesSym.SITE_DEL); }
+"NUEVA_PAGINA"          {  yybegin(YYINITIAL);   symbol("",ParserAccionesSym.PAGE_NEW); }
+"MODIFICAR_PAGINA"      {  yybegin(YYINITIAL);   symbol("",ParserAccionesSym.PAGE_MOD); }
+"BORRAR_PAGINA"         {  yybegin(YYINITIAL);   symbol("",ParserAccionesSym.PAGE_DEL); }
+"AGREGAR_COMPONENTE"    {  yybegin(YYINITIAL);   symbol("",ParserAccionesSym.COMP_NEW); }
+"MODIFICAR_COMPONENTE"  {  yybegin(YYINITIAL);   symbol("",ParserAccionesSym.COMP_MOD); }
+"BORRAR_COMPONENTE"     {  yybegin(YYINITIAL);   symbol("",ParserAccionesSym.COMP_DEL); }
 }
 
 <MI_PARAMETRO>{
-// parametro.nombre
-"ID"                    { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_ID); }
-"SITIO"                 { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_SITIO); }
-"PADRE"                 { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_PADRE); }
-"PAGINA"                { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_PAGINA); }
-"USUARIO_CREACION"      { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_USER_NEW); }
-"USUARIO_MODIFICACION"  { yybegin(MI_ID);     return symbol("",ParserAccionesSym.P_USER_MOD); }
-"TITULO"                { yybegin(MI_TEXTO);  return symbol("",ParserAccionesSym.P_TITULO); }
-"FECHA_CREACION"        { yybegin(MI_FECHA);  return symbol("",ParserAccionesSym.P_FECHA_NEW); }
-"FECHA_MODIFICACION"    { yybegin(MI_FECHA);  return symbol("",ParserAccionesSym.P_FECHA_MOD); }
-"CLASE"                 { yybegin(UI_WEB);    return symbol("",ParserAccionesSym.P_CLASE); }
-\"                      { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMI); }
+// parametro.nombre="MI_PARAMETRO"
+"ID"                    { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_ID); }
+"SITIO"                 { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_SITIO); }
+"PADRE"                 { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_PADRE); }
+"PAGINA"                { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_PAGINA); }
+"USUARIO_CREACION"      { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_USER_NEW); }
+"USUARIO_MODIFICACION"  { yybegin(MI_ID);      symbol("",ParserAccionesSym.P_USER_MOD); }
+"TITULO"                { yybegin(MI_TEXTO);   symbol("",ParserAccionesSym.P_TITULO); }
+"FECHA_CREACION"        { yybegin(MI_FECHA);   symbol("",ParserAccionesSym.P_FECHA_NEW); }
+"FECHA_MODIFICACION"    { yybegin(MI_FECHA);   symbol("",ParserAccionesSym.P_FECHA_MOD); }
+"CLASE"                 { yybegin(UI_WEB);     symbol("",ParserAccionesSym.P_CLASE); }
 }
 
 <MI_ATRIBUTO>{
-// atributo.nombre
-"PADRE"       { yybegin(MI_ID);         return symbol("",ParserAccionesSym.A_PADRE); }
-"TEXTO"       { yybegin(MI_TEXTO);      return symbol("",ParserAccionesSym.A_TEXTO); }
-"ALTURA"      { yybegin(MI_NUMERO);     return symbol("",ParserAccionesSym.A_ALTO); }
-"ANCHO"       { yybegin(MI_NUMERO);     return symbol("",ParserAccionesSym.A_ANCHO); }
-"COLOR"       { yybegin(MI_COLOR);      return symbol("",ParserAccionesSym.A_COLOR); }
-"ORIGEN"      { yybegin(MI_URL);        return symbol("",ParserAccionesSym.A_ORIGEN); }
-"ETIQUETAS"   { yybegin(MIS_ETIQUETAS); return symbol("",ParserAccionesSym.A_ETIQS); }
-"ALINEACION"  {                         return symbol("",ParserAccionesSym.A_ALIGN); }
-\"            { yybegin(YYINITIAL);     return symbol("",ParserAccionesSym.COMI); }
+// atributo.nombre="MI_ATRIBUTO"
+"PADRE"       { yybegin(MI_ID);          symbol("",ParserAccionesSym.A_PADRE); }
+"TEXTO"{_}    { yybegin(MI_TEXTO);       symbol("",ParserAccionesSym.A_TEXTO); }
+"ALTURA"      { yybegin(MI_NUMERO);      symbol("",ParserAccionesSym.A_ALTO); }
+"ANCHO"       { yybegin(MI_NUMERO);      symbol("",ParserAccionesSym.A_ANCHO); }
+"COLOR"       { yybegin(MI_COLOR);       symbol("",ParserAccionesSym.A_COLOR); }
+"ORIGEN"      { yybegin(MI_URL);         symbol("",ParserAccionesSym.A_ORIGEN); }
+"ETIQUETAS"   { yybegin(MIS_ETIQUETAS);  symbol("",ParserAccionesSym.A_ETIQS); }
+"ALINEACION"  { yybegin(MI_ALIGN);       symbol("",ParserAccionesSym.A_ALIGN); }
 }
 
-<MI_ETIQUETA> {
-{miEtiqueta}  { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.MI_ETIQUETA);  }
-\"            { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.COMI); }
+<MI_ID, MI_FECHA, MI_TEXTO, MI_COLOR, MI_NUMERO, MI_URL, MIS_ETIQUETAS, MI_ALIGN, UI_WEB>{
+"]"  { yybegin(YYINITIAL);  symbol("",ParserAccionesSym.DERCOR); }
 }
 
 <UI_WEB> {
-// parametro.nombre.clase
-"TITULO"   { return symbol("",ParserAccionesSym.UI_TITULO); }
-"PARRAFO"  { return symbol("",ParserAccionesSym.UI_PARRAFO); }
-"IMAGEN"   { return symbol("",ParserAccionesSym.UI_IMAGEN); }
-"VIDEO"    { return symbol("",ParserAccionesSym.UI_VIDEO); }
-"MENU"     { return symbol("",ParserAccionesSym.UI_MENU); }
+// parametro.nombre="clase".[UI_WEB]
+"TITULO"   {  symbol("",ParserAccionesSym.UI_TITULO); }
+"PARRAFO"  {  symbol("",ParserAccionesSym.UI_PARRAFO); }
+"IMAGEN"   {  symbol("",ParserAccionesSym.UI_IMAGEN); }
+"VIDEO"    {  symbol("",ParserAccionesSym.UI_VIDEO); }
+"MENU"     {  symbol("",ParserAccionesSym.UI_MENU); }
 }
 
 <MI_ALIGN>{
-// atributo.nombre.alineacion 
-"IZQUIERDA"   { return symbol("",ParserAccionesSym.T_IZQUIERDA); }
-"CENTRAR"     { return symbol("",ParserAccionesSym.T_CENTRAR); }
-"DERECHA"     { return symbol("",ParserAccionesSym.T_DERECHA); }
-"JUSTIFICAR"  { return symbol("",ParserAccionesSym.T_JUSTIFICAR); }
+// atributo.nombre="alineacion".[MI_ALIGN]
+"IZQUIERDA"   {  symbol("",ParserAccionesSym.T_IZQUIERDA); }
+"CENTRAR"     {  symbol("",ParserAccionesSym.T_CENTRAR); }
+"DERECHA"     {  symbol("",ParserAccionesSym.T_DERECHA); }
+"JUSTIFICAR"  {  symbol("",ParserAccionesSym.T_JUSTIFICAR); }
 }
 
 <MI_ID> {
-    {id}          { return symbol("",ParserAccionesSym.MI_ID); }
+    {id}          {  symbol("",ParserAccionesSym.MI_ID); }
 }
 <MI_FECHA> {
-    {miFecha}     { return symbol("",ParserAccionesSym.MI_FECHA); }
+    {miFecha}     {  symbol("",ParserAccionesSym.MI_FECHA); }
 }
 <MI_TEXTO> {
-    {miTexto}     { return symbol("",ParserAccionesSym.MI_TEXTO); }
+    {miTexto}     {  symbol("",ParserAccionesSym.MI_TEXTO); }
 }
 <MI_COLOR> {
-    {miColor}     { return symbol("",ParserAccionesSym.MI_COLOR); }
+    {miColor}     {  symbol("",ParserAccionesSym.MI_COLOR); }
 }
 <MI_NUMERO> {
-    {miNumero}    { return symbol("",ParserAccionesSym.MI_NUMERO); }
+    {miNumero}    {  symbol("",ParserAccionesSym.MI_NUMERO); }
 }
 <MI_URL> {
-    {miURL}       { return symbol("",ParserAccionesSym.MI_URL); }
+    {miURL}       {  symbol("",ParserAccionesSym.MI_URL); }
+}
+<MI_ETIQUETA>{
+{miEtiqueta}  { yybegin(YYINITIAL);  symbol("",ParserAccionesSym.MI_ETIQUETA);  }
 }
 <MIS_ETIQUETAS> {
-    {miEtiqueta}  { return symbol("",ParserAccionesSym.MI_ETIQUETA); }
-    \|            { return symbol("",ParserAccionesSym.OR); }
+{miEtiqueta}  {  symbol("",ParserAccionesSym.MI_ETIQUETA);  }
+\|            {  symbol("",ParserAccionesSym.OR); }
 }
 
 // puntuacion
-"<"  {                     return symbol("",ParserAccionesSym.IZQ); }
-">"  {                     return symbol("",ParserAccionesSym.DER); }
-"/"  {                     return symbol("",ParserAccionesSym.BARRA); }
-\"   {                     return symbol("",ParserAccionesSym.COMI); }
-"["  {                     return symbol("",ParserAccionesSym.IZQCOR); }
-"]"  { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.DERCOR); }
-\=   {                     return symbol("",ParserAccionesSym.IGUAL); }
+"<"  { symbol("",ParserAccionesSym.IZQ); }
+">"  { symbol("",ParserAccionesSym.DER); }
+"/"  { symbol("",ParserAccionesSym.BARRA); }
+\"   { symbol("",ParserAccionesSym.COMI); }
+"["  { symbol("",ParserAccionesSym.IZQCOR); }
+"]"  { symbol("",ParserAccionesSym.DERCOR); }
+\=   { symbol("",ParserAccionesSym.IGUAL); }
 
 // ignorados
 {Invisibles}  { }
 
 // error
-[^]  { yybegin(YYINITIAL); }
+[^]  { symbol("",ParserAccionesSym.error); }

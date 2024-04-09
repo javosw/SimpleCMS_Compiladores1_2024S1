@@ -97,8 +97,7 @@ reservados
 		etiquetas
 		etiqueta
 	nodo.atributo
-		valor
-			miEtiqueta
+		valor="miEtiqueta"
 		nombre
 	accion.nombre
 		NUEVO_SITIO_WEB
