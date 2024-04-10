@@ -1,0 +1,24 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package josq.cms.lenguajes.modelos.cup.simbolos;
+
+import josq.cms.lenguajes.modelos.Indicador;
+
+/**
+ *
+ * @author JavierOswaldo
+ */
+public class Parametro
+{
+    Indicador tipo;
+    Par contenido;
+
+    public Parametro(Indicador tipo, Par contenido)
+    {
+        this.tipo = tipo;
+        this.contenido = contenido;
+    }
+    
+}

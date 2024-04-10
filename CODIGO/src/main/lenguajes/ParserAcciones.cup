@@ -7,6 +7,7 @@ import java.util.ArrayList;
 //import java_cup.runtime.*;
 //import josq.cms.lenguajes.modelos.arbol.*;
 //import josq.cms.lenguajes.modelos.Indicador;
+import josq.cms.lenguajes.modelos.cup.simbolos.Par;
 
 // NOTA: %cupsym en jflex
 // parser=MyParser, sym=MyParserSym
@@ -56,15 +57,18 @@ terminal MI_ID, MI_TEXTO, MI_NUMERO, MI_COLOR, MI_URL, MI_FECHA, MI_ETIQUETA ;
 
 non terminal cms ;
 non terminal acciones, accionesIZQ, accionesMID, accionesDER ;
-non terminal accion, accionIZQ, accionMID, accionDER, accionNombre, accionTipo ;
+non terminal accion, accionIZQ, accionMID, accionDER ;
 non terminal parametros, parametrosIZQ, parametrosMID, parametrosDER ;
 non terminal parametro, parametroIZQ, parametroMID, parametroDER ;
-non terminal parametroNombre, parametroValor, parametroTipo ;
 non terminal atributos, atributosIZQ, atributosMID, atributosDER ;
 non terminal atributo, atributoIZQ, atributoMID, atributoDER ;
-non terminal atributoNombre, atributoValor, atributoTipo ;
 non terminal etiquetas, etiquetasIZQ, etiquetasMID, etiquetasDER ;
-non terminal etiqueta, etiquetaValor, misEtiquetas ; 
+non terminal etiqueta, etiquetaValor ; 
+non terminal accionNombre, accionTipo ;
+non terminal parametroNombre, parametroTipo ;
+non terminal atributoNombre, atributoTipo ;
+non terminal parametroContent, atributoContent ;
+non terminal miAlineacion, misEtiquetas ;
 
 // PRODUCCIONES
 
@@ -99,7 +103,7 @@ accion ::=
     accionIZQ:w1 accionMID:w2 accionDER:w3  {:  :}
 ;
 accionIZQ ::=
-    IZQ ACCI accionNombre:w1 DER  {:  :}
+    IZQ ACCI accionNombre:w1 DER  {: RESULT=w1; :} //+
 ;
 accionMID ::= 
     parametros  {:  :}
@@ -111,20 +115,20 @@ accionMID ::=
     | error:w1 DER {: print("@ACCION<> "); :}
 ;
 accionDER ::=
-    IZQ BARRA ACCI DER  {:  :}
+    IZQ BARRA ACCI DER  {:  :} //+
 ;
 accionNombre ::=
-    NOMBRE IGUAL COMI accionTipo COMI
+    NOMBRE IGUAL COMI accionTipo:w1 COMI {: RESULT=w1; :} //+
 ;
 accionTipo ::=
-    SITE_NEW
-    | SITE_DEL
-    | PAGE_NEW
-    | PAGE_DEL
-    | PAGE_MOD
-    | COMP_NEW
-    | COMP_DEL
-    | COMP_MOD
+    SITE_NEW:w1   {: RESULT=Indicador.SITE_NEW; :} 
+    | SITE_DEL:w1 {: RESULT=Indicador.SITE_DEL; :}
+    | PAGE_NEW:w1 {: RESULT=Indicador.PAGE_NEW; :}
+    | PAGE_DEL:w1 {: RESULT=Indicador.PAGE_DEL; :}
+    | PAGE_MOD:w1 {: RESULT=Indicador.PAGE_MOD; :}
+    | COMP_NEW:w1 {: RESULT=Indicador.COMP_NEW; :}
+    | COMP_DEL:w1 {: RESULT=Indicador.COMP_DEL; :}
+    | COMP_MOD:w1 {: RESULT=Indicador.COMP_MOD; :}
 ;
 
 // PARAMETROS
@@ -144,41 +148,45 @@ parametrosDER ::=
 
 // PARAMETRO
 parametro ::=
-    parametroIZQ parametroMID parametroDER  {:  :}
+    parametroIZQ:w1 parametroMID:w2 parametroDER  {: RESULT= new Parametro(w1,w2); :}
 ;
 parametroIZQ ::=
-    IZQ PARAM parametroNombre:w1 DER  {:  :}
-;
-parametroMID ::=
-    IZQCOR parametroValor DERCOR
-;
-parametroValor ::=
-    MI_ID
-    | MI_TEXTO
-    | MI_FECHA
-    | UI_TITULO 
-    | UI_PARRAFO 
-    | UI_IMAGEN 
-    | UI_VIDEO 
-    | UI_MENU
-;
-parametroDER ::=
-    IZQ BARRA PARAM DER  {:  :}
+    IZQ PARAM parametroNombre:w1 DER  {: RESULT=w1; :} // +
 ;
 parametroNombre ::=
-    NOMBRE IGUAL COMI parametroTipo COMI
+    NOMBRE IGUAL COMI parametroTipo:w1 COMI {: RESULT=w1; :} // +
 ;
 parametroTipo ::=
-    P_ID
-    | P_TITULO
-    | P_SITIO
-    | P_PADRE
-    | P_PAGINA
-    | P_CLASE
-    | P_USER_NEW
-    | P_USER_MOD
-    | P_FECHA_NEW
-    | P_FECHA_MOD
+    P_ID          {: RESULT=Indicador.P_ID; :}        // +
+    | P_TITULO    {: RESULT=Indicador.P_TITULO; :}    // +
+    | P_SITIO     {: RESULT=Indicador.P_SITIO; :}     // +
+    | P_PADRE     {: RESULT=Indicador.P_PADRE; :}     // +
+    | P_PAGINA    {: RESULT=Indicador.P_PAGINA; :}    // +
+    | P_CLASE     {: RESULT=Indicador.P_CLASE; :}     // +
+    | P_USER_NEW  {: RESULT=Indicador.P_USER_NEW; :}  // +
+    | P_USER_MOD  {: RESULT=Indicador.P_USER_MOD; :}  // +
+    | P_FECHA_NEW {: RESULT=Indicador.P_FECHA_NEW; :} // +
+    | P_FECHA_MOD {: RESULT=Indicador.P_FECHA_MOD; :} // +
+;
+parametroMID ::=
+    IZQCOR parametroContent:w1 DERCOR {: RESULT=w1; :} // +
+;
+parametroContent ::=
+    MI_ID:w1          {: RESULT= new Par(Indicador.MI_ID,w1); :}         // +
+    | MI_TEXTO:w1     {: RESULT= new Par(Indicador.MI_TEXTO,w1); :}      // +
+    | MI_FECHA:w1     {: RESULT= new Par(Indicador.MI_FECHA,w1); :}      // +
+    | miComponente:w1 {: RESULT= new Par(Indicador.MI_COMPONENTE,w1); :} // +
+;
+miComponente ::=
+    | UI_TITULO  {: RESULT=Indicador.UI_TITULO; :}  // + 
+    | UI_PARRAFO {: RESULT=Indicador.UI_PARRAFO; :} // + 
+    | UI_IMAGEN  {: RESULT=Indicador.UI_IMAGEN; :}  // + 
+    | UI_VIDEO   {: RESULT=Indicador.UI_VIDEO; :}   // + 
+    | UI_MENU    {: RESULT=Indicador.UI_MENU; :}    // + 
+;
+
+parametroDER ::=
+    IZQ BARRA PARAM DER // +
 ;
 
 // ATRIBUTOS
@@ -198,70 +206,69 @@ atributosDER ::=
 
 // ATRIBUTO
 atributo ::=
-    atributoIZQ atributoMID atributoDER  {:  :}
+    atributoIZQ:w1 atributoMID:w2 atributoDER  {: RESULT= new Atributo(w1,w2); :} // +
 ;
 atributoIZQ ::=
-    IZQ ATRIB atributoNombre:w1 DER  {:  :}
-;
-atributoMID ::=
-    IZQCOR atributoValor DERCOR
-;
-atributoValor ::= 
-    misEtiquetas
-    | MI_ID
-    | MI_TEXTO
-    | MI_COLOR
-    | MI_URL
-    | MI_NUMERO
-    | T_CENTRAR
-    | T_DERECHA
-    | T_IZQUIERDA
-    | T_JUSTIFICAR
-;
-
-misEtiquetas ::=
-    MI_ETIQUETA
-    | misEtiquetas OR MI_ETIQUETA
-;
-atributoDER ::=
-    IZQ BARRA ATRIB DER  {:  :}
+    IZQ ATRIB atributoNombre:w1 DER  {: RESULT=w1; :} // +
 ;
 atributoNombre ::=
-    NOMBRE IGUAL COMI atributoTipo COMI
+    NOMBRE IGUAL COMI atributoTipo:w1 COMI {: RESULT=w1; :} // +
 ;
-
 atributoTipo ::=
-    A_TEXTO
-    | A_ALIGN
-    | A_COLOR
-    | A_ORIGEN
-    | A_ALTO
-    | A_ANCHO
-    | A_PADRE
-    | A_ETIQS
+    A_TEXTO    {: RESULT=Indicador.A_TEXTO; :}  // +
+    | A_ALIGN  {: RESULT=Indicador.A_ALIGN; :}  // +
+    | A_COLOR  {: RESULT=Indicador.A_COLOR; :}  // +
+    | A_ORIGEN {: RESULT=Indicador.A_ORIGEN; :} // +
+    | A_ALTO   {: RESULT=Indicador.A_ALTO; :}   // +
+    | A_ANCHO  {: RESULT=Indicador.A_ANCHO; :}  // +
+    | A_PADRE  {: RESULT=Indicador.A_PADRE; :}  // +
+    | A_ETIQS  {: RESULT=Indicador.A_ETIQS; :}  // +
+;
+atributoMID ::=
+    IZQCOR atributoContent:w1 DERCOR {: RESULT=w1; :} // +
+;
+atributoContent ::= 
+    | MI_ID:w1        {: RESULT= new Par(Indicador.MI_ID,w1); :}         // +
+    | MI_TEXTO:w1     {: RESULT= new Par(Indicador.MI_TEXTO,w1); :}      // +
+    | MI_COLOR:w1     {: RESULT= new Par(Indicador.MI_COLOR,w1); :}      // +
+    | MI_URL:w1       {: RESULT= new Par(Indicador.MI_URL,w1); :}        // +
+    | MI_NUMERO:w1    {: RESULT= new Par(Indicador.MI_NUMERO,w1); :}     // +
+    | misEtiquetas:w1 {: RESULT= new Par(Indicador.MIS_ETIQUETAS,w1); :} // +
+    | miAlineacion:w1 {: RESULT= new Par(Indicador.MI_ALIGN,w1); :}      // +
+;
+miAlineacion ::=
+    | T_CENTRAR    {: RESULT=Indicador.T_CENTRAR; :}    // +
+    | T_DERECHA    {: RESULT=Indicador.T_DERECHA; :}    // +
+    | T_IZQUIERDA  {: RESULT=Indicador.T_IZQUIERDA; :}  // +
+    | T_JUSTIFICAR {: RESULT=Indicador.T_JUSTIFICAR; :} // +
+;
+misEtiquetas ::=
+    MI_ETIQUETA:w1 {: ArrayList<String> list = new ArrayList<String>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
+    | misEtiquetas:w1 OR MI_ETIQUETA:w2 {: if(w2!=null) w1.add(w2); RESULT=w1; :} // +
+;
+atributoDER ::=
+    IZQ BARRA ATRIB DER // +
 ;
 
 // ETIQUETAS
 etiquetas ::=
-    etiquetasIZQ etiquetasMID etiquetasDER  {:  :}
+    etiquetasIZQ etiquetasMID:w1 etiquetasDER  {: RESULT=w1; :} // +
 ;
 etiquetasIZQ ::=
-    IZQ ETIQS DER  {:  :}
+    IZQ ETIQS DER // +
 ;
 etiquetasMID ::= 
-    etiqueta  {:  :}
-    | etiquetasMID etiqueta  {:  :}
+    etiqueta:w1 {: ArrayList<String> list = new ArrayList<String>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
+    | etiquetasMID:w1 etiqueta:w2 {: if(w2!=null) w1.add(w2); RESULT=w1; :} // +
+;
+etiqueta ::= 
+    IZQ ETIQ etiquetaValor:w1 BARRA DER  {: RESULT=w1; :} // +
+;
+etiquetaValor ::=
+    VALOR IGUAL COMI MI_ETIQUETA:w1 COMI  {: RESULT=w1; :} // +
 ;
 etiquetasDER ::=
-    IZQ BARRA ETIQS DER  {:  :}
+    IZQ BARRA ETIQS DER // +
 ;
 
-// ETIQUETA
-etiqueta ::= 
-    IZQ ETIQ etiquetaValor BARRA DER  {:  :}
-;
-
-etiquetaValor ::=
-    VALOR IGUAL COMI MI_ETIQUETA:w1 COMI  {:  :}
-;
 

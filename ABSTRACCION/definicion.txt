@@ -306,9 +306,9 @@ operadores
 		parametros: {
 			* ID: [idSitio]
 			USUARIO_CREACION: [idUsuario]
-			FECHA_CREACION: [fecha]
+			FECHA_CREACION: [miFecha]
 			USUARIO_MODIFICACION: [idUsuario]
-			FECHA_MODIFICACION: [fecha]
+			FECHA_MODIFICACION: [miFecha]
 		}
 	}
 	accion: {
@@ -328,9 +328,9 @@ operadores
 			* SITIO: [idSitio]
 			* PADRE: [idPagina]
 			USUARIO_CREACION: [idUsuario]
-			FECHA_CREACION: [fecha]
+			FECHA_CREACION: [miFecha]
 			USUARIO_MODIFICACION: [idUsuario]
-			FECHA_MODIFICACION: [fecha]
+			FECHA_MODIFICACION: [miFecha]
 		}
 		etiquetas: {}
 	}
