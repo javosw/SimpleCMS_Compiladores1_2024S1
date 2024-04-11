@@ -62,6 +62,8 @@
                 <configuration>
                     <cupDefinition>src/main/lenguajes</cupDefinition>
                     <outputDirectory>src/main/java/</outputDirectory> 
+                    <noPositions>true</noPositions>
+                    <locations>false</locations>
                 </configuration>
             </plugin>
             <plugin>

@@ -7,7 +7,11 @@ import java.util.ArrayList;
 //import java_cup.runtime.*;
 //import josq.cms.lenguajes.modelos.arbol.*;
 //import josq.cms.lenguajes.modelos.Indicador;
+import josq.cms.lenguajes.modelos.Indicador;
+import josq.cms.lenguajes.modelos.cup.Accion;
 import josq.cms.lenguajes.modelos.cup.simbolos.Par;
+import josq.cms.lenguajes.modelos.cup.simbolos.Atributo;
+import josq.cms.lenguajes.modelos.cup.simbolos.Parametro;
 
 // NOTA: %cupsym en jflex
 // parser=MyParser, sym=MyParserSym
@@ -51,24 +55,32 @@ terminal A_TEXTO, A_ALIGN, A_COLOR, A_ORIGEN, A_ALTO, A_ANCHO, A_PADRE, A_ETIQS 
 // atributo.nombre.alineacion
 terminal T_CENTRAR, T_IZQUIERDA, T_DERECHA, T_JUSTIFICAR ;
 // literales
-terminal MI_ID, MI_TEXTO, MI_NUMERO, MI_COLOR, MI_URL, MI_FECHA, MI_ETIQUETA ;
+terminal String MI_ID, MI_TEXTO, MI_NUMERO, MI_COLOR, MI_URL, MI_FECHA, MI_ETIQUETA ;
 
 // #%#%#%#% NO TERMINALES #%#%#%#%
-
-non terminal cms ;
-non terminal acciones, accionesIZQ, accionesMID, accionesDER ;
-non terminal accion, accionIZQ, accionMID, accionDER ;
-non terminal parametros, parametrosIZQ, parametrosMID, parametrosDER ;
-non terminal parametro, parametroIZQ, parametroMID, parametroDER ;
-non terminal atributos, atributosIZQ, atributosMID, atributosDER ;
-non terminal atributo, atributoIZQ, atributoMID, atributoDER ;
-non terminal etiquetas, etiquetasIZQ, etiquetasMID, etiquetasDER ;
-non terminal etiqueta, etiquetaValor ; 
-non terminal accionNombre, accionTipo ;
-non terminal parametroNombre, parametroTipo ;
-non terminal atributoNombre, atributoTipo ;
-non terminal parametroContent, atributoContent ;
-non terminal miAlineacion, misEtiquetas ;
+non terminal ArrayList<Accion> cms, acciones, accionesMID ;
+non terminal accionesIZQ, accionesDER ;
+non terminal Accion accion, accionMID ;
+non terminal Indicador accionIZQ, accionNombre, accionTipo ; 
+non terminal accionDER ;
+non terminal ArrayList<Parametro> parametros, parametrosMID ;
+non terminal parametrosIZQ, parametrosDER ;
+non terminal Parametro parametro ;
+non terminal Indicador parametroIZQ, parametroNombre, parametroTipo ;
+non terminal Par parametroMID, parametroContent ;
+non terminal parametroDER ;
+non terminal ArrayList<Atributo> atributos, atributosMID ;
+non terminal atributosIZQ, atributosDER ;
+non terminal Atributo atributo ;
+non terminal Indicador atributoIZQ, atributoNombre, atributoTipo ;
+non terminal Par atributoMID, atributoContent ;
+non terminal atributoDER ;
+non terminal ArrayList<String> etiquetas, etiquetasMID ;
+non terminal etiquetasIZQ, etiquetasDER ;
+non terminal String etiqueta, etiquetaValor ; 
+non terminal Indicador miAlineacion ;
+non terminal ArrayList<String> misEtiquetas ;
+non terminal Indicador miComponente ;
 
 // PRODUCCIONES
 
@@ -77,78 +89,78 @@ start with cms ;
 
 // INICIO
 cms ::= 
-    accion:w1  {:  :}
-    | acciones:w1  {:  :}
+    accion:w1  {: ArrayList<Accion> list = new ArrayList<>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
+    | acciones:w1  {: RESULT=w1; :}
     | error:w1 {: print("@CMS "); :}
 ;
 
 // ACCIONES
 acciones ::=
-    accionesIZQ:w1 accionesMID:w2 accionesDER:w3  {:  :}
-    | error:w1 DER {: print("@ACCIONES> "); :}
+    accionesIZQ accionesMID:w1 accionesDER  {: RESULT=w1; :} // +
+    | error:w1 DER {: print("@ACCIONES> "); :} // +
 ;
 accionesIZQ ::=
-    IZQ ACCIS DER  {:  :}
+    IZQ ACCIS DER // +
 ;
 accionesMID ::=
-    accion:w1
-    | accionesMID:w1 accion:w2  {:  :}
+    accion:w1 {: ArrayList<Accion> list = new ArrayList<>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
+    | accionesMID:w1 accion:w2  {: if(w2!=null) w1.add(w2); RESULT=w1; :} // +
 ;
 accionesDER ::=
-    IZQ BARRA ACCIS DER  {:  :}
+    IZQ BARRA ACCIS DER // +
 ;
 
 // ACCION
 accion ::=
-    accionIZQ:w1 accionMID:w2 accionDER:w3  {:  :}
+    accionIZQ:w1 accionMID:w2 accionDER  {: w2.setTipo(w1); RESULT=w2; :} // +
 ;
 accionIZQ ::=
     IZQ ACCI accionNombre:w1 DER  {: RESULT=w1; :} //+
-;
-accionMID ::= 
-    parametros  {:  :}
-    | atributos  {:  :}
-    | etiquetas  {:  :}
-    | accionMID parametros  {:  :}
-    | accionMID atributos  {:  :}
-    | accionMID etiquetas  {:  :}
-    | error:w1 DER {: print("@ACCION<> "); :}
-;
-accionDER ::=
-    IZQ BARRA ACCI DER  {:  :} //+
 ;
 accionNombre ::=
     NOMBRE IGUAL COMI accionTipo:w1 COMI {: RESULT=w1; :} //+
 ;
 accionTipo ::=
-    SITE_NEW:w1   {: RESULT=Indicador.SITE_NEW; :} 
-    | SITE_DEL:w1 {: RESULT=Indicador.SITE_DEL; :}
-    | PAGE_NEW:w1 {: RESULT=Indicador.PAGE_NEW; :}
-    | PAGE_DEL:w1 {: RESULT=Indicador.PAGE_DEL; :}
-    | PAGE_MOD:w1 {: RESULT=Indicador.PAGE_MOD; :}
-    | COMP_NEW:w1 {: RESULT=Indicador.COMP_NEW; :}
-    | COMP_DEL:w1 {: RESULT=Indicador.COMP_DEL; :}
-    | COMP_MOD:w1 {: RESULT=Indicador.COMP_MOD; :}
+    SITE_NEW:w1   {: RESULT=Indicador.SITE_NEW; :}  // +
+    | SITE_DEL:w1 {: RESULT=Indicador.SITE_DEL; :}  // +
+    | PAGE_NEW:w1 {: RESULT=Indicador.PAGE_NEW; :}  // +
+    | PAGE_DEL:w1 {: RESULT=Indicador.PAGE_DEL; :}  // +
+    | PAGE_MOD:w1 {: RESULT=Indicador.PAGE_MOD; :}  // +
+    | COMP_NEW:w1 {: RESULT=Indicador.COMP_NEW; :}  // +
+    | COMP_DEL:w1 {: RESULT=Indicador.COMP_DEL; :}  // +
+    | COMP_MOD:w1 {: RESULT=Indicador.COMP_MOD; :}  // +
+;
+accionMID ::= 
+    parametros:w1  {: Accion a = new Accion(); a.setParametros(w1); RESULT=a; :} // +
+    | atributos:w1 {: Accion a = new Accion(); a.setAtributos(w1); RESULT=a; :} // +
+    | etiquetas:w1 {: Accion a = new Accion(); a.setEtiquetas(w1); RESULT=a; :} // +
+    | accionMID:w1 parametros:w2 {: w1.setParametros(w2); RESULT=w1; :} // +
+    | accionMID:w1 atributos:w2  {: w1.setAtributos(w2); RESULT=w1; :} // +
+    | accionMID:w1 etiquetas:w2  {: w1.setEtiquetas(w2); RESULT=w1; :} // +
+    | error:w1 DER {: print("@ACCION<> "); :} // +
+;
+accionDER ::=
+    IZQ BARRA ACCI DER //+
 ;
 
 // PARAMETROS
 parametros ::= 
-    parametrosIZQ parametrosMID parametrosDER  {:  :}
+    parametrosIZQ parametrosMID:w1 parametrosDER  {: RESULT=w1; :} // +
 ;
 parametrosIZQ ::=
-    IZQ PARAMS DER
+    IZQ PARAMS DER // +
 ;
 parametrosMID ::=
-    parametro  {:  :}
-    | parametrosMID parametro  {:  :}
+    parametro:w1  {: ArrayList<Parametro> list = new ArrayList<>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
+    | parametrosMID:w1 parametro:w2 {: if(w2!=null) w1.add(w2); RESULT=w1; :} // +
 ;
 parametrosDER ::=
-    IZQ BARRA PARAMS DER  {:  :}
+    IZQ BARRA PARAMS DER // +
 ;
 
 // PARAMETRO
 parametro ::=
-    parametroIZQ:w1 parametroMID:w2 parametroDER  {: RESULT= new Parametro(w1,w2); :}
+    parametroIZQ:w1 parametroMID:w2 parametroDER  {: RESULT= new Parametro(w1,w2); :} // +
 ;
 parametroIZQ ::=
     IZQ PARAM parametroNombre:w1 DER  {: RESULT=w1; :} // +
@@ -184,24 +196,23 @@ miComponente ::=
     | UI_VIDEO   {: RESULT=Indicador.UI_VIDEO; :}   // + 
     | UI_MENU    {: RESULT=Indicador.UI_MENU; :}    // + 
 ;
-
 parametroDER ::=
     IZQ BARRA PARAM DER // +
 ;
 
 // ATRIBUTOS
 atributos ::=
-    atributosIZQ atributosMID atributosDER  {:  :}
+    atributosIZQ atributosMID:w1 atributosDER  {: RESULT=w1; :} // +
 ;
 atributosIZQ ::=
-    IZQ ATRIBS DER  {:  :}
+    IZQ ATRIBS DER // +
 ;
 atributosMID ::=
-    atributo  {:  :}
-    | atributosMID atributo  {:  :}
+    atributo:w1  {: ArrayList<Atributo> lista = new ArrayList<>(); if(w1!=null) lista.add(w1); RESULT=lista; :} // +
+    | atributosMID:w1 atributo:w2  {: if(w2!=null) w1.add(w2); RESULT=w1; :} // +
 ;
 atributosDER ::=
-    IZQ BARRA ATRIBS DER  {:  :}
+    IZQ BARRA ATRIBS DER // +
 ;
 
 // ATRIBUTO
@@ -228,7 +239,7 @@ atributoMID ::=
     IZQCOR atributoContent:w1 DERCOR {: RESULT=w1; :} // +
 ;
 atributoContent ::= 
-    | MI_ID:w1        {: RESULT= new Par(Indicador.MI_ID,w1); :}         // +
+    MI_ID:w1          {: RESULT= new Par(Indicador.MI_ID,w1); :}         // +
     | MI_TEXTO:w1     {: RESULT= new Par(Indicador.MI_TEXTO,w1); :}      // +
     | MI_COLOR:w1     {: RESULT= new Par(Indicador.MI_COLOR,w1); :}      // +
     | MI_URL:w1       {: RESULT= new Par(Indicador.MI_URL,w1); :}        // +
@@ -237,13 +248,13 @@ atributoContent ::=
     | miAlineacion:w1 {: RESULT= new Par(Indicador.MI_ALIGN,w1); :}      // +
 ;
 miAlineacion ::=
-    | T_CENTRAR    {: RESULT=Indicador.T_CENTRAR; :}    // +
+    T_CENTRAR      {: RESULT=Indicador.T_CENTRAR; :}    // +
     | T_DERECHA    {: RESULT=Indicador.T_DERECHA; :}    // +
     | T_IZQUIERDA  {: RESULT=Indicador.T_IZQUIERDA; :}  // +
     | T_JUSTIFICAR {: RESULT=Indicador.T_JUSTIFICAR; :} // +
 ;
 misEtiquetas ::=
-    MI_ETIQUETA:w1 {: ArrayList<String> list = new ArrayList<String>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
+    MI_ETIQUETA:w1 {: ArrayList<String> list = new ArrayList<>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
     | misEtiquetas:w1 OR MI_ETIQUETA:w2 {: if(w2!=null) w1.add(w2); RESULT=w1; :} // +
 ;
 atributoDER ::=
@@ -258,7 +269,7 @@ etiquetasIZQ ::=
     IZQ ETIQS DER // +
 ;
 etiquetasMID ::= 
-    etiqueta:w1 {: ArrayList<String> list = new ArrayList<String>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
+    etiqueta:w1 {: ArrayList<String> list = new ArrayList<>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
     | etiquetasMID:w1 etiqueta:w2 {: if(w2!=null) w1.add(w2); RESULT=w1; :} // +
 ;
 etiqueta ::= 

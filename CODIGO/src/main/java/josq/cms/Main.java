@@ -4,10 +4,12 @@
  */
 package josq.cms;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import josq.cms.archivos.Texto;
 import josq.cms.lenguajes.Procesar;
+import josq.cms.lenguajes.modelos.cup.Accion;
 
 /**
  *
@@ -27,17 +29,22 @@ public class Main
         String ruta = "C:\\Users\\JavierOswaldo\\Desktop\\PROCESADORES-LENGUAJE\\CODIFICACION\\PROYECTO-1\\PRUEBAS\\"+xml;
         try
         {
-            Procesar.accionesDesdeArchivo(ruta);
+            ArrayList<Accion> acciones = Procesar.accionesDesdeArchivo(ruta);
+            print(acciones.toString());
         }
         catch (Exception ex)
         {
-            print("\n    <%#%#%#%#%#%#%#% ERRORES %#%#%#%#%#%#%#%>\n");
-            print(ex.getMessage());
+            print("\n<%#%#%#%#%#%#%#% ERRORES %#%#%#%#%#%#%#%>\n");
+            ex.printStackTrace();
+            //print(ex.getMessage());
         }
+        print("<<<<<<<<<<<<<<<<");
     }
     
     static void pruebas2()
     {
+        ArrayList<String> list = new ArrayList<String>();
+        list.add("mnbmnb");
         try
         {
             String file = "C:\\Users\\JavierOswaldo\\Desktop\\LEXER.txt";

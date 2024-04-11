@@ -204,7 +204,7 @@ miEtiqueta    =  [a-zA-Z0-9]+
 <MI_ATRIBUTO>{
 // atributo.nombre="MI_ATRIBUTO"
 "PADRE"       { yybegin(MI_ID);         return symbol("",ParserAccionesSym.A_PADRE); }
-"TEXTO"{_}    { yybegin(MI_TEXTO);      return symbol("",ParserAccionesSym.A_TEXTO); }
+"TEXTO"       { yybegin(MI_TEXTO);      return symbol("",ParserAccionesSym.A_TEXTO); }
 "ALTURA"      { yybegin(MI_NUMERO);     return symbol("",ParserAccionesSym.A_ALTO); }
 "ANCHO"       { yybegin(MI_NUMERO);     return symbol("",ParserAccionesSym.A_ANCHO); }
 "COLOR"       { yybegin(MI_COLOR);      return symbol("",ParserAccionesSym.A_COLOR); }
@@ -235,29 +235,29 @@ miEtiqueta    =  [a-zA-Z0-9]+
 }
 
 <MI_ID> {
-    {id}          { return symbol("",ParserAccionesSym.MI_ID); }
+    {id}            { return symbol("",ParserAccionesSym.MI_ID, yytext()); }
 }
 <MI_FECHA> {
-    {miFecha}     { return symbol("",ParserAccionesSym.MI_FECHA); }
+    {miFecha}       { return symbol("",ParserAccionesSym.MI_FECHA, yytext()); }
 }
 <MI_TEXTO> {
-    {miTexto}     { return symbol("",ParserAccionesSym.MI_TEXTO); }
+    {_}{miTexto}    { return symbol("",ParserAccionesSym.MI_TEXTO, yytext()); }
 }
 <MI_COLOR> {
-    {miColor}     { return symbol("",ParserAccionesSym.MI_COLOR); }
+    {miColor}       { return symbol("",ParserAccionesSym.MI_COLOR, yytext()); }
 }
 <MI_NUMERO> {
-    {miNumero}    { return symbol("",ParserAccionesSym.MI_NUMERO); }
+    {miNumero}      { return symbol("",ParserAccionesSym.MI_NUMERO, yytext()); }
 }
 <MI_URL> {
-    {miURL}       { return symbol("",ParserAccionesSym.MI_URL); }
+    {miURL}         { return symbol("",ParserAccionesSym.MI_URL, yytext()); }
 }
 <MI_ETIQUETA>{
-{miEtiqueta}  { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.MI_ETIQUETA); }
+{miEtiqueta}        { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.MI_ETIQUETA, yytext()); }
 }
 <MIS_ETIQUETAS> {
-{miEtiqueta}  { return symbol("",ParserAccionesSym.MI_ETIQUETA); }
-\|            { return symbol("",ParserAccionesSym.OR); }
+{miEtiqueta}        { return symbol("",ParserAccionesSym.MI_ETIQUETA, yytext()); }
+\|                  { return symbol("",ParserAccionesSym.OR); }
 }
 
 // puntuacion
