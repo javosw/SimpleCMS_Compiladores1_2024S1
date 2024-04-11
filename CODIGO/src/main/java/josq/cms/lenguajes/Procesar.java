@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import java_cup.runtime.Symbol;
 import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.DefaultSymbolFactory;
 import java_cup.runtime.Scanner;
 import josq.cms.lenguajes.lexer.LexerAcciones;
 import josq.cms.lenguajes.modelos.cup.Accion;
@@ -27,9 +28,9 @@ public class Procesar
     private static ArrayList<Accion> acciones(Reader myReader) throws Exception
     {
         // procesadores de lenguaje
-        ComplexSymbolFactory symFactory = new ComplexSymbolFactory();
-        Scanner lexer = new LexerAcciones(myReader, symFactory);
-        ParserAcciones parser = new ParserAcciones(lexer, symFactory);
+        DefaultSymbolFactory myFactory = new DefaultSymbolFactory();
+        Scanner lexer = new LexerAcciones(myReader, myFactory);
+        ParserAcciones parser = new ParserAcciones(lexer, myFactory);
 
         // resultado de procesamiento
         Symbol mySymbol = parser.parse();

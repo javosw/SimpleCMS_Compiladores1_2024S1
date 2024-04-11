@@ -91,13 +91,13 @@ start with cms ;
 cms ::= 
     accion:w1  {: ArrayList<Accion> list = new ArrayList<>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
     | acciones:w1  {: RESULT=w1; :}
-    | error:w1 {: print("@CMS "); :}
+    | error:w1 {: print("@ERROR("+w1left+"-"+w1right+") "); :}
 ;
 
 // ACCIONES
 acciones ::=
     accionesIZQ accionesMID:w1 accionesDER  {: RESULT=w1; :} // +
-    | error:w1 DER {: print("@ACCIONES> "); :} // +
+    | error:w1 DER {: print("@ERROR("+w1left+"-"+w1right+") "); :} // +
 ;
 accionesIZQ ::=
     IZQ ACCIS DER // +
@@ -137,7 +137,7 @@ accionMID ::=
     | accionMID:w1 parametros:w2 {: w1.setParametros(w2); RESULT=w1; :} // +
     | accionMID:w1 atributos:w2  {: w1.setAtributos(w2); RESULT=w1; :} // +
     | accionMID:w1 etiquetas:w2  {: w1.setEtiquetas(w2); RESULT=w1; :} // +
-    | error:w1 DER {: print("@ACCION<> "); :} // +
+    | error:w1 DER {: print("@ERROR("+w1left+"-"+w1right+") "); :} // +
 ;
 accionDER ::=
     IZQ BARRA ACCI DER //+

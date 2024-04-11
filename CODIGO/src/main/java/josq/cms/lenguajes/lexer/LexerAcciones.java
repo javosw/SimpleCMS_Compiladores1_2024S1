@@ -14,9 +14,11 @@ import java_cup.runtime.Symbol;
 import java_cup.runtime.SymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
+import java_cup.runtime.DefaultSymbolFactory;
 
 import josq.cms.lenguajes.parser.ParserAccionesSym;
 import josq.cms.archivos.Texto;
+import josq.cms.lenguajes.modelos.jflex.Punto;
 
 
 @SuppressWarnings("fallthrough")
@@ -510,6 +512,96 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
   private boolean zzEOFDone;
 
   /* user code: */
+
+    private DefaultSymbolFactory myFactory = null;
+
+    public LexerAcciones(Reader myReader, DefaultSymbolFactory myFactory)
+    { this(myReader); this.myFactory = myFactory; }
+
+    public Punto getPunto(){ return new Punto(yycolumn, yyline, yylength(), (int)yychar+1); };
+
+    private Symbol symbol(String name, int sym) {
+        int izq = (int)yychar+1;
+        int der = (int)yychar+yylength();
+        Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der);
+        //save(infoLexema2(mySymbol)+" ");
+        return mySymbol;
+    }
+    private Symbol symbol(String name, int sym, Object val) {
+        int izq = (int)yychar+1;
+        int der = (int)yychar+yylength();
+        Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der, val);
+        //save(infoLexema2(mySymbol)+" ");
+        return mySymbol;
+    }
+
+    // para errores lexicos
+    private void error(String message) {
+        print("Error at line "+(yyline+1)+", column "+(yycolumn+1)+" : "+message);
+    }
+
+    // para debugear
+    private void print(String txt){ System.out.print(txt); }
+    private void print(int sym){ print(infoLexema(sym)); }
+
+    private String infoLexema(int sym) { return yytext()+":"+ParserAccionesSym.terminalNames[sym]; }
+    private String infoLexema2(Symbol mySymbol) { return "["+mySymbol.left+","+mySymbol.right+";"+infoLexema(mySymbol.sym)+"]"; }
+    
+    // para manejos de lexemas
+    private StringBuffer buff = new StringBuffer();
+
+    void cleanBuffer()
+    {
+        buff.delete(0, buff.length());
+        buff.trimToSize();
+    }
+    String reduceBuffer(String texto)
+    {
+        buff.append(texto);
+        buff.deleteCharAt(buff.length()-1);
+        buff.deleteCharAt(0);
+        String temp = buff.toString();
+        cleanBuffer();
+        return temp;
+    }
+
+    // para manejo de contextos lexicos
+    private boolean accioncEsInpar = false;
+    private boolean parametroEsInpar = false;
+    private boolean atributoEsInpar = false;
+
+    private void setContextoDe(int sym)
+    {
+        if(sym == ParserAccionesSym.ACCI)
+        { 
+            if (accioncEsInpar) { yybegin(YYINITIAL); }
+            else { yybegin(MI_ACCION); }
+            accioncEsInpar = !accioncEsInpar;
+        }
+        else if(sym == ParserAccionesSym.PARAM)
+        { 
+            if (parametroEsInpar) { yybegin(YYINITIAL); }
+            else { yybegin(MI_PARAMETRO); }
+            parametroEsInpar = !parametroEsInpar;
+        }
+        else if(sym == ParserAccionesSym.ATRIB)
+        { 
+            if (atributoEsInpar) { yybegin(YYINITIAL); }
+            else { yybegin(MI_ATRIBUTO); }
+            atributoEsInpar = !atributoEsInpar;
+        }
+    }
+
+    // para guardar en un archivo los resultados del lexer
+    private void save(String txt)
+    {
+        String file = "C:\\Users\\JavierOswaldo\\Desktop\\BORRAR-jkjkjklljs.txt";
+        
+        try {Texto.addTexto(file, txt);}
+        catch (Exception ex) {print(ex.getMessage());}
+    }
+
+/*
     ComplexSymbolFactory myFactory = null;
 
     public LexerAcciones(Reader in, ComplexSymbolFactory sf)
@@ -531,68 +623,8 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
         //print(sym);
         return mySymbol;
     }
-    private void error(String message) {
-        System.out.println("Error at line "+(yyline+1)+", column "+(yycolumn+1)+" : "+message);
-    }
 
-    void print(String txt){ System.out.print(txt); }
-    void print(int sym){ print(infoLexema(sym)); }
-
-    String infoLexema(int sym) { return yytext()+":"+ParserAccionesSym.terminalNames[sym]+" "; }
-
-
-    StringBuffer buff = new StringBuffer();
-
-    void cleanBuffer()
-    {
-        buff.delete(0, buff.length());
-        buff.trimToSize();
-    }
-    String reduceBuffer(String texto)
-    {
-        buff.append(texto);
-        buff.deleteCharAt(buff.length()-1);
-        buff.deleteCharAt(0);
-        String temp = buff.toString();
-        cleanBuffer();
-        return temp;
-    }
-
-
-    boolean accioncEsInpar = false;
-    boolean parametroEsInpar = false;
-    boolean atributoEsInpar = false;
-
-    void setContextoDe(int sym)
-    {
-        if(sym == ParserAccionesSym.ACCI)
-        { 
-            if (accioncEsInpar) { yybegin(YYINITIAL); }
-            else { yybegin(MI_ACCION); }
-            accioncEsInpar = !accioncEsInpar;
-        }
-        if(sym == ParserAccionesSym.PARAM)
-        { 
-            if (parametroEsInpar) { yybegin(YYINITIAL); }
-            else { yybegin(MI_PARAMETRO); }
-            parametroEsInpar = !parametroEsInpar;
-        }
-        if(sym == ParserAccionesSym.ATRIB)
-        { 
-            if (atributoEsInpar) { yybegin(YYINITIAL); }
-            else { yybegin(MI_ATRIBUTO); }
-            atributoEsInpar = !atributoEsInpar;
-        }
-    }
-
-    void saveLexema(String txt)
-    {
-        String file = "C:\\Users\\JavierOswaldo\\Desktop\\LEXER.txt";
-        
-        try {Texto.addTexto(file, txt);}
-        catch (Exception ex) {print(ex.getMessage());}
-    }
-
+*/
 
 
 
