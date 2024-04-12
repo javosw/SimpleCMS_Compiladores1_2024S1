@@ -8,10 +8,10 @@ import java.util.ArrayList;
 //import josq.cms.lenguajes.modelos.arbol.*;
 //import josq.cms.lenguajes.modelos.Indicador;
 import josq.cms.lenguajes.modelos.Indicador;
-import josq.cms.lenguajes.modelos.cup.Accion;
 import josq.cms.lenguajes.modelos.cup.simbolos.Par;
 import josq.cms.lenguajes.modelos.cup.simbolos.Atributo;
 import josq.cms.lenguajes.modelos.cup.simbolos.Parametro;
+import josq.cms.lenguajes.modelos.cup.simbolos.Accion;
 
 // NOTA: %cupsym en jflex
 // parser=MyParser, sym=MyParserSym

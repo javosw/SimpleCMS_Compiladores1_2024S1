@@ -12,14 +12,14 @@ import josq.cms.lenguajes.modelos.web.Sitio;
  */
 public class Pagina
 {
-    String id;
+    String idPpage;
     String title;
     String idSite;
-    String idPage;
-    String user_new;
-    String user_mod;
-    String date_new;
-    String date_mod;
+    String idPageRoot;
+    String userNew;
+    String userMod;
+    String dateNew;
+    String dateMod;
     
     Sitio refSite;
     Pagina refPage;

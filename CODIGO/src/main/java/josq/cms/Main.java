@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import josq.cms.archivos.Texto;
 import josq.cms.lenguajes.Procesar;
-import josq.cms.lenguajes.modelos.cup.Accion;
+import josq.cms.lenguajes.modelos.cup.simbolos.Accion;
 
 /**
  *

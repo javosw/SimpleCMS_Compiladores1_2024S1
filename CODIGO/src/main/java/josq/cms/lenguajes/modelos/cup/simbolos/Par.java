@@ -49,6 +49,9 @@ public class Par
         return valueString;
     }
 
-    
-    
+    public ArrayList<String> getValueStrings()
+    {
+        return valueStrings;
+    }
+
 }

@@ -15,7 +15,7 @@ import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.DefaultSymbolFactory;
 import java_cup.runtime.Scanner;
 import josq.cms.lenguajes.lexer.LexerAcciones;
-import josq.cms.lenguajes.modelos.cup.Accion;
+import josq.cms.lenguajes.modelos.cup.simbolos.Accion;
 import josq.cms.lenguajes.parser.ParserAcciones;
 
 

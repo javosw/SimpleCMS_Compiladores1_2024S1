@@ -7,10 +7,10 @@ package josq.cms.lenguajes.parser;
 
 import java.util.ArrayList;
 import josq.cms.lenguajes.modelos.Indicador;
-import josq.cms.lenguajes.modelos.cup.Accion;
 import josq.cms.lenguajes.modelos.cup.simbolos.Par;
 import josq.cms.lenguajes.modelos.cup.simbolos.Atributo;
 import josq.cms.lenguajes.modelos.cup.simbolos.Parametro;
+import josq.cms.lenguajes.modelos.cup.simbolos.Accion;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.

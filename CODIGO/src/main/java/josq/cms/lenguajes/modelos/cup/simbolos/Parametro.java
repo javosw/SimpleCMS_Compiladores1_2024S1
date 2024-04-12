@@ -20,5 +20,15 @@ public class Parametro
         this.tipo = tipo;
         this.contenido = contenido;
     }
+
+    public Indicador getTipo()
+    {
+        return tipo;
+    }
+
+    public Par getContenido()
+    {
+        return contenido;
+    }
     
 }

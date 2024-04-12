@@ -2,21 +2,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package josq.cms.lenguajes.modelos.cup.acciones;
+package josq.cms.lenguajes.controladores.acciones;
 
-import josq.cms.lenguajes.modelos.Indicador;
+import josq.cms.lenguajes.controladores.Instruccion;
 
 /**
  *
  * @author JavierOswaldo
  */
-public class ComponenteParrafo
+public class PaginaDel implements Instruccion
 {
-    Indicador accion;
-    Indicador clase;
-    String id;
     String idPage;
-    String text;
-    Indicador align;
-    String color;
+
+    public PaginaDel(String idPage)
+    {
+        this.idPage = idPage;
+    }
 }
