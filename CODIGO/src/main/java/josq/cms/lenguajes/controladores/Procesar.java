@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package josq.cms.lenguajes;
+package josq.cms.lenguajes.controladores;
 
 import java.io.FileInputStream;
 import java.io.Reader;
@@ -14,9 +14,9 @@ import java_cup.runtime.Symbol;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.DefaultSymbolFactory;
 import java_cup.runtime.Scanner;
-import josq.cms.lenguajes.lexer.LexerAcciones;
-import josq.cms.lenguajes.modelos.cup.simbolos.Accion;
-import josq.cms.lenguajes.parser.ParserAcciones;
+import josq.cms.lenguajes.automatas.LexerAcciones;
+import josq.cms.lenguajes.automatas.ParserAcciones;
+import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
 
 
 /**

@@ -60,52 +60,16 @@ public class Pagina implements Serializable
         this.idPage = idPage;
         this.idSite = idSite;
     }
-
-    public void setTitle(String title)
+    
+    public boolean hasEtiqueta(String etiqueta)
     {
-        this.title = title;
-    }
-
-    public Map<String, Pagina> getPaginas()
-    {
-        return paginas;
-    }
-
-    public Map<String, Object> getComponentes()
-    {
-        return componentes;
-    }
-
-    public void setIdPageRoot(String idPageRoot)
-    {
-        this.idPageRoot = idPageRoot;
-    }
-
-    public void setUserNew(String userNew)
-    {
-        this.userNew = userNew;
-    }
-
-    public void setUserMod(String userMod)
-    {
-        this.userMod = userMod;
-    }
-
-    public void setDateNew(String dateNew)
-    {
-        this.dateNew = dateNew;
-    }
-
-    public void setDateMod(String dateMod)
-    {
-        this.dateMod = dateMod;
-    }
-
-    public Set<String> getEtiquetas()
-    {
-        return etiquetas;
+        return etiquetas.contains(etiqueta);
     }
     
+    public boolean hasPagina(String pagina)
+    {
+        return paginas.keySet().contains(pagina);
+    }
     void addComponente(String idComponente, Object miComponente)
     {
         boolean existe = componentes.containsKey(idComponente);
@@ -135,5 +99,56 @@ public class Pagina implements Serializable
     public void addEtiqueta(String etiqueta)
     {
         etiquetas.add(etiqueta);
+    }
+
+
+    // GETTERS
+    public Map<String, Pagina> getPaginas()
+    {
+        return paginas;
+    }
+    public Map<String, Object> getComponentes()
+    {
+        return componentes;
+    }
+    public Set<String> getEtiquetas()
+    {
+        return etiquetas;
+    }
+
+    public String getIdPage()
+    {
+        return idPage;
+    }
+
+    // SETTERS
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
+
+    public void setIdPageRoot(String idPageRoot)
+    {
+        this.idPageRoot = idPageRoot;
+    }
+
+    public void setUserNew(String userNew)
+    {
+        this.userNew = userNew;
+    }
+
+    public void setUserMod(String userMod)
+    {
+        this.userMod = userMod;
+    }
+
+    public void setDateNew(String dateNew)
+    {
+        this.dateNew = dateNew;
+    }
+
+    public void setDateMod(String dateMod)
+    {
+        this.dateMod = dateMod;
     }
 }

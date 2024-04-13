@@ -4,33 +4,32 @@
  */
 package josq.cms.lenguajes.controladores;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
-import josq.cms.lenguajes.controladores.acciones.ComponenteDel;
-import josq.cms.lenguajes.controladores.acciones.ComponenteImagen;
-import josq.cms.lenguajes.controladores.acciones.ComponenteMenu;
-import josq.cms.lenguajes.controladores.acciones.ComponenteParrafo;
-import josq.cms.lenguajes.controladores.acciones.ComponenteVideo;
-import josq.cms.lenguajes.controladores.acciones.PaginaDel;
-import josq.cms.lenguajes.controladores.acciones.PaginaMod;
-import josq.cms.lenguajes.controladores.acciones.PaginaNew;
-import josq.cms.lenguajes.controladores.acciones.SitioDel;
-import josq.cms.lenguajes.controladores.acciones.SitioNew;
-import josq.cms.lenguajes.modelos.Indicador;
-import josq.cms.lenguajes.modelos.cup.simbolos.Accion;
-import josq.cms.lenguajes.modelos.cup.simbolos.Atributo;
-import josq.cms.lenguajes.modelos.cup.simbolos.Par;
-import josq.cms.lenguajes.modelos.cup.simbolos.Parametro;
+import java.util.Set;
+import josq.cms.archivos.MyFile;
+import josq.cms.archivos.Ruta;
+import josq.cms.lenguajes.automatas.modelos.Indicador;
+import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
+import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Atributo;
+import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Parametro;
 import josq.cms.web.modelos.Componente;
 import josq.cms.web.modelos.Pagina;
 import josq.cms.web.modelos.Sitio;
+import josq.cms.web.modelos.componentes.Imagen;
+import josq.cms.web.modelos.componentes.Menu;
+import josq.cms.web.modelos.componentes.Parrafo;
+import josq.cms.web.modelos.componentes.Titulo;
+import josq.cms.web.modelos.componentes.Video;
 
 /**
  *
  * @author JavierOswaldo
  */
-public class AccionFactory
+public class WebModelFactory
 {
     /*
     Instruccion newAccion(Accion miAccion)
@@ -48,7 +47,7 @@ public class AccionFactory
     }
     */
     
-    Sitio newSitioNew(Accion miAccion)
+    public static Sitio newSitioForCreation(Accion miAccion)
     {
         ArrayList<Parametro> listParametros = miAccion.getParametros();
         Map<Indicador,Object> mapParametros = new HashMap<>();
@@ -79,7 +78,7 @@ public class AccionFactory
         return miSitio;
     }
     
-    Sitio newSitioDel(Accion miAccion)
+    public static Sitio newSitioForDeletion(Accion miAccion)
     {
         ArrayList<Parametro> listParametros = miAccion.getParametros();
         Map<Indicador,Object> mapParametros = new HashMap<>();
@@ -98,7 +97,7 @@ public class AccionFactory
         return miSitio;
     }
 
-    Pagina newPaginaNew(Accion miAccion)
+    public static Pagina newPaginaForCreation(Accion miAccion)
     {
         ArrayList<Parametro> listParametros = miAccion.getParametros();
         Map<Indicador,Object> mapParametros = new HashMap<>();
@@ -139,7 +138,7 @@ public class AccionFactory
         return miPagina;
     }
     
-    Pagina newPaginaMod(Accion miAccion)
+    public static Pagina newPaginaForModification(Accion miAccion)
     {
         ArrayList<Parametro> listParametros = miAccion.getParametros();
         Map<Indicador,Object> mapParametros = new HashMap<>();
@@ -163,7 +162,7 @@ public class AccionFactory
         return miPagina;
     }
 
-    Pagina newPaginaDel(Accion miAccion)
+    public static Pagina newPaginaForDeletion(Accion miAccion)
     {
         ArrayList<Parametro> listParametros = miAccion.getParametros();
         Map<Indicador,Object> mapParametros = new HashMap<>();
@@ -182,7 +181,7 @@ public class AccionFactory
         return miPagina;
     }
     
-    Componente newComponente(Accion miAccion)
+    public static Componente newComponente(Accion miAccion)
     {
         ArrayList<Parametro> listParametros = miAccion.getParametros();
         Map<Indicador,Object> mapParametros = new HashMap<>();
@@ -212,106 +211,169 @@ public class AccionFactory
         return miComp;
     }
     
-    Object getWidget(Indicador clase, Map<Indicador,Object> mapAtributos)
+    public static Object getWidget(Indicador clase, Map<Indicador,Object> mapAtributos)
     {
-        if(clase == Indicador.UI_TITULO | clase == Indicador.UI_PARRAFO) return newComponenteParrafo(miAccion);
-        else if(clase == Indicador.UI_IMAGEN) return newComponenteImagen(miAccion);
-        else if(clase == Indicador.UI_VIDEO) return newComponenteVideo(miAccion);
-        else if(clase == Indicador.UI_MENU) return newComponenteMenu(miAccion);
+        if(clase == Indicador.UI_TITULO)
+        {
+            Object text = mapAtributos.get(Indicador.A_TEXTO);
+            Object align = mapAtributos.get(Indicador.A_ALIGN);
+            Object color = mapAtributos.get(Indicador.A_COLOR);
+
+            boolean is_text = text != null && text instanceof String;
+            boolean is_align = align != null && align instanceof String;
+            boolean is_color = color != null && color instanceof String;
+
+            Titulo miTitulo = null;
+            if (is_text) 
+            {
+                miTitulo = new Titulo((String) text);
+                if(is_align) miTitulo.setAlign((Indicador) align);
+                if(is_color) miTitulo.setColor((String) color);
+            }
+            return  miTitulo;
+        }
+        else if(clase == Indicador.UI_PARRAFO) 
+        {
+            Object text = mapAtributos.get(Indicador.A_TEXTO);
+            Object align = mapAtributos.get(Indicador.A_ALIGN);
+            Object color = mapAtributos.get(Indicador.A_COLOR);
+
+            boolean is_text = text != null && text instanceof String;
+            boolean is_align = align != null && align instanceof String;
+            boolean is_color = color != null && color instanceof String;
+
+            Parrafo miParrafo = null;
+            if (is_text) 
+            {
+                miParrafo = new Parrafo((String) text);
+                if(is_align) miParrafo.setAlign((Indicador) align);
+                if(is_color) miParrafo.setColor((String) color);
+            }
+            return  miParrafo;
+        }
+        else if(clase == Indicador.UI_IMAGEN) 
+        {
+            Object url = mapAtributos.get(Indicador.A_ORIGEN);
+            Object align = mapAtributos.get(Indicador.A_ALIGN);
+            Object sizeX = mapAtributos.get(Indicador.A_ANCHO);
+            Object sizeY = mapAtributos.get(Indicador.A_ALTO);
+
+            boolean is_url = url != null && url instanceof String;
+            boolean is_align = align != null && align instanceof Indicador;
+            boolean is_sizeX = sizeX != null && sizeX instanceof String;
+            boolean is_sizeY = sizeY != null && sizeY instanceof String;
+
+            Imagen miImagen = null;
+            if (is_url) 
+            {
+                miImagen = new Imagen((String) url);
+                try
+                {
+                    if(is_sizeX && is_sizeY) miImagen.setArea(Integer.parseInt((String) sizeX), Integer.parseInt((String) sizeY));
+                }
+                catch (Exception e) { System.out.println(e.getMessage()); }
+                if(is_align) miImagen.setAlign((Indicador) align);
+            }
+            return  miImagen;
+        }
+        else if(clase == Indicador.UI_VIDEO) 
+        {
+            Object url = mapAtributos.get(Indicador.A_ORIGEN);
+            Object sizeX = mapAtributos.get(Indicador.A_ANCHO);
+            Object sizeY = mapAtributos.get(Indicador.A_ALTO);
+
+            boolean is_url = url != null && url instanceof String;
+            boolean is_sizeX = sizeX != null && sizeX instanceof String;
+            boolean is_sizeY = sizeY != null && sizeY instanceof String;
+
+            Video miVideo = null;
+            if (is_url) 
+            {
+                miVideo = new Video((String) url);
+                try
+                {
+                    if(is_sizeX && is_sizeY) miVideo.setArea(Integer.parseInt((String) sizeX), Integer.parseInt((String) sizeY));
+                }
+                catch (Exception e) { System.out.println(e.getMessage()); }
+            }
+            return  miVideo;
+        }
+        else if(clase == Indicador.UI_MENU) 
+        {
+            Object idPageRoot = mapAtributos.get(Indicador.A_PADRE);
+            Object labels = mapAtributos.get(Indicador.A_ETIQS);
+
+            boolean is_idPageRoot = idPageRoot != null && idPageRoot instanceof String;
+            boolean is_labels = labels != null && labels instanceof ArrayList;
+
+            Menu miMenu = null;
+            if(is_idPageRoot)
+            {
+                miMenu = new Menu((String) idPageRoot);
+                
+                Set<String> setLabels = null;
+                if(is_labels) 
+                {
+                    setLabels = new HashSet<>((ArrayList<String>) labels);
+                    
+                    Set<String> paginas = new HashSet<>();
+                    collectLabeledPages((String) idPageRoot, setLabels, paginas);
+                    for(String p : paginas) miMenu.addPagina(p);
+                }
+            }
+            return miMenu;
+            
+            // get pagina desde archivo
+            // para cada hija de root: 
+            //   si esta pagina tiene alguna etiqueta: agregar este idpagina a menu.paginas
+                    
+        }
         
-        return  null;
+        return null;
     }
     
-    Instruccion newComponenteParrafo(Accion miAccion)
+    private static void collectLabeledPages(String idPage, Set<String> labels, Set<String> paginas)
     {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> paresParam = new HashMap<>();
-        for (Parametro p : parametros) paresParam.put(p.getTipo(), p.getContenido());
+        String file = Ruta.cms+idPage;
+        File pageFile = new File(file); 
+        if (!pageFile.exists()) return;
         
-        ArrayList<Atributo> atributos = miAccion.getAtributos();
-        Map<Indicador,Par> paresAtrib = new HashMap<>();
-        for (Atributo a : atributos) paresAtrib.put(a.getTipo(), a.getContenido());
-
-        String idComp = paresParam.get(Indicador.P_ID).getValueString();
-        String idPage = paresParam.get(Indicador.P_PAGINA).getValueString();
-        String text = paresAtrib.get(Indicador.A_TEXTO).getValueString();
-        Indicador align = paresAtrib.get(Indicador.A_ALIGN).getValueIndicador();
-        String color = paresAtrib.get(Indicador.A_COLOR).getValueString();
-        Indicador clase = paresParam.get(Indicador.P_CLASE).getValueIndicador();
-        Indicador accion = miAccion.getTipo();
-        
-        return new ComponenteParrafo(idComp, idPage, text, align, color, clase, accion);
-    }
-    
-    Instruccion newComponenteImagen(Accion miAccion)
-    {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> paresParam = new HashMap<>();
-        for (Parametro p : parametros) paresParam.put(p.getTipo(), p.getContenido());
-        
-        ArrayList<Atributo> atributos = miAccion.getAtributos();
-        Map<Indicador,Par> paresAtrib = new HashMap<>();
-        for (Atributo a : atributos) paresAtrib.put(a.getTipo(), a.getContenido());
-
-        String idComp = paresParam.get(Indicador.P_ID).getValueString();
-        String idPage = paresParam.get(Indicador.P_PAGINA).getValueString();
-        String url = paresAtrib.get(Indicador.A_ORIGEN).getValueString();
-        int sizeX = Integer.parseInt(paresAtrib.get(Indicador.A_ANCHO).getValueString());
-        int sizeY = Integer.parseInt(paresAtrib.get(Indicador.A_ALTO).getValueString());
-        Indicador align = paresAtrib.get(Indicador.A_ALIGN).getValueIndicador();
-        Indicador accion = miAccion.getTipo();
-
-        return new ComponenteImagen(idComp, idPage, url, sizeX, sizeY, align, accion);
+        try
+        {
+            Pagina myPage = (Pagina) MyFile.readObject(file);
+            
+            for(String l : labels)
+            {
+                if(myPage.hasEtiqueta(l)) { paginas.add(idPage); break; }
+            }
+            
+            Set<String> subPaginas = myPage.getPaginas().keySet();
+            for (String subPage : subPaginas) collectLabeledPages(subPage, labels, paginas);
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex.getMessage());
+        }
     }
 
-    Instruccion newComponenteMenu(Accion miAccion)
+    public static Componente newComponenteForDeletion(Accion miAccion)
     {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> paresParam = new HashMap<>();
-        for (Parametro p : parametros) paresParam.put(p.getTipo(), p.getContenido());
+        ArrayList<Parametro> listParametros = miAccion.getParametros();
+        Map<Indicador,Object> mapParametros = new HashMap<>();
+        for (Parametro p : listParametros) mapParametros.put(p.getTipo(), p.getContenido());
+                
+        Object idComp = mapParametros.get(Indicador.P_ID);
+        Object idPage = mapParametros.get(Indicador.P_PAGINA);
         
-        ArrayList<Atributo> atributos = miAccion.getAtributos();
-        Map<Indicador,Par> paresAtrib = new HashMap<>();
-        for (Atributo a : atributos) paresAtrib.put(a.getTipo(), a.getContenido());
+        boolean is_idComp = idComp != null && idComp instanceof String;
+        boolean is_idPage = idPage != null && idPage instanceof String;
 
-        String idComp = paresParam.get(Indicador.P_ID).getValueString();
-        String idPage = paresParam.get(Indicador.P_PAGINA).getValueString();
-        String idPageRoot = paresAtrib.get(Indicador.A_PADRE).getValueString();
-        ArrayList<String> labels = paresAtrib.get(Indicador.A_ETIQS).getValueStrings();
-        Indicador accion = miAccion.getTipo();
+        Componente miComp = null;
+        if(is_idComp && is_idPage)
+        {
+            miComp = new Componente((String)idComp,(String)idPage);
+        }
         
-        return new ComponenteMenu(idComp, idPage, idPageRoot, labels, accion);
+        return miComp;
     }
-
-    Instruccion newComponenteVideo(Accion miAccion)
-    {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> paresParam = new HashMap<>();
-        for (Parametro p : parametros) paresParam.put(p.getTipo(), p.getContenido());
-        
-        ArrayList<Atributo> atributos = miAccion.getAtributos();
-        Map<Indicador,Par> paresAtrib = new HashMap<>();
-        for (Atributo a : atributos) paresAtrib.put(a.getTipo(), a.getContenido());
-
-        String idComp = paresParam.get(Indicador.P_ID).getValueString();
-        String idPage = paresParam.get(Indicador.P_PAGINA).getValueString();
-        String url = paresAtrib.get(Indicador.A_ORIGEN).getValueString();
-        int sizeX = Integer.parseInt(paresAtrib.get(Indicador.A_ANCHO).getValueString());
-        int sizeY = Integer.parseInt(paresAtrib.get(Indicador.A_ALTO).getValueString());
-        Indicador accion = miAccion.getTipo();
-
-        return new ComponenteVideo(idComp, idPage, url, sizeX, sizeY, accion);
-    }
-    Instruccion newComponenteDel(Accion miAccion)
-    {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> paresParam = new HashMap<>();
-        for (Parametro p : parametros) paresParam.put(p.getTipo(), p.getContenido());
-        
-        String idComp = paresParam.get(Indicador.P_ID).getValueString();
-        String idPage = paresParam.get(Indicador.P_PAGINA).getValueString();
-
-        return new ComponenteDel(idComp, idPage);
-    }
-
 }

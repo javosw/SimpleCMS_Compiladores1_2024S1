@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import josq.cms.lenguajes.controladores.Instruccion;
-import josq.cms.archivos.Objetos;
+import josq.cms.archivos.MyFile;
 import josq.cms.web.modelos.Sitio;
 
 /**
@@ -38,7 +38,7 @@ public class SitioDel implements Instruccion
         
         try
         {
-            Sitio miSitio = (Sitio) Objetos.readObject(file);
+            Sitio miSitio = (Sitio) MyFile.readObject(file);
             // eliminar cada pagina del sitio de forma rrecursiva
         }
         catch (Exception ex)

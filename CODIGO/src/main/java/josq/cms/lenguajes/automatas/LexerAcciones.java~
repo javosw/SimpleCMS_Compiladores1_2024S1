@@ -5,7 +5,7 @@
 // meta characters:  |  (  )  {  }  [  ]  < >  \  .  *  +  ?  ^  $  / . " ~ !
 
 // codigo antes de la clase lexer
-package josq.cms.lenguajes.lexer;
+package josq.cms.lenguajes.automatas;
 
 import java.io.Reader;
 
@@ -16,9 +16,9 @@ import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java_cup.runtime.DefaultSymbolFactory;
 
-import josq.cms.lenguajes.parser.ParserAccionesSym;
-import josq.cms.archivos.Texto;
-import josq.cms.lenguajes.modelos.jflex.Punto;
+import josq.cms.lenguajes.automatas.ParserAccionesSym;
+import josq.cms.archivos.MyFile;
+import josq.cms.lenguajes.automatas.modelos.jflex.Punto;
 
 
 @SuppressWarnings("fallthrough")
@@ -518,27 +518,22 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
     public LexerAcciones(Reader myReader, DefaultSymbolFactory myFactory)
     { this(myReader); this.myFactory = myFactory; }
 
+    public Punto getPunto(){ return new Punto(yycolumn, yyline, yylength(), (int)yychar+1); };
+
     private Symbol symbol(String name, int sym) {
         int izq = (int)yychar+1;
         int der = (int)yychar+yylength();
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der);
-        save(infoLexema2(mySymbol)+" ");
-        //saveLexema(infoLexema(sym));
-        //print(sym);
+        //save(infoLexema2(mySymbol)+" ");
         return mySymbol;
     }
     private Symbol symbol(String name, int sym, Object val) {
         int izq = (int)yychar+1;
         int der = (int)yychar+yylength();
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der, val);
-        save(infoLexema2(mySymbol)+" ");
-        //saveLexema(infoLexema(sym));
-        //print(sym);
+        //save(infoLexema2(mySymbol)+" ");
         return mySymbol;
     }
-
-    public Punto getPunto(){ return new Punto(yycolumn, yyline, yylength(), (int)yychar+1); };
-
 
     // para errores lexicos
     private void error(String message) {
@@ -600,9 +595,9 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
     // para guardar en un archivo los resultados del lexer
     private void save(String txt)
     {
-        String file = "C:\\Users\\JavierOswaldo\\Desktop\\BORRAR-jkjkjklljs.txt";
+        String file = "C:\\Users\\JavierOswaldo\\Desktop\\jflexBORRAR-jjkjriijaxj.txt";
         
-        try {Texto.addTexto(file, txt);}
+        try {MyFile.writeString(file, txt);}
         catch (Exception ex) {print(ex.getMessage());}
     }
 

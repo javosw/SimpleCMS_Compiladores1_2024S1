@@ -4,7 +4,7 @@
  */
 package josq.cms.web.modelos.componentes;
 
-import josq.cms.lenguajes.modelos.Indicador;
+import josq.cms.lenguajes.automatas.modelos.Indicador;
 
 /**
  *
@@ -15,6 +15,16 @@ public class Parrafo
     String text;
     Indicador align;
     String color;
+
+    public void setAlign(Indicador align)
+    {
+        this.align = align;
+    }
+
+    public void setColor(String color)
+    {
+        this.color = color;
+    }
 
 /*
     parametros: {
@@ -28,4 +38,9 @@ public class Parrafo
             COLOR: [#5A5A5A]
     }
 */
+
+    public Parrafo(String text)
+    {
+        this.text = text;
+    }
 }

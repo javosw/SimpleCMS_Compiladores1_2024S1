@@ -5,6 +5,7 @@
 package josq.cms.web.modelos.componentes;
 
 import java.util.ArrayList;
+import java.util.Set;
 import josq.cms.web.modelos.Pagina;
 /**
  *
@@ -13,8 +14,13 @@ import josq.cms.web.modelos.Pagina;
 public class Menu
 {
     String idPageRoot;
-    ArrayList<String> paginas;
+    Set<String> paginas;
     
+    public void addPagina(String pagina)
+    {
+        paginas.add(pagina);
+    }
+
     //Pagina refPage;
     
  /*
@@ -28,4 +34,9 @@ public class Menu
             * ETIQUETAS: [ grupo1 | grupo2 | ... ]
     }
 */   
+
+    public Menu(String idPageRoot)
+    {
+        this.idPageRoot = idPageRoot;
+    }
 }

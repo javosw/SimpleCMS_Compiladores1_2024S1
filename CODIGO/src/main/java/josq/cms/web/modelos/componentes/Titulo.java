@@ -4,7 +4,7 @@
  */
 package josq.cms.web.modelos.componentes;
 
-import josq.cms.lenguajes.modelos.Indicador;
+import josq.cms.lenguajes.automatas.modelos.Indicador;
 
 /**
  *
@@ -28,4 +28,19 @@ public class Titulo
             COLOR: [#5A5A5A]
     }
 */
+
+    public Titulo(String text)
+    {
+        this.text = text;
+    }
+
+    public void setAlign(Indicador align)
+    {
+        this.align = align;
+    }
+
+    public void setColor(String color)
+    {
+        this.color = color;
+    }
 }

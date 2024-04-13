@@ -13,7 +13,17 @@ public class Video
     String url;
     int sizeX;
     int sizeY;
-    
+
+    public Video(String url)
+    {
+        this.url = url;
+    }
+
+    public void setArea(int sizeX, int sizeY)
+    {
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+    }
 /*
     parametros: {
             * ID: [idComponente]
@@ -27,4 +37,5 @@ public class Video
     }
 
 */
+
 }

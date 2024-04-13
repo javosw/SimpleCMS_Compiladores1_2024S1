@@ -1,7 +1,7 @@
 // meta characters:  |  (  )  {  }  [  ]  < >  \  .  *  +  ?  ^  $  / . " ~ !
 
 // codigo antes de la clase lexer
-package josq.cms.lenguajes.lexer;
+package josq.cms.lenguajes.automatas;
 
 import java.io.Reader;
 
@@ -12,9 +12,10 @@ import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java_cup.runtime.DefaultSymbolFactory;
 
-import josq.cms.lenguajes.parser.ParserAccionesSym;
-import josq.cms.archivos.Texto;
-import josq.cms.lenguajes.modelos.jflex.Punto;
+import josq.cms.archivos.MyFile;
+
+import josq.cms.lenguajes.automatas.ParserAccionesSym;
+import josq.cms.lenguajes.automatas.modelos.jflex.Punto;
 
 %%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
@@ -117,9 +118,9 @@ import josq.cms.lenguajes.modelos.jflex.Punto;
     // para guardar en un archivo los resultados del lexer
     private void save(String txt)
     {
-        String file = "C:\\Users\\JavierOswaldo\\Desktop\\BORRAR-jkjkjklljs.txt";
+        String file = "C:\\Users\\JavierOswaldo\\Desktop\\jflexBORRAR-jjkjriijaxj.txt";
         
-        try {Texto.addTexto(file, txt);}
+        try {MyFile.writeString(file, txt);}
         catch (Exception ex) {print(ex.getMessage());}
     }
 

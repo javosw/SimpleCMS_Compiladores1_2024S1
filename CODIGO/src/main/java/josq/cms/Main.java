@@ -5,13 +5,11 @@
 package josq.cms;
 
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import josq.cms.archivos.Texto;
-import josq.cms.lenguajes.Procesar;
+import josq.cms.archivos.MyFile;
+import josq.cms.lenguajes.controladores.Procesar;
 import josq.cms.lenguajes.controladores.Instruccion;
 import josq.cms.lenguajes.controladores.acciones.SitioNew;
-import josq.cms.lenguajes.modelos.cup.simbolos.Accion;
+import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
 
 /**
  *
@@ -55,11 +53,11 @@ public class Main
         list.add("mnbmnb");
         try
         {
-            String file = "C:\\Users\\JavierOswaldo\\Desktop\\LEXER.txt";
-            Texto.newTexto(file, " 111 ");
-            Texto.addTexto(file, "222 ");
-            Texto.addTexto(file, "333 ");
-            Texto.newTexto(file, "444 ");
+            String file = "C:\\Users\\JavierOswaldo\\Desktop\\TjjkjYhfH-BORRAR.txt";
+            MyFile.writeString(file, " 111 ");
+            MyFile.writeStringAtEnd(file, "222 ");
+            MyFile.writeStringAtEnd(file, "333 ");
+            MyFile.writeStringAtEnd(file, "444 ");
         }
         catch (Exception ex)
         {

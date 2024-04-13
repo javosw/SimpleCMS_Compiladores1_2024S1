@@ -6,7 +6,7 @@ package josq.cms.lenguajes.controladores.acciones;
 
 import java.util.ArrayList;
 import josq.cms.lenguajes.controladores.Instruccion;
-import josq.cms.lenguajes.modelos.Indicador;
+import josq.cms.lenguajes.automatas.modelos.Indicador;
 
 /**
  *

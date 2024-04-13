@@ -6,14 +6,16 @@ package josq.cms.archivos;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  *
  * @author JavierOswaldo
  */
-public class Objetos
+public class MyFile
 {
     public static void writeObjeto(String file, Object myObject) throws Exception
     {
@@ -24,8 +26,6 @@ public class Objetos
 
         myObjectStream.close();    
     }
-    
-    
     public static Object readObject(String file) throws Exception
     {
         FileInputStream myFileStream = new FileInputStream(file);
@@ -37,4 +37,19 @@ public class Objetos
         
         return myObject;
     }
+    
+    
+    public static void writeString(String file, String txt) throws Exception
+    {
+        FileWriter myWriter = new FileWriter(file,StandardCharsets.UTF_8);
+        myWriter.write(txt);
+        myWriter.close();
+    }
+    public static void writeStringAtEnd(String file, String txt) throws Exception
+    {
+        FileWriter myWriter = new FileWriter(file,StandardCharsets.UTF_8,true);
+        myWriter.write(txt);
+        myWriter.close();
+    }
+
 }

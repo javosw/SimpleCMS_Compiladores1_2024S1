@@ -4,7 +4,7 @@
  */
 package josq.cms.web.modelos.componentes;
 
-import josq.cms.lenguajes.modelos.Indicador;
+import josq.cms.lenguajes.automatas.modelos.Indicador;
 
 /**
  *
@@ -16,6 +16,11 @@ public class Imagen
     int sizeX;
     int sizeY;
     Indicador align;
+
+    public void setAlign(Indicador align)
+    {
+        this.align = align;
+    }
     
 /*
     parametros: {
@@ -31,4 +36,14 @@ public class Imagen
     }
 
 */
+
+    public void setArea(int sizeX, int sizeY)
+    {
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+    }
+    public Imagen(String url)
+    {
+        this.url = url;
+    }
 }
