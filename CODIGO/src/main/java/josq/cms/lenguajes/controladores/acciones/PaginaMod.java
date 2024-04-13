@@ -23,4 +23,11 @@ public class PaginaMod implements Instruccion
         this.title = title;
         this.labels = labels;
     }
+
+    @Override
+    public void ejecutar()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
 }

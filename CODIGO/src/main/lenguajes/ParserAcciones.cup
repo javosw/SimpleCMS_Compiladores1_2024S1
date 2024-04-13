@@ -67,13 +67,13 @@ non terminal ArrayList<Parametro> parametros, parametrosMID ;
 non terminal parametrosIZQ, parametrosDER ;
 non terminal Parametro parametro ;
 non terminal Indicador parametroIZQ, parametroNombre, parametroTipo ;
-non terminal Par parametroMID, parametroContent ;
+non terminal Object parametroMID, parametroContent ;
 non terminal parametroDER ;
 non terminal ArrayList<Atributo> atributos, atributosMID ;
 non terminal atributosIZQ, atributosDER ;
 non terminal Atributo atributo ;
 non terminal Indicador atributoIZQ, atributoNombre, atributoTipo ;
-non terminal Par atributoMID, atributoContent ;
+non terminal Object atributoMID, atributoContent ;
 non terminal atributoDER ;
 non terminal ArrayList<String> etiquetas, etiquetasMID ;
 non terminal etiquetasIZQ, etiquetasDER ;
@@ -184,10 +184,10 @@ parametroMID ::=
     IZQCOR parametroContent:w1 DERCOR {: RESULT=w1; :} // +
 ;
 parametroContent ::=
-    MI_ID:w1          {: RESULT= new Par(Indicador.MI_ID,w1); :}         // +
-    | MI_TEXTO:w1     {: RESULT= new Par(Indicador.MI_TEXTO,w1); :}      // +
-    | MI_FECHA:w1     {: RESULT= new Par(Indicador.MI_FECHA,w1); :}      // +
-    | miComponente:w1 {: RESULT= new Par(Indicador.MI_COMPONENTE,w1); :} // +
+    MI_ID:w1          {: RESULT=w1; :} // + 
+    | MI_TEXTO:w1     {: RESULT=w1; :} // + 
+    | MI_FECHA:w1     {: RESULT=w1; :} // + 
+    | miComponente:w1 {: RESULT=w1; :} // + 
 ;
 miComponente ::=
     | UI_TITULO  {: RESULT=Indicador.UI_TITULO; :}  // + 
@@ -239,13 +239,13 @@ atributoMID ::=
     IZQCOR atributoContent:w1 DERCOR {: RESULT=w1; :} // +
 ;
 atributoContent ::= 
-    MI_ID:w1          {: RESULT= new Par(Indicador.MI_ID,w1); :}         // +
-    | MI_TEXTO:w1     {: RESULT= new Par(Indicador.MI_TEXTO,w1); :}      // +
-    | MI_COLOR:w1     {: RESULT= new Par(Indicador.MI_COLOR,w1); :}      // +
-    | MI_URL:w1       {: RESULT= new Par(Indicador.MI_URL,w1); :}        // +
-    | MI_NUMERO:w1    {: RESULT= new Par(Indicador.MI_NUMERO,w1); :}     // +
-    | misEtiquetas:w1 {: RESULT= new Par(Indicador.MIS_ETIQUETAS,w1); :} // +
-    | miAlineacion:w1 {: RESULT= new Par(Indicador.MI_ALIGN,w1); :}      // +
+    MI_ID:w1          {: RESULT=w1; :} // +
+    | MI_TEXTO:w1     {: RESULT=w1; :} // +
+    | MI_COLOR:w1     {: RESULT=w1; :} // +
+    | MI_URL:w1       {: RESULT=w1; :} // +
+    | MI_NUMERO:w1    {: RESULT=w1; :} // +
+    | misEtiquetas:w1 {: RESULT=w1; :} // +
+    | miAlineacion:w1 {: RESULT=w1; :} // +
 ;
 miAlineacion ::=
     T_CENTRAR      {: RESULT=Indicador.T_CENTRAR; :}    // +

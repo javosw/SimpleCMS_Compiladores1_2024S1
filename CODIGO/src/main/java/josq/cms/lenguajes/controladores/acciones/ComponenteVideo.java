@@ -29,5 +29,11 @@ public class ComponenteVideo implements Instruccion
         this.sizeY = sizeY;
         this.accion = accion;
     }
+
+    @Override
+    public void ejecutar()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

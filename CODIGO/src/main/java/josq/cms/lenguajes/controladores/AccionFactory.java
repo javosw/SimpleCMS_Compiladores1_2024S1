@@ -22,6 +22,9 @@ import josq.cms.lenguajes.modelos.cup.simbolos.Accion;
 import josq.cms.lenguajes.modelos.cup.simbolos.Atributo;
 import josq.cms.lenguajes.modelos.cup.simbolos.Par;
 import josq.cms.lenguajes.modelos.cup.simbolos.Parametro;
+import josq.cms.web.modelos.Componente;
+import josq.cms.web.modelos.Pagina;
+import josq.cms.web.modelos.Sitio;
 
 /**
  *
@@ -29,6 +32,7 @@ import josq.cms.lenguajes.modelos.cup.simbolos.Parametro;
  */
 public class AccionFactory
 {
+    /*
     Instruccion newAccion(Accion miAccion)
     {
         Indicador tipo = miAccion.getTipo();
@@ -42,94 +46,181 @@ public class AccionFactory
         
         return null;
     }
+    */
     
-    
-    Instruccion newSitioNew(Accion miAccion)
+    Sitio newSitioNew(Accion miAccion)
     {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> pares = new HashMap<>();
-        for (Parametro p : parametros) pares.put(p.getTipo(), p.getContenido());
+        ArrayList<Parametro> listParametros = miAccion.getParametros();
+        Map<Indicador,Object> mapParametros = new HashMap<>();
+        for (Parametro p : listParametros) mapParametros.put(p.getTipo(), p.getContenido());
         
-        String idSite = pares.get(Indicador.P_ID).getValueString();
-        String userNew = pares.get(Indicador.P_USER_NEW).getValueString();
-        String userMod = pares.get(Indicador.P_USER_MOD).getValueString();
-        String dateNew = pares.get(Indicador.P_FECHA_NEW).getValueString();
-        String dateMod = pares.get(Indicador.P_FECHA_MOD).getValueString();
+        Object idSite = mapParametros.get(Indicador.P_ID);
+        Object userNew = mapParametros.get(Indicador.P_USER_NEW);
+        Object userMod = mapParametros.get(Indicador.P_USER_MOD);
+        Object dateNew = mapParametros.get(Indicador.P_FECHA_NEW);
+        Object dateMod = mapParametros.get(Indicador.P_FECHA_MOD);
 
-        return new SitioNew(idSite, userNew, userMod, dateNew, dateMod);
+        boolean is_idSite = idSite != null && idSite instanceof String;
+        boolean is_userNew = userNew != null && userNew instanceof String;
+        boolean is_userMod = userMod != null && userMod instanceof String;
+        boolean is_dateNew = dateNew != null && dateNew instanceof String;
+        boolean is_dateMod = dateMod != null && dateMod instanceof String;
+
+        Sitio miSitio = null;
+        if (is_idSite) 
+        {
+            miSitio = new Sitio((String) idSite);
+            if(is_userNew) miSitio.setUserNew((String) userNew);
+            if(is_userMod) miSitio.setUserMod((String) userMod);
+            if(is_dateNew) miSitio.setDateNew((String) dateNew);
+            if(is_dateMod) miSitio.setDateMod((String) dateMod);
+        }
+        
+        return miSitio;
     }
     
-    Instruccion newSitioDel(Accion miAccion)
+    Sitio newSitioDel(Accion miAccion)
     {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> pares = new HashMap<>();
-        for (Parametro p : parametros) pares.put(p.getTipo(), p.getContenido());
+        ArrayList<Parametro> listParametros = miAccion.getParametros();
+        Map<Indicador,Object> mapParametros = new HashMap<>();
+        for (Parametro p : listParametros) mapParametros.put(p.getTipo(), p.getContenido());
         
-        String idSite = pares.get(Indicador.P_ID).getValueString();
+        Object idSite = mapParametros.get(Indicador.P_ID);
 
-        return new SitioDel(idSite);
+        boolean is_idSite = idSite != null && idSite instanceof String;
+
+        Sitio miSitio = null;
+        if (is_idSite) 
+        {
+            miSitio = new Sitio((String) idSite);
+        }
+        
+        return miSitio;
     }
 
-    // ++++++++++++
-    Instruccion newPaginaNew(Accion miAccion)
+    Pagina newPaginaNew(Accion miAccion)
     {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> pares = new HashMap<>();
-        for (Parametro p : parametros) pares.put(p.getTipo(), p.getContenido());
+        ArrayList<Parametro> listParametros = miAccion.getParametros();
+        Map<Indicador,Object> mapParametros = new HashMap<>();
+        for (Parametro p : listParametros) mapParametros.put(p.getTipo(), p.getContenido());
         
-        String idPage = pares.get(Indicador.P_ID).getValueString();
-        String idPageRoot = pares.get(Indicador.P_ID).getValueString();
-        String idSite = pares.get(Indicador.P_ID).getValueString();
-        String title = pares.get(Indicador.P_ID).getValueString();
+        Object idPage = mapParametros.get(Indicador.P_ID);
+        Object idPageRoot = mapParametros.get(Indicador.P_PADRE);
+        Object idSite = mapParametros.get(Indicador.P_SITIO);
+        Object title = mapParametros.get(Indicador.P_TITULO);
+        Object userNew = mapParametros.get(Indicador.P_USER_NEW);
+        Object userMod = mapParametros.get(Indicador.P_USER_MOD);
+        Object dateNew = mapParametros.get(Indicador.P_FECHA_NEW);
+        Object dateMod = mapParametros.get(Indicador.P_FECHA_MOD);
         ArrayList<String> labels = miAccion.getEtiquetas();
-        String userNew = pares.get(Indicador.P_USER_NEW).getValueString();
-        String userMod = pares.get(Indicador.P_USER_MOD).getValueString();
-        String dateNew = pares.get(Indicador.P_FECHA_NEW).getValueString();
-        String dateMod = pares.get(Indicador.P_FECHA_MOD).getValueString();
-        
-        return  new PaginaNew(idPage, idPageRoot, idSite, title, labels, userNew, userMod, dateNew, dateMod);
-    }
 
-    Instruccion newPaginaMod(Accion miAccion)
-    {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> pares = new HashMap<>();
-        for (Parametro p : parametros) pares.put(p.getTipo(), p.getContenido());
+        boolean is_idPage = idPage != null && idPage instanceof String;
+        boolean is_idSite = idSite != null && idSite instanceof String;
+        boolean is_idPageRoot = idPageRoot != null && idPageRoot instanceof String;
+        boolean is_title = title != null && title instanceof String;
+        boolean is_userNew = userNew != null && userNew instanceof String;
+        boolean is_userMod = userMod != null && userMod instanceof String;
+        boolean is_dateNew = dateNew != null && dateNew instanceof String;
+        boolean is_dateMod = dateMod != null && dateMod instanceof String;
+
+        Pagina miPagina = null;
+        if (is_idPage && is_idSite) 
+        {
+            miPagina = new Pagina((String) idPage, (String) idSite);
+            if(is_idPageRoot) miPagina.setIdPageRoot((String) idPageRoot);
+            if(is_title) miPagina.setTitle((String) title);
+            if(is_userNew) miPagina.setUserNew((String) userNew);
+            if(is_userMod) miPagina.setUserMod((String) userMod);
+            if(is_dateNew) miPagina.setDateNew((String) dateNew);
+            if(is_dateMod) miPagina.setDateMod((String) dateMod);
+            for (String l : labels) miPagina.addEtiqueta(l);
+        }
         
-        String idPage = pares.get(Indicador.P_ID).getValueString();
-        String title = pares.get(Indicador.P_ID).getValueString();
+        return miPagina;
+    }
+    
+    Pagina newPaginaMod(Accion miAccion)
+    {
+        ArrayList<Parametro> listParametros = miAccion.getParametros();
+        Map<Indicador,Object> mapParametros = new HashMap<>();
+        for (Parametro p : listParametros) mapParametros.put(p.getTipo(), p.getContenido());
+        
+        Object idPage = mapParametros.get(Indicador.P_ID);
+        Object title = mapParametros.get(Indicador.P_TITULO);
         ArrayList<String> labels = miAccion.getEtiquetas();
-        
-        return new PaginaMod(idPage, title, labels);
-    }
-    
-    Instruccion newPaginaDel(Accion miAccion)
-    {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> pares = new HashMap<>();
-        for (Parametro p : parametros) pares.put(p.getTipo(), p.getContenido());
-        
-        String idPage = pares.get(Indicador.P_ID).getValueString();
-        
-        return new PaginaDel(idPage);
-    }
-    
-    Instruccion newComponente(Accion miAccion)
-    {
-        ArrayList<Parametro> parametros = miAccion.getParametros();
-        Map<Indicador,Par> paresParam = new HashMap<>();
-        for (Parametro p : parametros) paresParam.put(p.getTipo(), p.getContenido());
-        
-        Indicador clase = paresParam.get(Indicador.P_CLASE).getValueIndicador();
 
+        boolean is_idPage = idPage != null && idPage instanceof String;
+        boolean is_title = title != null && title instanceof String;
+
+        Pagina miPagina = null;
+        if (is_idPage) 
+        {
+            miPagina = new Pagina((String) idPage);
+            if(is_title) miPagina.setTitle((String) title);
+            for (String l : labels) miPagina.addEtiqueta(l);
+        }
+        
+        return miPagina;
+    }
+
+    Pagina newPaginaDel(Accion miAccion)
+    {
+        ArrayList<Parametro> listParametros = miAccion.getParametros();
+        Map<Indicador,Object> mapParametros = new HashMap<>();
+        for (Parametro p : listParametros) mapParametros.put(p.getTipo(), p.getContenido());
+        
+        Object idPage = mapParametros.get(Indicador.P_ID);
+
+        boolean is_idPage = idPage != null && idPage instanceof String;
+
+        Pagina miPagina = null;
+        if (is_idPage) 
+        {
+            miPagina = new Pagina((String) idPage);
+        }
+        
+        return miPagina;
+    }
+    
+    Componente newComponente(Accion miAccion)
+    {
+        ArrayList<Parametro> listParametros = miAccion.getParametros();
+        Map<Indicador,Object> mapParametros = new HashMap<>();
+        for (Parametro p : listParametros) mapParametros.put(p.getTipo(), p.getContenido());
+                
+        Object idComp = mapParametros.get(Indicador.P_ID);
+        Object idPage = mapParametros.get(Indicador.P_PAGINA);
+        Object clase = mapParametros.get(Indicador.P_CLASE);
+        
+        boolean is_idComp = idComp != null && idComp instanceof String;
+        boolean is_idPage = idPage != null && idPage instanceof String;
+        boolean is_clase = clase != null && clase instanceof Indicador;
+
+        Componente miComp = null;
+        if(is_idComp && is_idPage && is_clase)
+        {
+            miComp = new Componente((String)idComp,(String)idPage);
+            
+            ArrayList<Atributo> listAtributos = miAccion.getAtributos();
+            Map<Indicador,Object> mapAtributos = new HashMap<>();
+            for (Atributo a : listAtributos) mapParametros.put(a.getTipo(), a.getContenido());
+
+            Object widget = getWidget((Indicador) clase, mapAtributos);
+            miComp.setWidget(widget);
+        }
+        
+        return miComp;
+    }
+    
+    Object getWidget(Indicador clase, Map<Indicador,Object> mapAtributos)
+    {
         if(clase == Indicador.UI_TITULO | clase == Indicador.UI_PARRAFO) return newComponenteParrafo(miAccion);
         else if(clase == Indicador.UI_IMAGEN) return newComponenteImagen(miAccion);
         else if(clase == Indicador.UI_VIDEO) return newComponenteVideo(miAccion);
         else if(clase == Indicador.UI_MENU) return newComponenteMenu(miAccion);
-
-        return null;
+        
+        return  null;
     }
-    
     
     Instruccion newComponenteParrafo(Accion miAccion)
     {

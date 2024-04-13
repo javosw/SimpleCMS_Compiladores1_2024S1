@@ -2,30 +2,30 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package josq.cms.lenguajes.modelos.web.componentes;
+package josq.cms.web.modelos.componentes;
 
-import java.util.ArrayList;
-import josq.cms.lenguajes.modelos.web.Pagina;
+import josq.cms.lenguajes.modelos.Indicador;
+
 /**
  *
  * @author JavierOswaldo
  */
-public class Menu
+public class Titulo
 {
-    String idPageRoot;
-    ArrayList<String> labels;
+    String text;
+    Indicador align;
+    String color;
     
-    Pagina refPage;
-    
- /*
+/*
     parametros: {
             * ID: [idComponente]
             * PAGINA: [idPagina]
-            * CLASE: [MENU]
+            * CLASE: [TITULO] | [PARRAFO]
     }
     atributos: {
-            * PADRE: [idPagina]
-            * ETIQUETAS: [ grupo1 | grupo2 | ... ]
+            * TEXTO: [miTextoAZ09]
+            ALINEACION: [CENTRAR] | [IZQUIERDA] | [DERECHA] | [JUSTIFICAR]
+            COLOR: [#5A5A5A]
     }
-*/   
+*/
 }

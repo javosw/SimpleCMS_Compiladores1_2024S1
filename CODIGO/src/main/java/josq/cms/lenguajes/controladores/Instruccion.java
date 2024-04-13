@@ -10,5 +10,5 @@ package josq.cms.lenguajes.controladores;
  */
 public interface Instruccion
 {
-    
+    void ejecutar();
 }

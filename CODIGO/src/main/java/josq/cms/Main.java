@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import josq.cms.archivos.Texto;
 import josq.cms.lenguajes.Procesar;
+import josq.cms.lenguajes.controladores.Instruccion;
+import josq.cms.lenguajes.controladores.acciones.SitioNew;
 import josq.cms.lenguajes.modelos.cup.simbolos.Accion;
 
 /**
@@ -20,9 +22,15 @@ public class Main
     public static void main(String[] args) throws Exception 
     {
         //VistaInicio.main(args);
-        pruebas1();
+        pruebas3();
     }
 
+    static void pruebas3()
+    {
+        Instruccion inst= new SitioNew("SITIO66545656");
+        inst.ejecutar();
+    }
+    
     static void pruebas1() 
     {
         String xml = "acciones.xml";

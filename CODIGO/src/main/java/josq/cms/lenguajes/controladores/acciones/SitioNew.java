@@ -4,7 +4,10 @@
  */
 package josq.cms.lenguajes.controladores.acciones;
 
+import java.io.File;
+import josq.cms.archivos.Objetos;
 import josq.cms.lenguajes.controladores.Instruccion;
+import josq.cms.web.modelos.Sitio;
 
 /**
  *
@@ -13,17 +16,56 @@ import josq.cms.lenguajes.controladores.Instruccion;
 public class SitioNew implements Instruccion
 {
     String idSite;
-    String userNew;
-    String userMod;
-    String dateNew;
-    String dateMod;
+    String user;
+    String date;
 
-    public SitioNew(String idSite, String userNew, String userMod, String dateNew, String dateMod)
+    //String userNew;
+    //String userMod;
+    //String dateNew;
+    //String dateMod;
+    
+    public SitioNew(String idSite)
     {
         this.idSite = idSite;
-        this.userNew = userNew;
-        this.userMod = userMod;
-        this.dateNew = dateNew;
-        this.dateMod = dateMod;
     }
+    
+    // EJECUTAR: 
+    // buscar archivo idSite
+    // si no existe toncs crear
+    // si existe no hacer nada
+
+    private String ruta = "C:\\CMS";
+    
+    @Override
+    public void ejecutar()
+    {
+        String file = ruta+idSite;
+        
+        // new Sitio
+        Sitio newSitio = new Sitio(idSite);
+
+        try
+        {
+            File oldSitio = new File(file); 
+            if (oldSitio.exists()) return;
+
+            Objetos.writeObjeto(file, newSitio);
+        }
+        catch (Exception ex)
+        {
+            System.out.println(ex.getMessage());
+            
+        }
+    }
+
+    public void setRuta(String ruta)
+    {
+        this.ruta = ruta;
+    }
+
+    public void setUser(String user)
+    {
+        this.user = user;
+    }
+    
 }

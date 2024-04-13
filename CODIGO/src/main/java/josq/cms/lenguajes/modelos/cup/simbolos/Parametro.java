@@ -13,9 +13,9 @@ import josq.cms.lenguajes.modelos.Indicador;
 public class Parametro
 {
     Indicador tipo;
-    Par contenido;
+    Object contenido;
 
-    public Parametro(Indicador tipo, Par contenido)
+    public Parametro(Indicador tipo, Object contenido)
     {
         this.tipo = tipo;
         this.contenido = contenido;
@@ -26,7 +26,7 @@ public class Parametro
         return tipo;
     }
 
-    public Par getContenido()
+    public Object getContenido()
     {
         return contenido;
     }

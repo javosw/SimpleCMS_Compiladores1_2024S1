@@ -37,4 +37,15 @@ public class PaginaNew implements Instruccion
         this.dateMod = dateMod;
     }
 
+    // ejecutar
+    // archivo? -> ignorar
+    // sino -> crear objeto pagina
+    // buscar pageroot -> add this page to pageroot
+    // crear archivo pagina
+
+    @Override
+    public void ejecutar()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

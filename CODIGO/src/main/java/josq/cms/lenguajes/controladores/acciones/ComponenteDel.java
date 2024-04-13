@@ -20,5 +20,11 @@ public class ComponenteDel implements  Instruccion
         this.idComp = idComp;
         this.idPage = idPage;
     }
+
+    @Override
+    public void ejecutar()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

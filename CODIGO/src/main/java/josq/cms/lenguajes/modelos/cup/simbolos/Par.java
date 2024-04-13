@@ -4,7 +4,6 @@
  */
 package josq.cms.lenguajes.modelos.cup.simbolos;
 
-import java.util.ArrayList;
 import josq.cms.lenguajes.modelos.Indicador;
 
 /**
@@ -14,24 +13,12 @@ import josq.cms.lenguajes.modelos.Indicador;
 public class Par
 {
     private Indicador key;
-    private Indicador valueIndicador;
-    private String valueString;
-    private ArrayList<String> valueStrings;
+    private Object value;
 
-    public Par(Indicador key, String val)
+    public Par(Indicador key, Object value)
     {
         this.key = key;
-        this.valueString = val;
-    }
-    public Par(Indicador key, Indicador val)
-    {
-        this.key = key;
-        this.valueIndicador = val;
-    }
-    public Par(Indicador key, ArrayList<String> val)
-    {
-        this.key = key;
-        this.valueStrings = val;
+        this.value = value;
     }
 
     public Indicador getKey()
@@ -39,19 +26,14 @@ public class Par
         return key;
     }
 
-    public Indicador getValueIndicador()
+    public Object getValue()
     {
-        return valueIndicador;
+        return value;
     }
 
-    public String getValueString()
+    boolean hasValue()
     {
-        return valueString;
-    }
-
-    public ArrayList<String> getValueStrings()
-    {
-        return valueStrings;
+        return value != null;
     }
 
 }
