@@ -10,5 +10,7 @@ package josq.cms.archivos;
  */
 public class Ruta
 {
-    public static String cms = "C:\\CMS";
+    public static String cms = "C:\\CMS\\";
+    public static String xml = "C:\\CMS-PRUEBAS\\xml\\";
+    public static String xmlConError = "C:\\CMS-PRUEBAS\\xml-error\\"; 
 }

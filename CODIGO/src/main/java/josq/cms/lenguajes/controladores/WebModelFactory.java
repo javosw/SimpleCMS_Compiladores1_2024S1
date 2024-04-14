@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import josq.cms.archivos.MyFile;
+import josq.cms.archivos.MiArchivo;
 import josq.cms.archivos.Ruta;
 import josq.cms.lenguajes.automatas.modelos.Indicador;
 import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
@@ -271,7 +271,11 @@ public class WebModelFactory
                 {
                     if(is_sizeX && is_sizeY) miImagen.setArea(Integer.parseInt((String) sizeX), Integer.parseInt((String) sizeY));
                 }
-                catch (Exception e) { System.out.println(e.getMessage()); }
+                catch (Exception ex) 
+                {
+                    System.out.print("@Integer.parseInt: ");
+                    System.out.println(ex.getMessage());
+                }
                 if(is_align) miImagen.setAlign((Indicador) align);
             }
             return  miImagen;
@@ -294,7 +298,11 @@ public class WebModelFactory
                 {
                     if(is_sizeX && is_sizeY) miVideo.setArea(Integer.parseInt((String) sizeX), Integer.parseInt((String) sizeY));
                 }
-                catch (Exception e) { System.out.println(e.getMessage()); }
+                catch (Exception ex) 
+                {
+                    System.out.print("@Integer.parseInt: ");
+                    System.out.println(ex.getMessage());
+                }
             }
             return  miVideo;
         }
@@ -322,11 +330,6 @@ public class WebModelFactory
                 }
             }
             return miMenu;
-            
-            // get pagina desde archivo
-            // para cada hija de root: 
-            //   si esta pagina tiene alguna etiqueta: agregar este idpagina a menu.paginas
-                    
         }
         
         return null;
@@ -340,7 +343,7 @@ public class WebModelFactory
         
         try
         {
-            Pagina myPage = (Pagina) MyFile.readObject(file);
+            Pagina myPage = (Pagina) MiArchivo.readObject(file);
             
             for(String l : labels)
             {
@@ -352,7 +355,8 @@ public class WebModelFactory
         }
         catch (Exception ex)
         {
-            System.out.println(ex.getMessage());
+			System.out.print("@collectLabeledPages: ");
+			System.out.println(ex.getMessage());
         }
     }
 

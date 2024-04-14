@@ -5,9 +5,11 @@
 package josq.cms;
 
 import java.util.ArrayList;
-import josq.cms.archivos.MyFile;
-import josq.cms.lenguajes.controladores.Procesar;
+import josq.cms.archivos.MiArchivo;
+import josq.cms.archivos.Ruta;
 import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
+import josq.cms.lenguajes.controladores.Instrucciones;
+import josq.cms.lenguajes.controladores.Procesar;
 
 /**
  *
@@ -18,16 +20,17 @@ public class Main
     public static void main(String[] args) throws Exception 
     {
         //VistaInicio.main(args);
+        readLenguaje();
     }
     
     static void pruebas1() 
     {
         String xml = "acciones.xml";
-        String ruta = "C:\\Users\\JavierOswaldo\\Desktop\\PROCESADORES-LENGUAJE\\CODIFICACION\\PROYECTO-1\\PRUEBAS\\"+xml;
+        String ruta = Ruta.xml+xml;
         try
         {
-            ArrayList<Accion> acciones = Procesar.accionesDesdeArchivo(ruta);
-            print(acciones.toString());
+            Instrucciones inst = new Instrucciones();
+            inst.procesarDesdeArchivo(ruta);
         }
         catch (Exception ex)
         {
@@ -45,17 +48,33 @@ public class Main
         try
         {
             String file = "C:\\Users\\JavierOswaldo\\Desktop\\TjjkjYhfH-BORRAR.txt";
-            MyFile.writeString(file, " 111 ");
-            MyFile.writeStringAtEnd(file, "222 ");
-            MyFile.writeStringAtEnd(file, "333 ");
-            MyFile.writeStringAtEnd(file, "444 ");
+            MiArchivo.writeString(file, " 111 ");
+            MiArchivo.writeStringAtEnd(file, "222 ");
+            MiArchivo.writeStringAtEnd(file, "333 ");
+            MiArchivo.writeStringAtEnd(file, "444 ");
         }
         catch (Exception ex)
         {
         }
         
     }
-    
+    static void readLenguaje() 
+    {
+        String xml = "acciones.xml";
+        String ruta = Ruta.xml+xml;
+        try
+        {
+            ArrayList<Accion> acciones = Procesar.accionesDesdeArchivo(ruta);
+            print(acciones.toString());
+        }
+        catch (Exception ex)
+        {
+            print("\n<%#%#%#%#%#%#%#% ERRORES %#%#%#%#%#%#%#%>\n");
+            ex.printStackTrace();
+            //print(ex.getMessage());
+        }
+        print("<<<<<<<<<<<<<<<<");
+    }
     private static void print(String txt){ System.out.println(txt); }
     
 }

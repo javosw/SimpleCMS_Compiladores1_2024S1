@@ -12,7 +12,7 @@ import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 import java_cup.runtime.DefaultSymbolFactory;
 
-import josq.cms.archivos.MyFile;
+import josq.cms.archivos.MiArchivo;
 
 import josq.cms.lenguajes.automatas.ParserAccionesSym;
 import josq.cms.lenguajes.automatas.modelos.jflex.Punto;
@@ -47,14 +47,14 @@ import josq.cms.lenguajes.automatas.modelos.jflex.Punto;
         int izq = (int)yychar+1;
         int der = (int)yychar+yylength();
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der);
-        //save(infoLexema2(mySymbol)+" ");
+        save(infoLexema2(mySymbol)+" ");
         return mySymbol;
     }
     private Symbol symbol(String name, int sym, Object val) {
         int izq = (int)yychar+1;
         int der = (int)yychar+yylength();
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der, val);
-        //save(infoLexema2(mySymbol)+" ");
+        save(infoLexema2(mySymbol)+" ");
         return mySymbol;
     }
 
@@ -120,8 +120,8 @@ import josq.cms.lenguajes.automatas.modelos.jflex.Punto;
     {
         String file = "C:\\Users\\JavierOswaldo\\Desktop\\jflexBORRAR-jjkjriijaxj.txt";
         
-        try {MyFile.writeString(file, txt);}
-        catch (Exception ex) {print(ex.getMessage());}
+        try { MiArchivo.writeStringAtEnd(file, txt); }
+        catch (Exception ex) { print(ex.getMessage()); }
     }
 
 /*

@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @author JavierOswaldo
  */
-public class MyFile
+public class MiArchivo
 {
     public static void writeObjet(String file, Object myObject) throws Exception
     {
