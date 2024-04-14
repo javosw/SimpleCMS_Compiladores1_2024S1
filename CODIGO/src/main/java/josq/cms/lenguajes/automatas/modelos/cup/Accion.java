@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package josq.cms.lenguajes.automatas.modelos.cup.simbolos;
+package josq.cms.lenguajes.automatas.modelos.cup;
 
 import java.util.ArrayList;
 import josq.cms.lenguajes.automatas.modelos.Indicador;
@@ -18,26 +18,21 @@ public class Accion
     private ArrayList<Atributo> atributos;
     private ArrayList<String> etiquetas;
 
-    public Accion() {}
+    public Accion()
+    {
+        this.parametros = new ArrayList<>();
+        this.atributos = new ArrayList<>();
+        this.etiquetas = new ArrayList<>();
+    }
+    public Accion(Indicador tipo)
+    {
+        this();
+        this.tipo = tipo;
+    }
 
     public void setTipo(Indicador tipo)
     {
         this.tipo = tipo;
-    }
-
-    public void setParametros(ArrayList<Parametro> parametros)
-    {
-        this.parametros = parametros;
-    }
-
-    public void setAtributos(ArrayList<Atributo> atributos)
-    {
-        this.atributos = atributos;
-    }
-
-    public void setEtiquetas(ArrayList<String> etiquetas)
-    {
-        this.etiquetas = etiquetas;
     }
 
     public Indicador getTipo()
@@ -59,5 +54,8 @@ public class Accion
     {
         return etiquetas;
     }
+    
+    
+    void test(Parametro p){parametros.addAll(parametros);}
 
 }

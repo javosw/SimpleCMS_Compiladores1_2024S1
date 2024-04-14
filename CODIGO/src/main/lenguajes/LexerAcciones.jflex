@@ -174,7 +174,7 @@ id   =  {pre}([a-zA-Z0-9]|{pre})*
 //idComponente 
 //idUsuario
 
-miTexto  =  [a-zA-Z0-9]({_}|[a-zA-Z0-9])+
+miTexto  =  [a-zA-Z0-9]({_}|[a-zA-Z0-9]+)+
 //miTitulo
 
 miNumero      =  [1-9][0-9]*
@@ -274,7 +274,7 @@ miEtiqueta    =  [a-zA-Z0-9]+
     {miFecha}       { return symbol("",ParserAccionesSym.MI_FECHA, yytext()); }
 }
 <MI_TEXTO> {
-    {_}{miTexto}    { return symbol("",ParserAccionesSym.MI_TEXTO, yytext()); }
+    {_}?{miTexto}    { return symbol("",ParserAccionesSym.MI_TEXTO, yytext()); }
 }
 <MI_COLOR> {
     {miColor}       { return symbol("",ParserAccionesSym.MI_COLOR, yytext()); }

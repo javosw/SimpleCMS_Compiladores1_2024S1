@@ -5,12 +5,10 @@
 package josq.cms.web.modelos;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import josq.cms.web.modelos.Sitio;
 
 /**
  *
@@ -32,7 +30,7 @@ public class Pagina implements Serializable
     String dateMod;
     
     
-    Map<String,Pagina> paginas;
+    Set<String> paginas;
     Map<String,Object> componentes;
     Set<String> etiquetas;
     
@@ -43,7 +41,7 @@ public class Pagina implements Serializable
 
     public Pagina()
     {
-        paginas = new HashMap<>();
+        paginas = new HashSet<>();
         componentes = new HashMap<>();
         etiquetas = new HashSet<>();
     }
@@ -65,10 +63,9 @@ public class Pagina implements Serializable
     {
         return etiquetas.contains(etiqueta);
     }
-    
-    public boolean hasPagina(String pagina)
+    public boolean hasPagina(String idPagina)
     {
-        return paginas.keySet().contains(pagina);
+        return paginas.contains(idPagina);
     }
     public void addComponente(String idComponente, Object miComponente)
     {
@@ -87,27 +84,19 @@ public class Pagina implements Serializable
         componentes.put(idComponente, miComponente);
     }
     
-    void addPagina(String idPagina, Pagina newPagina)
+    public void addPagina(String idPagina)
     {
-        boolean existe = paginas.containsKey(idPagina);
-        if(existe) return;
-
-        paginas.put(idPagina, newPagina);
+        paginas.add(idPagina);
     }
     
-    void putPagina(String idPagina, Pagina newPagina)
-    {
-        paginas.put(idPagina, newPagina);
-    }
-
     public void addEtiqueta(String etiqueta)
     {
         etiquetas.add(etiqueta);
     }
 
-
     // GETTERS
-    public Map<String, Pagina> getPaginas()
+
+    public Set<String> getPaginas()
     {
         return paginas;
     }
@@ -155,6 +144,11 @@ public class Pagina implements Serializable
         return dateMod;
     }
 
+    public String getIdSite()
+    {
+        return idSite;
+    }
+
     // SETTERS
     public void setTitle(String title)
     {
@@ -184,6 +178,11 @@ public class Pagina implements Serializable
     public void setDateMod(String dateMod)
     {
         this.dateMod = dateMod;
+    }
+
+    public void setIdSite(String idSite)
+    {
+        this.idSite = idSite;
     }
     
 }

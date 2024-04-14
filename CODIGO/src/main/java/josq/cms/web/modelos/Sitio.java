@@ -23,12 +23,12 @@ public class Sitio implements Serializable
     String userMod;    
     String dateMod;
     
-    ArrayList<Pagina> paginas;
+    //ArrayList<Pagina> paginas;
 
     // ######################################################################
     public Sitio()
     {
-        paginas = new ArrayList<>();
+        //paginas = new ArrayList<>();
     }
 
     public Sitio(String idSite)
@@ -43,7 +43,10 @@ public class Sitio implements Serializable
     {
         return idSite;
     }
-
+    public String getIdPageRoot()
+    {
+        return "~"+idSite;
+    }
     public String getUserNew()
     {
         return userNew;
@@ -64,12 +67,7 @@ public class Sitio implements Serializable
         return dateMod;
     }
 
-    public ArrayList<Pagina> getPaginas()
-    {
-        return paginas;
-    }
-
-    
+    //public ArrayList<Pagina> getPaginas(){return paginas;}
     
     // ######################################################################
 

@@ -7,8 +7,8 @@ package josq.cms;
 import java.util.ArrayList;
 import josq.cms.archivos.MiArchivo;
 import josq.cms.archivos.Ruta;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
-import josq.cms.lenguajes.controladores.Instrucciones;
+import josq.cms.lenguajes.automatas.modelos.cup.Accion;
+import josq.cms.lenguajes.controladores.Instruccion;
 import josq.cms.lenguajes.controladores.Procesar;
 
 /**
@@ -20,17 +20,24 @@ public class Main
     public static void main(String[] args) throws Exception 
     {
         //VistaInicio.main(args);
-        readLenguaje();
+        //readLenguaje("newSitio.xml");
+        
+        
+        //testAccion("newSitio.xml");
+        //testAccion("newPagina.xml");
+        testAccion("delPagina.xml");
+        //testAccion("delSitio.xml");
+
+        
+        
     }
-    
-    static void pruebas1() 
+    static void testAccion(String accion) 
     {
-        String xml = "acciones.xml";
-        String ruta = Ruta.xml+xml;
+        String ruta = Ruta.acciones+accion;
         try
         {
-            Instrucciones inst = new Instrucciones();
-            inst.procesarDesdeArchivo(ruta);
+            Instruccion inst = new Instruccion();
+                inst.procesarDesdeArchivo(ruta);
         }
         catch (Exception ex)
         {
@@ -40,6 +47,23 @@ public class Main
         }
         print("<<<<<<<<<<<<<<<<");
     }
+    static void readLenguaje(String xml) 
+    {
+        String ruta = Ruta.acciones+xml;
+        try
+        {
+            ArrayList<Accion> acciones = Procesar.accionesDesdeArchivo(ruta);
+            print(acciones.toString());
+        }
+        catch (Exception ex)
+        {
+            print("\n<+#%#%#%#%#%#%#% ERRORES %#%#%#%#%#%#%#+>\n");
+            ex.printStackTrace();
+            //print(ex.getMessage());
+        }
+        print("<<<<<<<<<<<<<<<<");
+    }
+
     
     static void pruebas2()
     {
@@ -57,23 +81,6 @@ public class Main
         {
         }
         
-    }
-    static void readLenguaje() 
-    {
-        String xml = "acciones.xml";
-        String ruta = Ruta.xml+xml;
-        try
-        {
-            ArrayList<Accion> acciones = Procesar.accionesDesdeArchivo(ruta);
-            print(acciones.toString());
-        }
-        catch (Exception ex)
-        {
-            print("\n<%#%#%#%#%#%#%#% ERRORES %#%#%#%#%#%#%#%>\n");
-            ex.printStackTrace();
-            //print(ex.getMessage());
-        }
-        print("<<<<<<<<<<<<<<<<");
     }
     private static void print(String txt){ System.out.println(txt); }
     

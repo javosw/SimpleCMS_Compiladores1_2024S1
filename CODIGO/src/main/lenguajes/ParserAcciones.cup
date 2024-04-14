@@ -8,9 +8,9 @@ import java.util.ArrayList;
 //import josq.cms.lenguajes.modelos.arbol.*;
 //import josq.cms.lenguajes.modelos.Indicador;
 import josq.cms.lenguajes.automatas.modelos.Indicador;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Atributo;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Parametro;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
+import josq.cms.lenguajes.automatas.modelos.cup.Atributo;
+import josq.cms.lenguajes.automatas.modelos.cup.Parametro;
+import josq.cms.lenguajes.automatas.modelos.cup.Accion;
 
 // NOTA: %cupsym en jflex
 // parser=MyParser, sym=MyParserSym
@@ -89,14 +89,14 @@ start with cms ;
 // INICIO
 cms ::= 
     accion:w1  {: ArrayList<Accion> list = new ArrayList<>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
-    | acciones:w1  {: RESULT=w1; :}
-    | error:w1 {: print("@ERROR("+w1left+"-"+w1right+") "); :}
+    | acciones:w1  {: if(w1==null){ ArrayList<Accion> list = new ArrayList<>(); RESULT=list; } else{RESULT=w1;} :}
+    | error:w1 {: print("@ERROR-CMS("+w1left+"-"+w1right+") "); ArrayList<Accion> list = new ArrayList<>(); RESULT=list; :}
 ;
 
 // ACCIONES
 acciones ::=
     accionesIZQ accionesMID:w1 accionesDER  {: RESULT=w1; :} // +
-    | error:w1 DER {: print("@ERROR("+w1left+"-"+w1right+") "); :} // +
+    | error:w1 DER {: print("@ERROR-ACCS("+w1left+"-"+w1right+") "); :} // +
 ;
 accionesIZQ ::=
     IZQ ACCIS DER // +
@@ -111,7 +111,7 @@ accionesDER ::=
 
 // ACCION
 accion ::=
-    accionIZQ:w1 accionMID:w2 accionDER  {: w2.setTipo(w1); RESULT=w2; :} // +
+    accionIZQ:w1 accionMID:w2 accionDER {: if(w2.getTipo()==null) w2.setTipo(w1); RESULT=w2; :} // +
 ;
 accionIZQ ::=
     IZQ ACCI accionNombre:w1 DER  {: RESULT=w1; :} //+
@@ -130,13 +130,13 @@ accionTipo ::=
     | COMP_MOD:w1 {: RESULT=Indicador.COMP_MOD; :}  // +
 ;
 accionMID ::= 
-    parametros:w1  {: Accion a = new Accion(); a.setParametros(w1); RESULT=a; :} // +
-    | atributos:w1 {: Accion a = new Accion(); a.setAtributos(w1); RESULT=a; :} // +
-    | etiquetas:w1 {: Accion a = new Accion(); a.setEtiquetas(w1); RESULT=a; :} // +
-    | accionMID:w1 parametros:w2 {: w1.setParametros(w2); RESULT=w1; :} // +
-    | accionMID:w1 atributos:w2  {: w1.setAtributos(w2); RESULT=w1; :} // +
-    | accionMID:w1 etiquetas:w2  {: w1.setEtiquetas(w2); RESULT=w1; :} // +
-    | error:w1 DER {: print("@ERROR("+w1left+"-"+w1right+") "); :} // +
+    parametros:w1  {: Accion a = new Accion(); a.getParametros().addAll(w1); RESULT=a; :} // +
+    | atributos:w1 {: Accion a = new Accion(); a.getAtributos().addAll(w1); RESULT=a; :} // +
+    | etiquetas:w1 {: Accion a = new Accion(); a.getEtiquetas().addAll(w1); RESULT=a; :} // +
+    | accionMID:w1 parametros:w2 {: w1.getParametros().addAll(w2); RESULT=w1; :} // +
+    | accionMID:w1 atributos:w2  {: w1.getAtributos().addAll(w2); RESULT=w1; :} // +
+    | accionMID:w1 etiquetas:w2  {: w1.getEtiquetas().addAll(w2); RESULT=w1; :} // +
+    | error:w1 DER {: print("@ERROR-ACCMID("+w1left+"-"+w1right+") "); Accion a = new Accion(Indicador.ERROR); RESULT=a; :} // +
 ;
 accionDER ::=
     IZQ BARRA ACCI DER //+
@@ -207,7 +207,7 @@ atributosIZQ ::=
     IZQ ATRIBS DER // +
 ;
 atributosMID ::=
-    atributo:w1  {: ArrayList<Atributo> lista = new ArrayList<>(); if(w1!=null) lista.add(w1); RESULT=lista; :} // +
+    atributo:w1  {: ArrayList<Atributo> list = new ArrayList<>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
     | atributosMID:w1 atributo:w2  {: if(w2!=null) w1.add(w2); RESULT=w1; :} // +
 ;
 atributosDER ::=

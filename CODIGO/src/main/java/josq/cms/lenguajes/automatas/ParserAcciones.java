@@ -7,9 +7,9 @@ package josq.cms.lenguajes.automatas;
 
 import java.util.ArrayList;
 import josq.cms.lenguajes.automatas.modelos.Indicador;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Atributo;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Parametro;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
+import josq.cms.lenguajes.automatas.modelos.cup.Atributo;
+import josq.cms.lenguajes.automatas.modelos.cup.Parametro;
+import josq.cms.lenguajes.automatas.modelos.cup.Accion;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -332,7 +332,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).right;
 		ArrayList<Accion> w1 = (ArrayList<Accion>)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.peek()).value;
-		 RESULT=w1; 
+		 if(w1==null){ ArrayList<Accion> list = new ArrayList<>(); RESULT=list; } else{RESULT=w1;} 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("cms",0, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -344,7 +344,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).right;
 		Object w1 = (Object)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.peek()).value;
-		 print("@ERROR("+w1left+"-"+w1right+") "); 
+		 print("@ERROR-CMS("+w1left+"-"+w1right+") "); ArrayList<Accion> list = new ArrayList<>(); RESULT=list; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("cms",0, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -368,7 +368,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).right;
 		Object w1 = (Object)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).value;
-		 print("@ERROR("+w1left+"-"+w1right+") "); 
+		 print("@ERROR-ACCS("+w1left+"-"+w1right+") "); 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("acciones",1, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -428,7 +428,7 @@ class CUP$ParserAcciones$actions {
 		int w2left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).left;
 		int w2right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).right;
 		Accion w2 = (Accion)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).value;
-		 w2.setTipo(w1); RESULT=w2; 
+		 if(w2.getTipo()==null) w2.setTipo(w1); RESULT=w2; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("accion",5, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-2)), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -560,7 +560,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).right;
 		ArrayList<Parametro> w1 = (ArrayList<Parametro>)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.peek()).value;
-		 Accion a = new Accion(); a.setParametros(w1); RESULT=a; 
+		 Accion a = new Accion(); a.getParametros().addAll(w1); RESULT=a; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("accionMID",6, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -572,7 +572,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).right;
 		ArrayList<Atributo> w1 = (ArrayList<Atributo>)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.peek()).value;
-		 Accion a = new Accion(); a.setAtributos(w1); RESULT=a; 
+		 Accion a = new Accion(); a.getAtributos().addAll(w1); RESULT=a; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("accionMID",6, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -584,7 +584,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).right;
 		ArrayList<String> w1 = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.peek()).value;
-		 Accion a = new Accion(); a.setEtiquetas(w1); RESULT=a; 
+		 Accion a = new Accion(); a.getEtiquetas().addAll(w1); RESULT=a; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("accionMID",6, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -599,7 +599,7 @@ class CUP$ParserAcciones$actions {
 		int w2left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).left;
 		int w2right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).right;
 		ArrayList<Parametro> w2 = (ArrayList<Parametro>)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.peek()).value;
-		 w1.setParametros(w2); RESULT=w1; 
+		 w1.getParametros().addAll(w2); RESULT=w1; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("accionMID",6, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -614,7 +614,7 @@ class CUP$ParserAcciones$actions {
 		int w2left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).left;
 		int w2right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).right;
 		ArrayList<Atributo> w2 = (ArrayList<Atributo>)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.peek()).value;
-		 w1.setAtributos(w2); RESULT=w1; 
+		 w1.getAtributos().addAll(w2); RESULT=w1; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("accionMID",6, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -629,7 +629,7 @@ class CUP$ParserAcciones$actions {
 		int w2left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).left;
 		int w2right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).right;
 		ArrayList<String> w2 = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.peek()).value;
-		 w1.setEtiquetas(w2); RESULT=w1; 
+		 w1.getEtiquetas().addAll(w2); RESULT=w1; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("accionMID",6, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -641,7 +641,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).right;
 		Object w1 = (Object)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).value;
-		 print("@ERROR("+w1left+"-"+w1right+") "); 
+		 print("@ERROR-ACCMID("+w1left+"-"+w1right+") "); Accion a = new Accion(Indicador.ERROR); RESULT=a; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("accionMID",6, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -992,7 +992,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).right;
 		Atributo w1 = (Atributo)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.peek()).value;
-		 ArrayList<Atributo> lista = new ArrayList<>(); if(w1!=null) lista.add(w1); RESULT=lista; 
+		 ArrayList<Atributo> list = new ArrayList<>(); if(w1!=null) list.add(w1); RESULT=list; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("atributosMID",23, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;

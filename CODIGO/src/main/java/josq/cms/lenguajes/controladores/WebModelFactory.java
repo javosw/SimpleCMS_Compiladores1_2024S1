@@ -13,9 +13,9 @@ import java.util.Set;
 import josq.cms.archivos.MiArchivo;
 import josq.cms.archivos.Ruta;
 import josq.cms.lenguajes.automatas.modelos.Indicador;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Atributo;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Parametro;
+import josq.cms.lenguajes.automatas.modelos.cup.Accion;
+import josq.cms.lenguajes.automatas.modelos.cup.Atributo;
+import josq.cms.lenguajes.automatas.modelos.cup.Parametro;
 import josq.cms.web.modelos.Componente;
 import josq.cms.web.modelos.Pagina;
 import josq.cms.web.modelos.Sitio;
@@ -350,7 +350,7 @@ public class WebModelFactory
                 if(myPage.hasEtiqueta(l)) { paginas.add(idPage); break; }
             }
             
-            Set<String> subPaginas = myPage.getPaginas().keySet();
+            Set<String> subPaginas = myPage.getPaginas();
             for (String subPage : subPaginas) collectLabeledPages(subPage, labels, paginas);
         }
         catch (Exception ex)

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package josq.cms.lenguajes.automatas.modelos.cup.simbolos;
+package josq.cms.lenguajes.automatas.modelos.cup;
 
 import josq.cms.lenguajes.automatas.modelos.Indicador;
 
@@ -10,12 +10,12 @@ import josq.cms.lenguajes.automatas.modelos.Indicador;
  *
  * @author JavierOswaldo
  */
-public class Parametro
+public class Atributo
 {
     Indicador tipo;
     Object contenido;
 
-    public Parametro(Indicador tipo, Object contenido)
+    public Atributo(Indicador tipo, Object contenido)
     {
         this.tipo = tipo;
         this.contenido = contenido;
@@ -30,5 +30,4 @@ public class Parametro
     {
         return contenido;
     }
-    
 }

@@ -10,7 +10,7 @@ import java.util.Set;
 import josq.cms.archivos.MiArchivo;
 import josq.cms.archivos.Ruta;
 import josq.cms.lenguajes.automatas.modelos.Indicador;
-import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
+import josq.cms.lenguajes.automatas.modelos.cup.Accion;
 import josq.cms.web.modelos.Componente;
 import josq.cms.web.modelos.Pagina;
 import josq.cms.web.modelos.Sitio;
@@ -19,7 +19,7 @@ import josq.cms.web.modelos.Sitio;
  *
  * @author JavierOswaldo
  */
-public class Instrucciones
+public class Instruccion
 {
     // get acciones[]
     // crear modelos web
@@ -35,20 +35,33 @@ public class Instrucciones
     ArrayList<Componente> modComponentes;
     ArrayList<Componente> delComponentes;
 
+    public Instruccion()
+    {
+        this.newSitios = new ArrayList<>();
+        this.delSitios = new ArrayList<>();
+        this.newPaginas = new ArrayList<>();
+        this.delPaginas = new ArrayList<>();
+        this.modPaginas = new ArrayList<>();
+        this.newComponentes = new ArrayList<>();
+        this.modComponentes = new ArrayList<>();
+        this.delComponentes = new ArrayList<>();
+    }
+
     public void procesarDesdeArchivo(String file)
     {
         try
         {
-            ArrayList<Accion> acciones = Procesar.accionesDesdeArchivo(file);
             System.out.println("@procesarDesdeArchivo > Procesar.accionesDesdeArchivo: ");
-            for(Accion a : acciones) setWebModel(a);
+            ArrayList<Accion> acciones = Procesar.accionesDesdeArchivo(file);
             System.out.println("@procesarDesdeArchivo > setWebModel");
-            ejecutarAcciones();
+            for(Accion a : acciones) getWebModel(a);
             System.out.println("@procesarDesdeArchivo > ejecutarAcciones");
+            ejecutarAcciones();
+            System.out.println("@procesarDesdeArchivo <");
         }
         catch (Exception ex)
         {
-            System.out.print("@procesarDesdeArchivo: ");
+            System.out.print("@procesarDesdeArchivo > catch: ");
             System.out.println(ex.getMessage());
         }
     }
@@ -66,7 +79,7 @@ public class Instrucciones
         for(Componente c : modComponentes) exeModComponente(c);
     }
     
-    private void setWebModel(Accion miAccion)
+    private void getWebModel(Accion miAccion)
     {
         Indicador tipo = miAccion.getTipo();
         
@@ -115,8 +128,10 @@ public class Instrucciones
         {
             File binSitio = new File(ruta); 
             if (binSitio.exists()) return;
-
             MiArchivo.writeObjet(ruta, miSitio);
+
+            Pagina rootPagina = new Pagina(miSitio.getIdPageRoot(), miSitio.getIdSite());
+            newPaginaRoot(rootPagina);
         }
         catch (Exception ex)
         {
@@ -124,22 +139,39 @@ public class Instrucciones
             System.out.println(ex.getMessage());
         }
     }
-    private void exeDelSitio(Sitio oldSitio)
+    private void newPaginaRoot(Pagina miPagina)
     {
-        String ruta = Ruta.cms+oldSitio.getIdSite();
+        String ruta = Ruta.cms+miPagina.getIdPage();
         
         try
         {
-            File fileSitio = new File(ruta); 
-            if (!fileSitio.exists()) return;
+            File filePagina = new File(ruta); 
+            if (filePagina.exists()) filePagina.delete();
 
-            Object rawSitio = MiArchivo.readObject(ruta);
-            boolean isSitio = rawSitio != null && rawSitio instanceof Sitio;
+            MiArchivo.writeObjet(ruta, miPagina);
+        }
+        catch (Exception ex)
+        {
+            System.out.print("@newRootPagina: ");
+            System.out.println(ex.getMessage());
+        }
+    }
+    private void exeDelSitio(Sitio miSitio)
+    {
+        String ruta = Ruta.cms+miSitio.getIdSite();
+        
+        try
+        {
+            File sitioFile = new File(ruta); 
+            if (!sitioFile.exists()) return;
+
+            Object sitioRaw = MiArchivo.readObject(ruta);
+            boolean isSitio = sitioRaw != null && sitioRaw instanceof Sitio;
             
             if(!isSitio) return;
             
-            ArrayList<Pagina> paginas = ((Sitio)rawSitio).getPaginas();
-            for(Pagina p : paginas) delPagina(p.getIdPage());
+            delPagina(((Sitio)sitioRaw).getIdPageRoot());
+            sitioFile.delete();
         }
         catch (Exception ex)
         {
@@ -147,7 +179,6 @@ public class Instrucciones
             System.out.println(ex.getMessage());
         }
     }
-        
     private void exeNewPagina(Pagina miPagina)
     {
         String ruta = Ruta.cms+miPagina.getIdPage();
@@ -157,6 +188,9 @@ public class Instrucciones
             File filePagina = new File(ruta); 
             if (filePagina.exists()) return;
 
+            if(miPagina.getIdPageRoot()==null) addSubPagina(miPagina.getIdPage(), "~"+miPagina.getIdSite());
+            else addSubPagina(miPagina.getIdPage(), miPagina.getIdPageRoot());
+
             MiArchivo.writeObjet(ruta, miPagina);
         }
         catch (Exception ex)
@@ -164,6 +198,32 @@ public class Instrucciones
             System.out.print("@exeNewPagina: ");
             System.out.println(ex.getMessage());
         }
+    }
+    private void addSubPagina(String idSubPagina,String idPagina)
+    {
+        String ruta = Ruta.cms+idPagina;
+        try
+        {
+            File filePagina = new File(ruta);
+            if (!filePagina.exists()) return;
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+            
+            if(!isPagina) return;
+            
+            Pagina miPagina = (Pagina)rawPagina;
+            miPagina.addPagina(idSubPagina); 
+            
+            filePagina.delete();
+            MiArchivo.writeObjet(ruta, miPagina);
+        }
+        catch (Exception ex)
+        {
+            System.out.print("@addSubPagina: ");
+            System.out.println(ex.getMessage());
+        }
+
     }
     
     private void exeModPagina(Pagina newPagina)
@@ -217,7 +277,7 @@ public class Instrucciones
             // si el objeto leido no es una pagina, puede que sea un sitio: NO ELIMINAR EL ARCHIVO
             if(!isPagina) return; 
             
-            Set<String> subPaginas = ((Pagina)rawPagina).getPaginas().keySet();
+            Set<String> subPaginas = ((Pagina)rawPagina).getPaginas();
             for(String p : subPaginas) delPagina(p);
             
             filePagina.delete();

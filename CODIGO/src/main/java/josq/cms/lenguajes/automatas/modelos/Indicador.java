@@ -10,6 +10,7 @@ package josq.cms.lenguajes.automatas.modelos;
  */
 public enum Indicador
 {
+    ERROR,
     // puntuacion
     IZQ, DER, BARRA, IGUAL, IZQCOR, DERCOR, COMI, OR,
     // nodos
