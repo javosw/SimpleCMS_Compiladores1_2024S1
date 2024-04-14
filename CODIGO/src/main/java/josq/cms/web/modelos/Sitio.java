@@ -25,6 +25,7 @@ public class Sitio implements Serializable
     
     ArrayList<Pagina> paginas;
 
+    // ######################################################################
     public Sitio()
     {
         paginas = new ArrayList<>();
@@ -36,11 +37,41 @@ public class Sitio implements Serializable
         this.idSite = idSite;
     }
 
-    @Override
-    public String toString()
+    // ######################################################################
+
+    public String getIdSite()
     {
-        return "idSitio="+idSite;
+        return idSite;
     }
+
+    public String getUserNew()
+    {
+        return userNew;
+    }
+
+    public String getDateNew()
+    {
+        return dateNew;
+    }
+
+    public String getUserMod()
+    {
+        return userMod;
+    }
+
+    public String getDateMod()
+    {
+        return dateMod;
+    }
+
+    public ArrayList<Pagina> getPaginas()
+    {
+        return paginas;
+    }
+
+    
+    
+    // ######################################################################
 
     public void setUserNew(String userNew)
     {

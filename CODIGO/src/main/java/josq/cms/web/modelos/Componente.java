@@ -4,12 +4,16 @@
  */
 package josq.cms.web.modelos;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JavierOswaldo
  */
-public class Componente
+public class Componente implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     String idComponente;
     String idPagina;
     Object widget;
@@ -23,6 +27,21 @@ public class Componente
     public void setWidget(Object widget)
     {
         this.widget = widget;
+    }
+
+    public String getIdComponente()
+    {
+        return idComponente;
+    }
+
+    public String getIdPagina()
+    {
+        return idPagina;
+    }
+
+    public Object getWidget()
+    {
+        return widget;
     }
     
 }

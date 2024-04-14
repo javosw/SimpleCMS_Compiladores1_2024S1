@@ -211,7 +211,7 @@ public class WebModelFactory
         return miComp;
     }
     
-    public static Object getWidget(Indicador clase, Map<Indicador,Object> mapAtributos)
+    private static Object getWidget(Indicador clase, Map<Indicador,Object> mapAtributos)
     {
         if(clase == Indicador.UI_TITULO)
         {

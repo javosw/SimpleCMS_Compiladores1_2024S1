@@ -70,15 +70,19 @@ public class Pagina implements Serializable
     {
         return paginas.keySet().contains(pagina);
     }
-    void addComponente(String idComponente, Object miComponente)
+    public void addComponente(String idComponente, Object miComponente)
     {
         boolean existe = componentes.containsKey(idComponente);
         if(existe) return;
 
         componentes.put(idComponente, miComponente);
     }
-    
-    void putComponente(String idComponente, Object miComponente)
+    public void delComponente(String idComponente)
+    {
+        componentes.remove(idComponente);
+    }
+
+    public void putComponente(String idComponente, Object miComponente)
     {
         componentes.put(idComponente, miComponente);
     }
@@ -121,6 +125,36 @@ public class Pagina implements Serializable
         return idPage;
     }
 
+    public String getIdPageRoot()
+    {
+        return idPageRoot;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+    public String getUserNew()
+    {
+        return userNew;
+    }
+
+    public String getUserMod()
+    {
+        return userMod;
+    }
+
+    public String getDateNew()
+    {
+        return dateNew;
+    }
+
+    public String getDateMod()
+    {
+        return dateMod;
+    }
+
     // SETTERS
     public void setTitle(String title)
     {
@@ -151,4 +185,5 @@ public class Pagina implements Serializable
     {
         this.dateMod = dateMod;
     }
+    
 }

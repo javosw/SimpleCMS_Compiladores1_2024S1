@@ -4,14 +4,18 @@
  */
 package josq.cms.web.modelos.componentes;
 
+import java.io.Serializable;
 import josq.cms.lenguajes.automatas.modelos.Indicador;
 
 /**
  *
  * @author JavierOswaldo
  */
-public class Imagen
+public class Imagen implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
+
     String url;
     int sizeX;
     int sizeY;

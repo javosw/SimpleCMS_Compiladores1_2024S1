@@ -7,8 +7,6 @@ package josq.cms;
 import java.util.ArrayList;
 import josq.cms.archivos.MyFile;
 import josq.cms.lenguajes.controladores.Procesar;
-import josq.cms.lenguajes.controladores.Instruccion;
-import josq.cms.lenguajes.controladores.acciones.SitioNew;
 import josq.cms.lenguajes.automatas.modelos.cup.simbolos.Accion;
 
 /**
@@ -20,13 +18,6 @@ public class Main
     public static void main(String[] args) throws Exception 
     {
         //VistaInicio.main(args);
-        pruebas3();
-    }
-
-    static void pruebas3()
-    {
-        Instruccion inst= new SitioNew("SITIO66545656");
-        inst.ejecutar();
     }
     
     static void pruebas1() 

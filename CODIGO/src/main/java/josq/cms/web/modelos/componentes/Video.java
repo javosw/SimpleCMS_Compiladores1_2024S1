@@ -4,12 +4,17 @@
  */
 package josq.cms.web.modelos.componentes;
 
+import java.io.Serializable;
+
 /**
  *
  * @author JavierOswaldo
  */
-public class Video
+public class Video implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
+
     String url;
     int sizeX;
     int sizeY;

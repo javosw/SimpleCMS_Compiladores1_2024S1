@@ -4,14 +4,18 @@
  */
 package josq.cms.web.modelos.componentes;
 
+import java.io.Serializable;
 import josq.cms.lenguajes.automatas.modelos.Indicador;
 
 /**
  *
  * @author JavierOswaldo
  */
-public class Parrafo
+public class Parrafo implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
+
     String text;
     Indicador align;
     String color;

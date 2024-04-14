@@ -17,7 +17,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class MyFile
 {
-    public static void writeObjeto(String file, Object myObject) throws Exception
+    public static void writeObjet(String file, Object myObject) throws Exception
     {
         FileOutputStream myFileStream = new FileOutputStream(file);
         ObjectOutputStream myObjectStream = new ObjectOutputStream(myFileStream);

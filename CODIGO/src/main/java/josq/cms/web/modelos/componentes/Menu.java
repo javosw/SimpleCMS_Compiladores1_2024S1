@@ -4,6 +4,7 @@
  */
 package josq.cms.web.modelos.componentes;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Set;
 import josq.cms.web.modelos.Pagina;
@@ -11,8 +12,11 @@ import josq.cms.web.modelos.Pagina;
  *
  * @author JavierOswaldo
  */
-public class Menu
+public class Menu implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
+
     String idPageRoot;
     Set<String> paginas;
     
