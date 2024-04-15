@@ -10,6 +10,7 @@ import josq.cms.archivos.Ruta;
 import josq.cms.lenguajes.automatas.modelos.cup.Accion;
 import josq.cms.lenguajes.controladores.Instruccion;
 import josq.cms.lenguajes.controladores.Procesar;
+import josq.cms.web.render.HTMLinador;
 
 /**
  *
@@ -23,13 +24,15 @@ public class Main
         //readLenguaje("newSitio.xml");
         
         
-        //testAccion("newSitio.xml");
-        //testAccion("newPagina.xml");
-        testAccion("delPagina.xml");
+        testAccion("newSitio.xml");
+        testAccion("newPagina.xml");
+        //testAccion("delPagina.xml");
         //testAccion("delSitio.xml");
+        //testAccion("modPagina.xml");
+        testAccion("newComp.xml");
+        //testAccion("delComp.xml");
 
-        
-        
+        HTMLinador.getWebPage("_MI-AGENDA");
     }
     static void testAccion(String accion) 
     {

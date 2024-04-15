@@ -120,6 +120,7 @@ public class Instruccion
         }
     }
     
+    // FINALIZADO
     private void exeNewSitio(Sitio miSitio)
     {
         String ruta = Ruta.cms+miSitio.getIdSite();
@@ -139,6 +140,7 @@ public class Instruccion
             System.out.println(ex.getMessage());
         }
     }
+    // FINALIZADO
     private void newPaginaRoot(Pagina miPagina)
     {
         String ruta = Ruta.cms+miPagina.getIdPage();
@@ -156,6 +158,7 @@ public class Instruccion
             System.out.println(ex.getMessage());
         }
     }
+    // FINALIZADO
     private void exeDelSitio(Sitio miSitio)
     {
         String ruta = Ruta.cms+miSitio.getIdSite();
@@ -179,6 +182,7 @@ public class Instruccion
             System.out.println(ex.getMessage());
         }
     }
+    // FINALIZADO
     private void exeNewPagina(Pagina miPagina)
     {
         String ruta = Ruta.cms+miPagina.getIdPage();
@@ -199,6 +203,7 @@ public class Instruccion
             System.out.println(ex.getMessage());
         }
     }
+    // FINALIZADO
     private void addSubPagina(String idSubPagina,String idPagina)
     {
         String ruta = Ruta.cms+idPagina;
@@ -225,15 +230,16 @@ public class Instruccion
         }
 
     }
-    
+
+    // FINALIZADO
     private void exeModPagina(Pagina newPagina)
     {
         String ruta = Ruta.cms+newPagina.getIdPage();
         
         try
         {
-            File filePagina = new File(ruta);
-            if (!filePagina.exists()) return;
+            File paginaFile = new File(ruta);
+            if (!paginaFile.exists()) return;
 
             Object rawPagina = MiArchivo.readObject(ruta);
             boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
@@ -247,8 +253,8 @@ public class Instruccion
                 oldPagina.getEtiquetas().clear();
                 oldPagina.getEtiquetas().addAll(newPagina.getEtiquetas());
             }
-            filePagina.delete();
             
+            paginaFile.delete();
             MiArchivo.writeObjet(ruta, oldPagina);
         }
         catch (Exception ex)
@@ -258,11 +264,13 @@ public class Instruccion
         }
     }
     
+    // FINALIZADO
     private void exeDelPagina(Pagina miPagina)
     {
         delPagina(miPagina.getIdPage());
     }
     
+    // FINALIZADO
     private void delPagina(String idPage)
     {
         String ruta = Ruta.cms+idPage;
@@ -289,6 +297,7 @@ public class Instruccion
         }
     }
     
+    // FINALIZADO
     void exeNewComponente(Componente miComp)
     {
         String ruta = Ruta.cms+miComp.getIdPagina();
@@ -304,8 +313,8 @@ public class Instruccion
             if(!isPagina) return;
             
             Pagina miPagina = (Pagina)rawPagina;
-            Set<String> componentes = miPagina.getComponentes().keySet();
-            if (componentes.contains(miComp.getIdComponente())) return;
+            Set<String> idsComponentes = miPagina.getComponentes().keySet();
+            if (idsComponentes.contains(miComp.getIdComponente())) return;
 
             miPagina.addComponente(miComp.getIdComponente(), miComp.getWidget());
 
@@ -334,8 +343,8 @@ public class Instruccion
             if(!isPagina) return;
             
             Pagina miPagina = (Pagina)rawPagina;
-            Set<String> componentes = miPagina.getComponentes().keySet();
-            if (!componentes.contains(miComp.getIdComponente())) return;
+            Set<String> idsComponentes = miPagina.getComponentes().keySet();
+            if (!idsComponentes.contains(miComp.getIdComponente())) return;
 
             miPagina.putComponente(miComp.getIdComponente(), miComp.getWidget());
 
@@ -349,6 +358,7 @@ public class Instruccion
         }
     }
 
+    // FINALIZADO
     void exeDelComponente(Componente miComp)
     {
         String ruta = Ruta.cms+miComp.getIdPagina();
@@ -364,8 +374,8 @@ public class Instruccion
             if(!isPagina) return;
             
             Pagina miPagina = (Pagina)rawPagina;
-            Set<String> componentes = miPagina.getComponentes().keySet();
-            if (!componentes.contains(miComp.getIdComponente())) return;
+            Set<String> idsComponentes = miPagina.getComponentes().keySet();
+            if (!idsComponentes.contains(miComp.getIdComponente())) return;
 
             miPagina.delComponente(miComp.getIdComponente());
 

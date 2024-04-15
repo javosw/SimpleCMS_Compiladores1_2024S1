@@ -179,7 +179,7 @@ miTexto  =  [a-zA-Z0-9]({_}|[a-zA-Z0-9]+)+
 
 miNumero      =  [1-9][0-9]*
 miColor       =  #[0-9a-fA-F]{6}
-miURL         =  ((http|https)\:\/\/)?[a-zA-Z]+(\.[a-zA-Z0-9]+)*(\/|\/[a-zA-Z0-9]+)*
+miURL         =  ((http|https)\:\/\/)?[a-zA-Z0-9\.\/]+
 miFecha       =  [0-9]{4}\-[0-9]{2}\-[0-9]{2}
 miEtiqueta    =  [a-zA-Z0-9]+
 

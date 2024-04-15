@@ -50,4 +50,24 @@ public class Imagen implements Serializable
     {
         this.url = url;
     }
+
+    public String getUrl()
+    {
+        return url;
+    }
+
+    public int getSizeX()
+    {
+        return sizeX;
+    }
+
+    public int getSizeY()
+    {
+        return sizeY;
+    }
+
+    public Indicador getAlign()
+    {
+        return align;
+    }
 }

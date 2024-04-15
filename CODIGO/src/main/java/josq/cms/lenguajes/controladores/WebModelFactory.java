@@ -31,21 +31,6 @@ import josq.cms.web.modelos.componentes.Video;
  */
 public class WebModelFactory
 {
-    /*
-    Instruccion newAccion(Accion miAccion)
-    {
-        Indicador tipo = miAccion.getTipo();
-        if(tipo == Indicador.SITE_NEW) return newSitioNew(miAccion);
-        else if(tipo == Indicador.SITE_DEL) return newSitioDel(miAccion);
-        else if(tipo == Indicador.PAGE_NEW) return newPaginaNew(miAccion);
-        else if(tipo == Indicador.PAGE_MOD) return newPaginaMod(miAccion);
-        else if(tipo == Indicador.PAGE_DEL) return newPaginaDel(miAccion);
-        else if(tipo == Indicador.COMP_NEW | tipo == Indicador.COMP_MOD) return newComponente(miAccion);
-        else if(tipo == Indicador.COMP_DEL) return newComponenteDel(miAccion);
-        
-        return null;
-    }
-    */
     
     public static Sitio newSitioForCreation(Accion miAccion)
     {
@@ -183,13 +168,13 @@ public class WebModelFactory
     
     public static Componente newComponente(Accion miAccion)
     {
-        ArrayList<Parametro> listParametros = miAccion.getParametros();
-        Map<Indicador,Object> mapParametros = new HashMap<>();
-        for (Parametro p : listParametros) mapParametros.put(p.getTipo(), p.getContenido());
+        ArrayList<Parametro> paramsList = miAccion.getParametros();
+        Map<Indicador,Object> paramsMap = new HashMap<>();
+        for (Parametro p : paramsList) paramsMap.put(p.getTipo(), p.getContenido());
                 
-        Object idComp = mapParametros.get(Indicador.P_ID);
-        Object idPage = mapParametros.get(Indicador.P_PAGINA);
-        Object clase = mapParametros.get(Indicador.P_CLASE);
+        Object idComp = paramsMap.get(Indicador.P_ID);
+        Object idPage = paramsMap.get(Indicador.P_PAGINA);
+        Object clase = paramsMap.get(Indicador.P_CLASE);
         
         boolean is_idComp = idComp != null && idComp instanceof String;
         boolean is_idPage = idPage != null && idPage instanceof String;
@@ -200,24 +185,24 @@ public class WebModelFactory
         {
             miComp = new Componente((String)idComp,(String)idPage);
             
-            ArrayList<Atributo> listAtributos = miAccion.getAtributos();
-            Map<Indicador,Object> mapAtributos = new HashMap<>();
-            for (Atributo a : listAtributos) mapParametros.put(a.getTipo(), a.getContenido());
+            ArrayList<Atributo> atribsList = miAccion.getAtributos();
+            Map<Indicador,Object> atribsMap = new HashMap<>();
+            for (Atributo a : atribsList) atribsMap.put(a.getTipo(), a.getContenido());
 
-            Object widget = getWidget((Indicador) clase, mapAtributos);
+            Object widget = getWidget((Indicador) clase, atribsMap);
             miComp.setWidget(widget);
         }
         
         return miComp;
     }
     
-    private static Object getWidget(Indicador clase, Map<Indicador,Object> mapAtributos)
+    private static Object getWidget(Indicador clase, Map<Indicador,Object> atribsMap)
     {
         if(clase == Indicador.UI_TITULO)
         {
-            Object text = mapAtributos.get(Indicador.A_TEXTO);
-            Object align = mapAtributos.get(Indicador.A_ALIGN);
-            Object color = mapAtributos.get(Indicador.A_COLOR);
+            Object text = atribsMap.get(Indicador.A_TEXTO);
+            Object align = atribsMap.get(Indicador.A_ALIGN);
+            Object color = atribsMap.get(Indicador.A_COLOR);
 
             boolean is_text = text != null && text instanceof String;
             boolean is_align = align != null && align instanceof String;
@@ -234,9 +219,9 @@ public class WebModelFactory
         }
         else if(clase == Indicador.UI_PARRAFO) 
         {
-            Object text = mapAtributos.get(Indicador.A_TEXTO);
-            Object align = mapAtributos.get(Indicador.A_ALIGN);
-            Object color = mapAtributos.get(Indicador.A_COLOR);
+            Object text = atribsMap.get(Indicador.A_TEXTO);
+            Object align = atribsMap.get(Indicador.A_ALIGN);
+            Object color = atribsMap.get(Indicador.A_COLOR);
 
             boolean is_text = text != null && text instanceof String;
             boolean is_align = align != null && align instanceof String;
@@ -249,14 +234,14 @@ public class WebModelFactory
                 if(is_align) miParrafo.setAlign((Indicador) align);
                 if(is_color) miParrafo.setColor((String) color);
             }
-            return  miParrafo;
+            return miParrafo;
         }
         else if(clase == Indicador.UI_IMAGEN) 
         {
-            Object url = mapAtributos.get(Indicador.A_ORIGEN);
-            Object align = mapAtributos.get(Indicador.A_ALIGN);
-            Object sizeX = mapAtributos.get(Indicador.A_ANCHO);
-            Object sizeY = mapAtributos.get(Indicador.A_ALTO);
+            Object url = atribsMap.get(Indicador.A_ORIGEN);
+            Object align = atribsMap.get(Indicador.A_ALIGN);
+            Object sizeX = atribsMap.get(Indicador.A_ANCHO);
+            Object sizeY = atribsMap.get(Indicador.A_ALTO);
 
             boolean is_url = url != null && url instanceof String;
             boolean is_align = align != null && align instanceof Indicador;
@@ -282,9 +267,9 @@ public class WebModelFactory
         }
         else if(clase == Indicador.UI_VIDEO) 
         {
-            Object url = mapAtributos.get(Indicador.A_ORIGEN);
-            Object sizeX = mapAtributos.get(Indicador.A_ANCHO);
-            Object sizeY = mapAtributos.get(Indicador.A_ALTO);
+            Object url = atribsMap.get(Indicador.A_ORIGEN);
+            Object sizeX = atribsMap.get(Indicador.A_ANCHO);
+            Object sizeY = atribsMap.get(Indicador.A_ALTO);
 
             boolean is_url = url != null && url instanceof String;
             boolean is_sizeX = sizeX != null && sizeX instanceof String;
@@ -308,8 +293,8 @@ public class WebModelFactory
         }
         else if(clase == Indicador.UI_MENU) 
         {
-            Object idPageRoot = mapAtributos.get(Indicador.A_PADRE);
-            Object labels = mapAtributos.get(Indicador.A_ETIQS);
+            Object idPageRoot = atribsMap.get(Indicador.A_PADRE);
+            Object labels = atribsMap.get(Indicador.A_ETIQS);
 
             boolean is_idPageRoot = idPageRoot != null && idPageRoot instanceof String;
             boolean is_labels = labels != null && labels instanceof ArrayList;
@@ -319,15 +304,12 @@ public class WebModelFactory
             {
                 miMenu = new Menu((String) idPageRoot);
                 
-                Set<String> setLabels = null;
-                if(is_labels) 
-                {
-                    setLabels = new HashSet<>((ArrayList<String>) labels);
-                    
-                    Set<String> paginas = new HashSet<>();
-                    collectLabeledPages((String) idPageRoot, setLabels, paginas);
-                    for(String p : paginas) miMenu.addPagina(p);
-                }
+                if(!is_labels) return miMenu;
+
+                Set<String> labelsSet = new HashSet<>((ArrayList<String>) labels);
+                Set<String> pagesCollected = new HashSet<>();                
+                collectLabeledPages((String) idPageRoot, labelsSet, pagesCollected);
+                miMenu.getPaginas().addAll(pagesCollected);
             }
             return miMenu;
         }
@@ -335,28 +317,25 @@ public class WebModelFactory
         return null;
     }
     
-    private static void collectLabeledPages(String idPage, Set<String> labels, Set<String> paginas)
+    private static void collectLabeledPages(String idPagina, Set<String> labels, Set<String> menuPages)
     {
-        String file = Ruta.cms+idPage;
+        String file = Ruta.cms+idPagina;
         File pageFile = new File(file); 
         if (!pageFile.exists()) return;
         
         try
         {
-            Pagina myPage = (Pagina) MiArchivo.readObject(file);
+            Pagina miPagina = (Pagina) MiArchivo.readObject(file);
             
-            for(String l : labels)
-            {
-                if(myPage.hasEtiqueta(l)) { paginas.add(idPage); break; }
-            }
+            for(String l : labels) if(miPagina.hasEtiqueta(l)) { menuPages.add(idPagina); break; }
             
-            Set<String> subPaginas = myPage.getPaginas();
-            for (String subPage : subPaginas) collectLabeledPages(subPage, labels, paginas);
+            Set<String> subPaginas = miPagina.getPaginas();
+            for (String subPage : subPaginas) collectLabeledPages(subPage, labels, menuPages);
         }
         catch (Exception ex)
         {
-			System.out.print("@collectLabeledPages: ");
-			System.out.println(ex.getMessage());
+            System.out.print("@collectLabeledPages: ");
+            System.out.println(ex.getMessage());
         }
     }
 

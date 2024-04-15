@@ -5,9 +5,8 @@
 package josq.cms.web.modelos.componentes;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
-import josq.cms.web.modelos.Pagina;
 /**
  *
  * @author JavierOswaldo
@@ -15,18 +14,6 @@ import josq.cms.web.modelos.Pagina;
 public class Menu implements Serializable
 {
     private static final long serialVersionUID = 1L;
-
-
-    String idPageRoot;
-    Set<String> paginas;
-    
-    public void addPagina(String pagina)
-    {
-        paginas.add(pagina);
-    }
-
-    //Pagina refPage;
-    
  /*
     parametros: {
             * ID: [idComponente]
@@ -39,8 +26,31 @@ public class Menu implements Serializable
     }
 */   
 
-    public Menu(String idPageRoot)
+    String idPageRoot;
+    Set<String> paginas;
+    
+    public Menu()
     {
-        this.idPageRoot = idPageRoot;
+        this.paginas = new HashSet<>();
+    };
+    public Menu(String idPageRoot) 
+    {
+        this();
+        this.idPageRoot = idPageRoot; 
+    }
+    
+    public void addPagina(String pagina)
+    {
+        paginas.add(pagina);
+    }
+
+    public Set<String> getPaginas()
+    {
+        return paginas;
+    }
+
+    public String getIdPageRoot()
+    {
+        return idPageRoot;
     }
 }

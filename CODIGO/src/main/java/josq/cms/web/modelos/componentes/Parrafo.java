@@ -47,4 +47,19 @@ public class Parrafo implements Serializable
     {
         this.text = text;
     }
+
+    public String getText()
+    {
+        return text;
+    }
+
+    public Indicador getAlign()
+    {
+        return align;
+    }
+
+    public String getColor()
+    {
+        return color;
+    }
 }

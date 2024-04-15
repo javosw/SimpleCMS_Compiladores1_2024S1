@@ -43,4 +43,19 @@ public class Video implements Serializable
 
 */
 
+    public String getUrl()
+    {
+        return url;
+    }
+
+    public int getSizeX()
+    {
+        return sizeX;
+    }
+
+    public int getSizeY()
+    {
+        return sizeY;
+    }
+
 }

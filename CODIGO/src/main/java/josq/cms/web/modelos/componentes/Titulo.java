@@ -47,4 +47,19 @@ public class Titulo implements Serializable
     {
         this.color = color;
     }
+
+    public String getText()
+    {
+        return text;
+    }
+
+    public Indicador getAlign()
+    {
+        return align;
+    }
+
+    public String getColor()
+    {
+        return color;
+    }
 }
