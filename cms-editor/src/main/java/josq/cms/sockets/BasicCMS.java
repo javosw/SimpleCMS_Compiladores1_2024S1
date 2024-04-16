@@ -14,6 +14,8 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -44,10 +46,10 @@ public class BasicCMS
         while (true)
         {
             Socket miCliente = miServer.accept();
-            System.out.println("@while");
+            System.out.println("@cms");
             
             String readString = "";
-            String writeString = "[producto]";
+            String writeString = "";
             try
             {
                 InputStream readStream = miCliente.getInputStream();
@@ -66,6 +68,7 @@ public class BasicCMS
                 //BufferedWriter miBufferedWriter = new BufferedWriter(miWriter);
                 boolean autoFlush = true;
                 PrintWriter miWriter = new PrintWriter(writeStream, autoFlush, StandardCharsets.UTF_16);
+                writeString = new SimpleDateFormat("HH:mm:ss:SSSS").format(new Date().getTime());
                 miWriter.print(writeString);
                 //miWriter.flush();
 
