@@ -23,37 +23,45 @@ public class Editor
         try
         {
             Editor cliente = new Editor();
-            cliente.consumir("localhost", 7654, "[sockets en java]");
-            cliente.consumir("localhost", 7654,"12321");
-            cliente.consumir("localhost", 7654,"asda6sd66565");
+            cliente.consumir("localhost", 7654,"[mi pubicacion]");
+            cliente.consumir("localhost", 7654,"[PAGINA-NUEVA]");
+            cliente.consumir("localhost", 7654,"[<accion></accion>]");
         }
         catch (Exception e) { System.out.println("@Editor.main: "+e.getMessage()); }
     }
     
     
-    public void consumir(String host, int port, String mensaje) throws Exception
+    public void consumir(String host, int port, String writeString) throws Exception
     {
         Socket miCliente = new Socket(host, port);
-        System.out.println("@miCliente.isConnected(): "+miCliente.isConnected());
-
+        System.out.println("@editor");
+        
+        String readString = "";
         try
         {
             OutputStream writeStream = miCliente.getOutputStream();
             //OutputStreamWriter miWriter = new OutputStreamWriter(writeStream);
             //BufferedWriter miBufferedWriter = new BufferedWriter(miWriter);
-            PrintWriter miWriter = new PrintWriter(writeStream, true, StandardCharsets.UTF_16);
-            miWriter.print(mensaje);
+            boolean autoFlush = true;
+            PrintWriter miWriter = new PrintWriter(writeStream, autoFlush, StandardCharsets.UTF_16);
+            miWriter.print(writeString);
+            //miWriter.flush();
+            
+            System.out.println("  @writeString=" + writeString);
             miWriter.close();
-
+        }
+        catch (Exception e) { System.out.println("  @writeStream: "+e.getMessage()); }
+        
+        try
+        {
             InputStream readStream = miCliente.getInputStream();
             //InputStreamReader miReader = new InputStreamReader(readStream);
             //BufferedReader miBufferedReader = new BufferedReader(miReader);
-            String mensajeRecibido = new String(readStream.readAllBytes(), StandardCharsets.UTF_16);
+            readString = new String(readStream.readAllBytes(), StandardCharsets.UTF_16);
             
-            String log = "@cliente: "+mensajeRecibido;
-            System.out.println(log);
+            System.out.println("  @readString="+readString);
         }
-        catch (Exception e) { System.out.println("@consumir: "+e.getMessage()); }
+        catch (Exception e) { System.out.println("  @readStream: "+e.getMessage()); }
         
         miCliente.close();
     }

@@ -43,33 +43,38 @@ public class BasicCMS
 
         while (true)
         {
+            Socket miCliente = miServer.accept();
             System.out.println("@while");
+            
+            String readString = "";
+            String writeString = "[producto]";
             try
             {
-                Socket miCliente = miServer.accept();
-                System.out.println("@miServer.accept()");
-
                 InputStream readStream = miCliente.getInputStream();
                 //InputStreamReader miReader = new InputStreamReader(readStream);
                 //BufferedReader miBufferedReader = new BufferedReader(miReader);
-                System.out.println("@readStream");
-                String mensajeCliente = new String(readStream.readAllBytes(), StandardCharsets.UTF_16);
-                System.out.println("@mensajeCliente");
-
+                
+                readString = new String(readStream.readAllBytes(), StandardCharsets.UTF_16);
+                System.out.println("  @readString="+readString);
+            }
+            catch (Exception e) { System.out.println("  @readStream: " + e.getMessage()); }
+            
+            try
+            {
                 OutputStream writeStream = miCliente.getOutputStream();
                 //OutputStreamWriter miWriter = new OutputStreamWriter(writeStream);
                 //BufferedWriter miBufferedWriter = new BufferedWriter(miWriter);
-                PrintWriter miWriter = new PrintWriter(writeStream, true, StandardCharsets.UTF_16);
+                boolean autoFlush = true;
+                PrintWriter miWriter = new PrintWriter(writeStream, autoFlush, StandardCharsets.UTF_16);
+                miWriter.print(writeString);
+                //miWriter.flush();
 
-                String mensajeServidor = "@servidor: cliente=" + mensajeCliente;
-                miWriter.print(mensajeServidor);
-                System.out.println(mensajeServidor);
-                //miCliente.close();
+                System.out.println("  @writeString="+writeString);
+                miWriter.close();
             }
-            catch (Exception e)
-            {
-                System.out.println("@servir: " + e.getMessage());
-            }
+            catch (Exception e) { System.out.println("  @writeStream: " + e.getMessage()); }
+            
+            //miCliente.close();
         }
         //miServer.close();
 
