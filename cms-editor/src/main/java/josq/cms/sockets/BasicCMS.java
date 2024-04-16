@@ -4,18 +4,8 @@
  */
 package josq.cms.sockets;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  *
@@ -46,40 +36,9 @@ public class BasicCMS
         while (true)
         {
             Socket miCliente = miServer.accept();
-            System.out.println("@cms");
             
-            String readString = "";
-            String writeString = "";
-            try
-            {
-                InputStream readStream = miCliente.getInputStream();
-                //InputStreamReader miReader = new InputStreamReader(readStream);
-                //BufferedReader miBufferedReader = new BufferedReader(miReader);
-                
-                readString = new String(readStream.readAllBytes(), StandardCharsets.UTF_16);
-                System.out.println("  @readString="+readString);
-            }
-            catch (Exception e) { System.out.println("  @readStream: " + e.getMessage()); }
-            
-            try
-            {
-                OutputStream writeStream = miCliente.getOutputStream();
-                //OutputStreamWriter miWriter = new OutputStreamWriter(writeStream);
-                //BufferedWriter miBufferedWriter = new BufferedWriter(miWriter);
-                boolean autoFlush = true;
-                PrintWriter miWriter = new PrintWriter(writeStream, autoFlush, StandardCharsets.UTF_16);
-                writeString = new SimpleDateFormat("HH:mm:ss:SSSS").format(new Date().getTime());
-                miWriter.print(writeString);
-                //miWriter.flush();
-
-                System.out.println("  @writeString="+writeString);
-                miWriter.close();
-            }
-            catch (Exception e) { System.out.println("  @writeStream: " + e.getMessage()); }
-            
-            //miCliente.close();
+            ServicioThread tareas = new ServicioThread(miCliente);
+            new Thread(tareas).start();
         }
-        //miServer.close();
-
     }
 }

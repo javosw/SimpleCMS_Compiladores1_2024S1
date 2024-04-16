@@ -4,10 +4,13 @@
  */
 package josq.cms.sockets;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,46 +26,51 @@ public class Editor
         try
         {
             Editor cliente = new Editor();
-            cliente.consumir("localhost", 7654,"[mi pubicacion]");
-            cliente.consumir("localhost", 7654,"[PAGINA-NUEVA]");
-            cliente.consumir("localhost", 7654,"[<accion></accion>]");
+            cliente.publicar("localhost", 7654,"[mi pubicacion]");
+            //cliente.consumir("localhost", 7654,"[asaasddas 79879878978]");
+
+            Editor cliente2 = new Editor();
+            cliente2.publicar("localhost", 7654,"[PAGINA-NUEVA]");
         }
         catch (Exception e) { System.out.println("@Editor.main: "+e.getMessage()); }
     }
+
+    Charset miCharset = StandardCharsets.UTF_8;
+
+    Socket miCliente;
     
-    
-    public void consumir(String host, int port, String writeString) throws Exception
+    public void publicar(String host, int port, String writeString) throws Exception
     {
-        Socket miCliente = new Socket(host, port);
+        miCliente = new Socket(host, port);
         System.out.println("@editor");
         
-        String readString = "";
+        StringBuilder readerString = new StringBuilder();
+        
         try
         {
-            OutputStream writeStream = miCliente.getOutputStream();
-            //OutputStreamWriter miWriter = new OutputStreamWriter(writeStream);
-            //BufferedWriter miBufferedWriter = new BufferedWriter(miWriter);
+            OutputStream writerStream = miCliente.getOutputStream();
+            InputStream readerStream = miCliente.getInputStream();
+            
             boolean autoFlush = true;
-            PrintWriter miWriter = new PrintWriter(writeStream, autoFlush, StandardCharsets.UTF_16);
+            PrintWriter miWriter = new PrintWriter(writerStream, autoFlush, miCharset);
+                
+            InputStreamReader readerStream2 = new InputStreamReader(readerStream, miCharset);
+            BufferedReader miReader = new BufferedReader(readerStream2);
+
             miWriter.print(writeString);
-            //miWriter.flush();
-            
             System.out.println("  @writeString=" + writeString);
-            miWriter.close();
-        }
-        catch (Exception e) { System.out.println("  @writeStream: "+e.getMessage()); }
-        
-        try
-        {
-            InputStream readStream = miCliente.getInputStream();
-            //InputStreamReader miReader = new InputStreamReader(readStream);
-            //BufferedReader miBufferedReader = new BufferedReader(miReader);
-            readString = new String(readStream.readAllBytes(), StandardCharsets.UTF_16);
             
-            System.out.println("  @readString="+readString);
+
+            while (true)
+            { 
+                String l = miReader.readLine();
+                if (l == null) break;
+                readerString.append(l);
+            }
+            System.out.println("  @readString="+readerString.toString());
+            
+            miCliente.close();
         }
-        catch (Exception e) { System.out.println("  @readStream: "+e.getMessage()); }
-        
-        miCliente.close();
+        catch (Exception e) { System.out.println("  @publicar: "+e.getMessage()); }
     }
 }
