@@ -16,6 +16,7 @@ import josq.cms.archivos.MiArchivo;
 
 import josq.cms.lenguajes.automatas.ParserAccionesSym;
 import josq.cms.lenguajes.automatas.modelos.jflex.Punto;
+import josq.cms.lenguajes.controladores.EjecutarAcciones;
 
 %%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
@@ -35,33 +36,25 @@ import josq.cms.lenguajes.automatas.modelos.jflex.Punto;
 
 // codigo dentro de la clase lexer
 %{
+    public LexerAcciones(Reader myReader, DefaultSymbolFactory myFactory) { this(myReader); this.myFactory = myFactory; }
 
     private DefaultSymbolFactory myFactory = null;
-
-    public LexerAcciones(Reader myReader, DefaultSymbolFactory myFactory)
-    { this(myReader); this.myFactory = myFactory; }
-
-    public Punto getPunto(){ return new Punto(yycolumn, yyline, yylength(), (int)yychar+1); };
 
     private Symbol symbol(String name, int sym) {
         int izq = (int)yychar+1;
         int der = (int)yychar+yylength();
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der);
-        save(infoLexema2(mySymbol)+" ");
         return mySymbol;
     }
     private Symbol symbol(String name, int sym, Object val) {
         int izq = (int)yychar+1;
         int der = (int)yychar+yylength();
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der, val);
-        save(infoLexema2(mySymbol)+" ");
         return mySymbol;
     }
 
     // para errores lexicos
-    private void error(String message) {
-        print("Error at line "+(yyline+1)+", column "+(yycolumn+1)+" : "+message);
-    }
+    public Punto getPunto(){ return new Punto(yycolumn, yyline, yylength(), (int)yychar+1); };
 
     // para debugear
     private void print(String txt){ System.out.print(txt); }
@@ -306,4 +299,4 @@ miEtiqueta    =  [a-zA-Z0-9]+
 {Invisibles}  { }
 
 // error
-[^]  { return symbol("",ParserAccionesSym.error); }
+[^]  { EjecutarAcciones.logGramaticas.append("@lexer: ").append(getPunto().toString()).append("\n"); return symbol("",ParserAccionesSym.error); }

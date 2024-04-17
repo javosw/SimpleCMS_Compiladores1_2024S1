@@ -10,10 +10,10 @@ package josq.cms.lenguajes.automatas.modelos.jflex;
  */
 public class Punto
 {
-    int yycolumn;
-    int yyline;
-    int yylength;
-    int yychar;
+    private int yycolumn;
+    private int yyline;
+    private int yylength;
+    private int yychar;
     
     public Punto(int yycolumn, int yyline, int yylength, int yychar)
     {
@@ -21,5 +21,11 @@ public class Punto
         this.yyline = yyline;
         this.yylength = yylength;
         this.yychar = yychar;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "h="+yycolumn+",v="+yyline+",l="+yylength+",c="+yychar;
     }
 }

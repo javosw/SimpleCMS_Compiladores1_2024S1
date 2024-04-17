@@ -168,7 +168,7 @@ public class EjecutarAcciones
         try
         {
             File binSitio = new File(ruta); 
-            if (binSitio.exists()) return;
+            if (binSitio.exists()) throw new Exception(ruta);
             MiArchivo.writeObjet(ruta, miSitio);
 
             Pagina rootPagina = new Pagina(miSitio.getIdPageRoot(), miSitio.getIdSite());
@@ -178,8 +178,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeNewSitio: ").append(ruta).append("\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logErrores.append("@exeNewSitio: ").append(ex.getMessage()).append("\n");
         }
     }
     // FINALIZADO 
@@ -193,12 +192,11 @@ public class EjecutarAcciones
             if (filePagina.exists()) filePagina.delete();
 
             MiArchivo.writeObjet(ruta, miPagina);
-            EjecutarAcciones.logResultados.append("@newRootPagina: ").append(ruta).append("\n");
+            EjecutarAcciones.logResultados.append("@newPaginaRoot: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@newRootPagina: ").append(ruta).append("\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logErrores.append("@newPaginaRoot: ").append(ex.getMessage()).append("\n");
         }
     }
     // FINALIZADO
@@ -209,12 +207,12 @@ public class EjecutarAcciones
         try
         {
             File sitioFile = new File(ruta); 
-            if (!sitioFile.exists()) return;
+            if (!sitioFile.exists()) throw new Exception(ruta);
 
             Object sitioRaw = MiArchivo.readObject(ruta);
             boolean isSitio = sitioRaw != null && sitioRaw instanceof Sitio;
             
-            if(!isSitio) return;
+            if(!isSitio) throw new Exception(ruta);
             
             delPagina(((Sitio)sitioRaw).getIdPageRoot());
             sitioFile.delete();
@@ -222,8 +220,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeDelSitio: ").append(ruta).append("\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logErrores.append("@exeDelSitio: ").append(ex.getMessage()).append("\n");
         }
     }
     // FINALIZADO
@@ -234,7 +231,7 @@ public class EjecutarAcciones
         try
         {
             File filePagina = new File(ruta); 
-            if (filePagina.exists()) return;
+            if (filePagina.exists()) throw new Exception(ruta);
 
             if(miPagina.getIdPageRoot()==null) addSubPagina(miPagina.getIdPage(), "~"+miPagina.getIdSite());
             else addSubPagina(miPagina.getIdPage(), miPagina.getIdPageRoot());
@@ -244,8 +241,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeNewPagina: ").append(ruta).append("\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logErrores.append("@exeNewPagina: ").append(ex.getMessage()).append("\n");
         }
     }
     // FINALIZADO
@@ -255,12 +251,12 @@ public class EjecutarAcciones
         try
         {
             File filePagina = new File(ruta);
-            if (!filePagina.exists()) return;
+            if (!filePagina.exists()) throw new Exception(ruta);
 
             Object rawPagina = MiArchivo.readObject(ruta);
             boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
             
-            if(!isPagina) return;
+            if(!isPagina) throw new Exception(ruta);
             
             Pagina miPagina = (Pagina)rawPagina;
             miPagina.addPagina(idSubPagina); 
@@ -271,8 +267,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@addSubPagina: ").append(ruta).append("\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logErrores.append("@addSubPagina: ").append(ex.getMessage()).append("\n");
         }
 
     }
@@ -285,12 +280,12 @@ public class EjecutarAcciones
         try
         {
             File paginaFile = new File(ruta);
-            if (!paginaFile.exists()) return;
+            if (!paginaFile.exists()) throw new Exception(ruta);
 
             Object rawPagina = MiArchivo.readObject(ruta);
             boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
             
-            if(!isPagina) return;
+            if(!isPagina) throw new Exception(ruta);
             
             Pagina oldPagina = (Pagina) rawPagina;
             if(newPagina.getTitle() != null) oldPagina.setTitle(newPagina.getTitle());
@@ -306,8 +301,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeModPagina: ").append(ruta).append("\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logErrores.append("@exeModPagina: ").append(ex.getMessage()).append("\n");
         }
     }
     
@@ -324,13 +318,13 @@ public class EjecutarAcciones
         try
         {
             File filePagina = new File(ruta); 
-            if (!filePagina.exists()) return;
+            if (!filePagina.exists()) throw new Exception(ruta);
             
             Object rawPagina = MiArchivo.readObject(ruta);
             boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
             
             // si el objeto leido no es una pagina, puede que sea un sitio: NO ELIMINAR EL ARCHIVO
-            if(!isPagina) return; 
+            if(!isPagina) throw new Exception(ruta);
             
             Set<String> subPaginas = ((Pagina)rawPagina).getPaginas();
             for(String p : subPaginas) delPagina(p);
@@ -340,8 +334,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@delPagina: ").append(ruta).append("\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logErrores.append("@delPagina: ").append(ex.getMessage()).append("\n");
         }
     }
     
@@ -358,11 +351,11 @@ public class EjecutarAcciones
             Object rawPagina = MiArchivo.readObject(ruta);
             boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
             
-            if(!isPagina) return;
+            if(!isPagina) throw new Exception(ruta);
             
             Pagina miPagina = (Pagina)rawPagina;
             Set<String> idsComponentes = miPagina.getComponentes().keySet();
-            if (idsComponentes.contains(miComp.getIdComponente())) return;
+            if (idsComponentes.contains(miComp.getIdComponente())) throw new Exception(ruta);
 
             miPagina.addComponente(miComp.getIdComponente(), miComp.getWidget());
 
@@ -372,8 +365,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeNewComponente: ").append(ruta).append("\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logErrores.append("@exeNewComponente: ").append(ex.getMessage()).append("\n");
         }
     }
 
@@ -384,16 +376,16 @@ public class EjecutarAcciones
         try
         {
             File binPagina = new File(ruta); 
-            if (!binPagina.exists()) return;
+            if (!binPagina.exists()) throw new Exception(ruta);
             
             Object rawPagina = MiArchivo.readObject(ruta);
             boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
             
-            if(!isPagina) return;
+            if(!isPagina) throw new Exception(ruta);
             
             Pagina miPagina = (Pagina)rawPagina;
             Set<String> idsComponentes = miPagina.getComponentes().keySet();
-            if (!idsComponentes.contains(miComp.getIdComponente())) return;
+            if (!idsComponentes.contains(miComp.getIdComponente())) throw new Exception(ruta);
 
             miPagina.putComponente(miComp.getIdComponente(), miComp.getWidget());
 
@@ -403,8 +395,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeModComponente: ").append(ruta).append("\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logErrores.append("@exeModComponente: ").append(ex.getMessage()).append("\n");
         }
     }
 
@@ -416,16 +407,16 @@ public class EjecutarAcciones
         try
         {
             File binPagina = new File(ruta); 
-            if (!binPagina.exists()) return;
+            if (!binPagina.exists()) throw new Exception(ruta);
             
             Object rawPagina = MiArchivo.readObject(ruta);
             boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
             
-            if(!isPagina) return;
+            if(!isPagina) throw new Exception(ruta);
             
             Pagina miPagina = (Pagina)rawPagina;
             Set<String> idsComponentes = miPagina.getComponentes().keySet();
-            if (!idsComponentes.contains(miComp.getIdComponente())) return;
+            if (!idsComponentes.contains(miComp.getIdComponente())) throw new Exception(ruta);
 
             miPagina.delComponente(miComp.getIdComponente());
 
@@ -435,8 +426,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeDelComponente: ").append(ruta).append("\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logErrores.append("@exeDelComponente: ").append(ex.getMessage()).append("\n");
         }
     }
 

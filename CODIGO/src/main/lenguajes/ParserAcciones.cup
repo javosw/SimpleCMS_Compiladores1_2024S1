@@ -11,6 +11,7 @@ import josq.cms.lenguajes.automatas.modelos.Indicador;
 import josq.cms.lenguajes.automatas.modelos.cup.Atributo;
 import josq.cms.lenguajes.automatas.modelos.cup.Parametro;
 import josq.cms.lenguajes.automatas.modelos.cup.Accion;
+import josq.cms.lenguajes.controladores.EjecutarAcciones;
 
 // NOTA: %cupsym en jflex
 // parser=MyParser, sym=MyParserSym
@@ -90,13 +91,13 @@ start with cms ;
 cms ::= 
     accion:w1  {: ArrayList<Accion> list = new ArrayList<>(); if(w1!=null) list.add(w1); RESULT=list; :} // +
     | acciones:w1  {: if(w1==null){ ArrayList<Accion> list = new ArrayList<>(); RESULT=list; } else{RESULT=w1;} :}
-    | error:w1 {: print("@ERROR-CMS("+w1left+"-"+w1right+") "); ArrayList<Accion> list = new ArrayList<>(); RESULT=list; :}
+    | error:w1 {: EjecutarAcciones.logGramaticas.append("@parser(l="+w1left+",r="+w1right+")\n"); ArrayList<Accion> list = new ArrayList<>(); RESULT=list; :}
 ;
 
 // ACCIONES
 acciones ::=
     accionesIZQ accionesMID:w1 accionesDER  {: RESULT=w1; :} // +
-    | error:w1 DER {: print("@ERROR-ACCS("+w1left+"-"+w1right+") "); :} // +
+    | error:w1 DER {: EjecutarAcciones.logGramaticas.append("@parser(l="+w1left+",r="+w1right+")\n"); :} // +
 ;
 accionesIZQ ::=
     IZQ ACCIS DER // +
@@ -136,7 +137,7 @@ accionMID ::=
     | accionMID:w1 parametros:w2 {: w1.getParametros().addAll(w2); RESULT=w1; :} // +
     | accionMID:w1 atributos:w2  {: w1.getAtributos().addAll(w2); RESULT=w1; :} // +
     | accionMID:w1 etiquetas:w2  {: w1.getEtiquetas().addAll(w2); RESULT=w1; :} // +
-    | error:w1 DER {: print("@ERROR-ACCMID("+w1left+"-"+w1right+") "); Accion a = new Accion(Indicador.ERROR); RESULT=a; :} // +
+    | error:w1 DER {: EjecutarAcciones.logGramaticas.append("@parser(l="+w1left+",r="+w1right+")\n"); Accion a = new Accion(Indicador.ERROR); RESULT=a; :} // +
 ;
 accionDER ::=
     IZQ BARRA ACCI DER //+

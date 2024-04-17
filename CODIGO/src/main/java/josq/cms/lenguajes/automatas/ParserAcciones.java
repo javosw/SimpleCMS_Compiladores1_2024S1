@@ -10,6 +10,7 @@ import josq.cms.lenguajes.automatas.modelos.Indicador;
 import josq.cms.lenguajes.automatas.modelos.cup.Atributo;
 import josq.cms.lenguajes.automatas.modelos.cup.Parametro;
 import josq.cms.lenguajes.automatas.modelos.cup.Accion;
+import josq.cms.lenguajes.controladores.EjecutarAcciones;
 import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
@@ -344,7 +345,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()).right;
 		Object w1 = (Object)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.peek()).value;
-		 print("@ERROR-CMS("+w1left+"-"+w1right+") "); ArrayList<Accion> list = new ArrayList<>(); RESULT=list; 
+		 EjecutarAcciones.logGramaticas.append("@parser(l="+w1left+",r="+w1right+")\n"); ArrayList<Accion> list = new ArrayList<>(); RESULT=list; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("cms",0, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -368,7 +369,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).right;
 		Object w1 = (Object)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).value;
-		 print("@ERROR-ACCS("+w1left+"-"+w1right+") "); 
+		 EjecutarAcciones.logGramaticas.append("@parser(l="+w1left+",r="+w1right+")\n"); 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("acciones",1, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
@@ -641,7 +642,7 @@ class CUP$ParserAcciones$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).right;
 		Object w1 = (Object)((java_cup.runtime.Symbol) CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)).value;
-		 print("@ERROR-ACCMID("+w1left+"-"+w1right+") "); Accion a = new Accion(Indicador.ERROR); RESULT=a; 
+		 EjecutarAcciones.logGramaticas.append("@parser(l="+w1left+",r="+w1right+")\n"); Accion a = new Accion(Indicador.ERROR); RESULT=a; 
               CUP$ParserAcciones$result = parser.getSymbolFactory().newSymbol("accionMID",6, ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.elementAt(CUP$ParserAcciones$top-1)), ((java_cup.runtime.Symbol)CUP$ParserAcciones$stack.peek()), RESULT);
             }
           return CUP$ParserAcciones$result;
