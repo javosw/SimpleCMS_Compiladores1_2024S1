@@ -8,9 +8,8 @@ import java.util.ArrayList;
 import josq.cms.archivos.MiArchivo;
 import josq.cms.archivos.Ruta;
 import josq.cms.lenguajes.automatas.modelos.cup.Accion;
-import josq.cms.lenguajes.controladores.Instruccion;
+import josq.cms.lenguajes.controladores.EjecutarAcciones;
 import josq.cms.lenguajes.controladores.Procesar;
-import josq.cms.web.render.HTMLinador;
 
 /**
  *
@@ -20,10 +19,11 @@ public class Main
 {
     public static void main(String[] args) throws Exception 
     {
-        //VistaInicio.main(args);
+        VistaInicio.main(args);
         //readLenguaje("newSitio.xml");
         
         
+        /*
         testAccion("newSitio.xml");
         testAccion("newPagina.xml");
         //testAccion("delPagina.xml");
@@ -32,14 +32,14 @@ public class Main
         testAccion("newComp.xml");
         //testAccion("delComp.xml");
 
-        HTMLinador.getWebPage("_MI-AGENDA");
+        HTMLinador.getWebPage("_MI-AGENDA");*/
     }
     static void testAccion(String accion) 
     {
         String ruta = Ruta.acciones+accion;
         try
         {
-            Instruccion inst = new Instruccion();
+            EjecutarAcciones inst = new EjecutarAcciones();
                 inst.procesarDesdeArchivo(ruta);
         }
         catch (Exception ex)

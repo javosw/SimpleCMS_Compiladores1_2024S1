@@ -19,12 +19,18 @@ import josq.cms.web.modelos.Sitio;
  *
  * @author JavierOswaldo
  */
-public class Instruccion
+public class EjecutarAcciones
 {
-    // get acciones[]
-    // crear modelos web
-    // guardar modelos web segun el tipo de accion requerida
-    // opcion ejecutar instrucciones
+    public final static StringBuilder logGramaticas = new StringBuilder();
+    public final static StringBuilder logResultados = new StringBuilder();
+    public final static StringBuilder logErrores = new StringBuilder();
+
+    public static void clearLogs()
+    {
+        logGramaticas.delete(0, logGramaticas.length());
+        logResultados.delete(0, logResultados.length());
+        logErrores.delete(0, logErrores.length());
+    }
     
     ArrayList<Sitio> newSitios;
     ArrayList<Sitio> delSitios;
@@ -35,7 +41,7 @@ public class Instruccion
     ArrayList<Componente> modComponentes;
     ArrayList<Componente> delComponentes;
 
-    public Instruccion()
+    public EjecutarAcciones()
     {
         this.newSitios = new ArrayList<>();
         this.delSitios = new ArrayList<>();
@@ -47,8 +53,42 @@ public class Instruccion
         this.delComponentes = new ArrayList<>();
     }
 
+    void clearAcciones()
+    {
+        newSitios.clear();
+        newSitios.clear();
+        delSitios.clear();
+        newPaginas.clear();
+        delPaginas.clear();
+        modPaginas.clear();
+        newComponentes.clear();
+        modComponentes.clear();
+        delComponentes.clear();
+    }
+    
+    public void procesarDesdeString(String texto)
+    {
+        clearAcciones();
+        try
+        {
+            System.out.println("@procesarDesdeString > Procesar.procesarDesdeString: ");
+            ArrayList<Accion> acciones = Procesar.accionesDesdeString(texto);
+            System.out.println("@procesarDesdeString > setWebModel");
+            for(Accion a : acciones) getWebModel(a);
+            System.out.println("@procesarDesdeString > ejecutarAcciones");
+            ejecutarAcciones();
+            System.out.println("@procesarDesdeString <");
+        }
+        catch (Exception ex)
+        {
+            EjecutarAcciones.logErrores.append("@procesarDesdeString\n");
+            System.out.println(ex.getMessage());
+        }
+    }
+
     public void procesarDesdeArchivo(String file)
     {
+        clearAcciones();
         try
         {
             System.out.println("@procesarDesdeArchivo > Procesar.accionesDesdeArchivo: ");
@@ -61,7 +101,7 @@ public class Instruccion
         }
         catch (Exception ex)
         {
-            System.out.print("@procesarDesdeArchivo > catch: ");
+            EjecutarAcciones.logErrores.append("@procesarDesdeArchivo\n");
             System.out.println(ex.getMessage());
         }
     }
@@ -133,14 +173,16 @@ public class Instruccion
 
             Pagina rootPagina = new Pagina(miSitio.getIdPageRoot(), miSitio.getIdSite());
             newPaginaRoot(rootPagina);
+            
+            EjecutarAcciones.logResultados.append("@exeNewSitio: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            System.out.print("@exeNewSitio: ");
+            EjecutarAcciones.logErrores.append("@exeNewSitio: ").append(ruta).append("\n");
             System.out.println(ex.getMessage());
         }
     }
-    // FINALIZADO
+    // FINALIZADO 
     private void newPaginaRoot(Pagina miPagina)
     {
         String ruta = Ruta.cms+miPagina.getIdPage();
@@ -151,10 +193,11 @@ public class Instruccion
             if (filePagina.exists()) filePagina.delete();
 
             MiArchivo.writeObjet(ruta, miPagina);
+            EjecutarAcciones.logResultados.append("@newRootPagina: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            System.out.print("@newRootPagina: ");
+            EjecutarAcciones.logErrores.append("@newRootPagina: ").append(ruta).append("\n");
             System.out.println(ex.getMessage());
         }
     }
@@ -175,10 +218,11 @@ public class Instruccion
             
             delPagina(((Sitio)sitioRaw).getIdPageRoot());
             sitioFile.delete();
+            EjecutarAcciones.logResultados.append("@exeDelSitio: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            System.out.print("@exeDelSitio: ");
+            EjecutarAcciones.logErrores.append("@exeDelSitio: ").append(ruta).append("\n");
             System.out.println(ex.getMessage());
         }
     }
@@ -196,10 +240,11 @@ public class Instruccion
             else addSubPagina(miPagina.getIdPage(), miPagina.getIdPageRoot());
 
             MiArchivo.writeObjet(ruta, miPagina);
+            EjecutarAcciones.logResultados.append("@exeNewPagina: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            System.out.print("@exeNewPagina: ");
+            EjecutarAcciones.logErrores.append("@exeNewPagina: ").append(ruta).append("\n");
             System.out.println(ex.getMessage());
         }
     }
@@ -222,10 +267,11 @@ public class Instruccion
             
             filePagina.delete();
             MiArchivo.writeObjet(ruta, miPagina);
+            EjecutarAcciones.logResultados.append("@addSubPagina: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            System.out.print("@addSubPagina: ");
+            EjecutarAcciones.logErrores.append("@addSubPagina: ").append(ruta).append("\n");
             System.out.println(ex.getMessage());
         }
 
@@ -256,10 +302,11 @@ public class Instruccion
             
             paginaFile.delete();
             MiArchivo.writeObjet(ruta, oldPagina);
+            EjecutarAcciones.logResultados.append("@exeModPagina: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            System.out.print("@exeModPagina: ");
+            EjecutarAcciones.logErrores.append("@exeModPagina: ").append(ruta).append("\n");
             System.out.println(ex.getMessage());
         }
     }
@@ -289,10 +336,11 @@ public class Instruccion
             for(String p : subPaginas) delPagina(p);
             
             filePagina.delete();
+            EjecutarAcciones.logResultados.append("@delPagina: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            System.out.print("@delPagina: ");
+            EjecutarAcciones.logErrores.append("@delPagina: ").append(ruta).append("\n");
             System.out.println(ex.getMessage());
         }
     }
@@ -320,10 +368,11 @@ public class Instruccion
 
             binPage.delete();
             MiArchivo.writeObjet(ruta, miPagina);
+            EjecutarAcciones.logResultados.append("@exeNewComponente: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            System.out.print("@exeNewComponente: ");
+            EjecutarAcciones.logErrores.append("@exeNewComponente: ").append(ruta).append("\n");
             System.out.println(ex.getMessage());
         }
     }
@@ -350,10 +399,11 @@ public class Instruccion
 
             binPagina.delete();
             MiArchivo.writeObjet(ruta, miPagina);
+            EjecutarAcciones.logResultados.append("@exeModComponente: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            System.out.print("@exeModComponente: ");
+            EjecutarAcciones.logErrores.append("@exeModComponente: ").append(ruta).append("\n");
             System.out.println(ex.getMessage());
         }
     }
@@ -381,10 +431,11 @@ public class Instruccion
 
             binPagina.delete();
             MiArchivo.writeObjet(ruta, miPagina);
+            EjecutarAcciones.logResultados.append("@exeDelComponente: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            System.out.print("@exeDelComponente: ");
+            EjecutarAcciones.logErrores.append("@exeDelComponente: ").append(ruta).append("\n");
             System.out.println(ex.getMessage());
         }
     }
