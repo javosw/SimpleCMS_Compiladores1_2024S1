@@ -1,100 +1,107 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package josq.cms.web.backend;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.Map;
 import java.util.Set;
 import josq.cms.archivos.MiArchivo;
 import josq.cms.archivos.Ruta;
 import josq.cms.web.modelos.Pagina;
+import josq.cms.web.modelos.componentes.Imagen;
+import josq.cms.web.modelos.componentes.Menu;
+import josq.cms.web.modelos.componentes.Parrafo;
+import josq.cms.web.modelos.componentes.Titulo;
+import josq.cms.web.modelos.componentes.Video;
 
 /**
  *
  * @author JavierOswaldo
  */
-public class HTMLinador extends HttpServlet
+public class HTMLinador
 {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
+    public static String getWebPage(String idPagina)
     {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter())
+        String ruta = Ruta.cms+idPagina;
+        
+        String notFound = "<!DOCTYPE html><html><head></head><body><h1>PAGINA NO ENCONTRADA</h1></body></html>";
+
+        try
         {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet HTMLinador</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet HTMLinador at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            File paginaFile = new File(ruta);
+            if (!paginaFile.exists()) return notFound; // generar NOT FOUND
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+            System.out.println("isPagina="+isPagina);
+            if(!isPagina) return notFound;
+            
+            StringBuilder html = new StringBuilder();
+            html.append("<!DOCTYPE html><html><head></head><body>");
+            
+            Pagina miPagina = (Pagina) rawPagina;
+ 
+            Map<String,Object> componentes = miPagina.getComponentes();
+            Set<String> idsComponentes = miPagina.getComponentes().keySet();
+            //System.out.println("componentes: "+idsComponentes.toString());
+            for(String c : idsComponentes) html.append(getWidget(componentes.get(c)));
+
+            Set<String> etiquetas = miPagina.getEtiquetas();
+            Set<String> paginas = miPagina.getPaginas();
+            
+            html.append("componentes: "+idsComponentes.toString()+"<br/>");
+            html.append("etiquetas: "+etiquetas.toString()+"<br/>");
+            html.append("paginas: "+paginas.toString()+"<br/>");
+            
+            html.append("</body></html>");
+            
+            return  html.toString();
+            
         }
+        catch (Exception ex)
+        {
+            System.out.println("@getWebPage: "+ex.getMessage());
+        }
+        return notFound;
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
-    {
-        
-        
-    }
-
     
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
+    private static String getWidget(Object miWidget)
     {
-        processRequest(request, response);
+        if(miWidget==null) return "";
+                
+        if (miWidget instanceof Imagen)
+        {
+            Imagen w = (Imagen) miWidget;
+            return "<img src\""+w.getUrl()+"\"/>";
+        }
+        else if (miWidget instanceof Menu)
+        {
+            Menu w = (Menu) miWidget;
+            StringBuilder menu = new StringBuilder();
+            Set<String> paginas = w.getPaginas();
+            menu.append("<ul>");
+            for (String p : paginas) menu.append("<li><a href=\"/cms-web-backend/paginas?id=").append(p).append("\">").append(p).append("</a></li>");
+            menu.append("</ul>");
+            return menu.toString();
+        }
+        else if (miWidget instanceof Parrafo)
+        {
+            Parrafo w = (Parrafo) miWidget;
+            return "<p>"+w.getText()+"</p>";
+        }
+        else if (miWidget instanceof Titulo)
+        {
+            Titulo w = (Titulo) miWidget;
+            return "<title>"+w.getText()+"</title>";
+        }
+        else if (miWidget instanceof Video)
+        {
+            Video w = (Video) miWidget;
+            return  "<video controls><source src=\""+w.getUrl()+"\" type=\"video/webm\"/></video>";
+        }
+        return "";
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo()
-    {
-        return "Short description";
-    }// </editor-fold>
 
 }

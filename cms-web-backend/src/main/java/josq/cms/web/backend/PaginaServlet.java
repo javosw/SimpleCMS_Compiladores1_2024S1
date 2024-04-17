@@ -66,73 +66,23 @@ public class PaginaServlet extends HttpServlet
             throws ServletException, IOException
     {
         String idPagina = request.getParameter("id");
-        if (idPagina == null || !existePagina(idPagina))
+        if (idPagina == null)
         {
-            processRequest(request, response); 
+            processRequest(request, response);
             return;
         }
-        System.out.println("@existePagina");
-    }
-    private boolean existePagina(String idPagina)
-    {
-        String ruta = Ruta.cms+idPagina;
         
-        try
+        System.out.println("idPagina="+idPagina);
+        response.setContentType("text/html;charset=UTF-8");
+        try 
         {
-            File paginaFile = new File(ruta);
-            if (!paginaFile.exists()) return false;
-
-            Object rawPagina = MiArchivo.readObject(ruta);
-            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
-            
-            return isPagina;
+            PrintWriter out = response.getWriter();
+            out.println(HTMLinador.getWebPage(idPagina));
+            System.out.println("@existePagina");
         }
-        catch (Exception ex)
-        {
-            System.out.print("@existePagina: ");
-            System.out.println(ex.getMessage());
-        }
-        
-        return false;
-    }
-    // FINALIZADO
-    private void exeModPagina(String idPagina)
-    {
-        String ruta = Ruta.cms+idPagina;
-        
-        try
-        {
-            Object rawPagina = MiArchivo.readObject(ruta);
-            Pagina miPagina = (Pagina) rawPagina;
-            
-            StringBuilder html = new StringBuilder();
-            html.append("<!DOCTYPE html>");
-            
-            String idPage = miPagina.getIdPage();
-            String idPageRoot = miPagina.getIdPageRoot();
-            String idSite = miPagina.getIdSite();
-
-            String title = miPagina.getTitle();
-
-            Set<String> paginas = miPagina.getPaginas();
-            Map<String,Object> componentes = miPagina.getComponentes();
-            Set<String> etiquetas = miPagina.getEtiquetas();
-        }
-        catch (Exception ex)
-        {
-            System.out.print("@exeModPagina: ");
-            System.out.println(ex.getMessage());
-        }
-    }
-    
-    String getHTML()
-    {
-        return "";
+        catch(Exception e){ System.out.println("@HTMLinador.getWebPage: "+e.getMessage());}
     }
 
-    
-    
-    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
