@@ -10,6 +10,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.File;
+import josq.cms.archivos.MiArchivo;
+import josq.cms.archivos.Ruta;
+import josq.cms.web.modelos.Pagina;
 
 /**
  *
@@ -59,7 +63,71 @@ public class HTMLinador extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        processRequest(request, response);
+        
+        String idPagina = request.getParameter("id");
+        if (idPagina == null || !existePagina(idPagina))
+        {
+            processRequest(request, response); 
+            return;
+        }
+        System.out.println("@existePagina");
+        
+    }
+
+    
+    private boolean existePagina(String idPagina)
+    {
+        String ruta = Ruta.cms+idPagina;
+        
+        try
+        {
+            File paginaFile = new File(ruta);
+            if (!paginaFile.exists()) return false;
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+            
+            return isPagina;
+        }
+        catch (Exception ex)
+        {
+            System.out.print("@existePagina: ");
+            System.out.println(ex.getMessage());
+        }
+        
+        return false;
+    }
+    // FINALIZADO
+    private void exeModPagina(Pagina newPagina)
+    {
+        String ruta = Ruta.cms+newPagina.getIdPage();
+        
+        try
+        {
+            File paginaFile = new File(ruta);
+            if (!paginaFile.exists()) return;
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+            
+            if(!isPagina) return;
+            
+            Pagina oldPagina = (Pagina) rawPagina;
+            if(newPagina.getTitle() != null) oldPagina.setTitle(newPagina.getTitle());
+            if(newPagina.getEtiquetas() != null && !newPagina.getEtiquetas().isEmpty()) 
+            {
+                oldPagina.getEtiquetas().clear();
+                oldPagina.getEtiquetas().addAll(newPagina.getEtiquetas());
+            }
+            
+            paginaFile.delete();
+            MiArchivo.writeObjet(ruta, oldPagina);
+        }
+        catch (Exception ex)
+        {
+            System.out.print("@exeModPagina: ");
+            System.out.println(ex.getMessage());
+        }
     }
 
     /**
