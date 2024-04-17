@@ -21,7 +21,7 @@ import josq.cms.web.modelos.Pagina;
  *
  * @author JavierOswaldo
  */
-public class HTMLinador extends HttpServlet
+public class PaginaServlet extends HttpServlet
 {
 
     /**
@@ -43,10 +43,10 @@ public class HTMLinador extends HttpServlet
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet HTMLinador</title>");            
+            out.println("<title>Servlet PaginaServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet HTMLinador at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet PaginaServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -65,12 +65,74 @@ public class HTMLinador extends HttpServlet
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
+        String idPagina = request.getParameter("id");
+        if (idPagina == null || !existePagina(idPagina))
+        {
+            processRequest(request, response); 
+            return;
+        }
+        System.out.println("@existePagina");
+    }
+    private boolean existePagina(String idPagina)
+    {
+        String ruta = Ruta.cms+idPagina;
         
+        try
+        {
+            File paginaFile = new File(ruta);
+            if (!paginaFile.exists()) return false;
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+            
+            return isPagina;
+        }
+        catch (Exception ex)
+        {
+            System.out.print("@existePagina: ");
+            System.out.println(ex.getMessage());
+        }
         
+        return false;
+    }
+    // FINALIZADO
+    private void exeModPagina(String idPagina)
+    {
+        String ruta = Ruta.cms+idPagina;
+        
+        try
+        {
+            Object rawPagina = MiArchivo.readObject(ruta);
+            Pagina miPagina = (Pagina) rawPagina;
+            
+            StringBuilder html = new StringBuilder();
+            html.append("<!DOCTYPE html>");
+            
+            String idPage = miPagina.getIdPage();
+            String idPageRoot = miPagina.getIdPageRoot();
+            String idSite = miPagina.getIdSite();
+
+            String title = miPagina.getTitle();
+
+            Set<String> paginas = miPagina.getPaginas();
+            Map<String,Object> componentes = miPagina.getComponentes();
+            Set<String> etiquetas = miPagina.getEtiquetas();
+        }
+        catch (Exception ex)
+        {
+            System.out.print("@exeModPagina: ");
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    String getHTML()
+    {
+        return "";
     }
 
     
-
+    
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *

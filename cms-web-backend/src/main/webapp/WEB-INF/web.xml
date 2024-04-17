@@ -4,9 +4,17 @@
         <servlet-name>HTMLinador</servlet-name>
         <servlet-class>josq.cms.web.backend.HTMLinador</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PaginasServlet</servlet-name>
+        <servlet-class>josq.cms.web.backend.PaginaServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HTMLinador</servlet-name>
         <url-pattern>/pagina</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PaginasServlet</servlet-name>
+        <url-pattern>/paginas</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
