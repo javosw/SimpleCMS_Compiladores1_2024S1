@@ -50,16 +50,19 @@ public class Parrafo implements Serializable
 
     public String getText()
     {
+        if(this.text == null) return "";
         return text;
     }
 
     public Indicador getAlign()
     {
+        if (this.align == null) return Indicador.T_IZQUIERDA;
         return align;
     }
 
     public String getColor()
     {
+        if(this.color == null) return "";
         return color;
     }
 }

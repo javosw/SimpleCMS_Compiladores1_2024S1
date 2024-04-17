@@ -50,11 +50,13 @@ public class Video implements Serializable
 
     public int getSizeX()
     {
+        if(this.sizeX == 0) return 100;
         return sizeX;
     }
 
     public int getSizeY()
     {
+        if(this.sizeY == 0) return 100;
         return sizeY;
     }
 

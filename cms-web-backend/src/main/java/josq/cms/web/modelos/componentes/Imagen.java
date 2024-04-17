@@ -53,21 +53,26 @@ public class Imagen implements Serializable
 
     public String getUrl()
     {
+        if(this.url == null) return "";
         return url;
     }
 
     public int getSizeX()
     {
+        if(this.sizeX == 0) return 100;
+        
         return sizeX;
     }
 
     public int getSizeY()
     {
+        if(this.sizeY == 0) return 100;
         return sizeY;
     }
 
     public Indicador getAlign()
     {
+        if (this.align == null) return Indicador.T_IZQUIERDA;
         return align;
     }
 }

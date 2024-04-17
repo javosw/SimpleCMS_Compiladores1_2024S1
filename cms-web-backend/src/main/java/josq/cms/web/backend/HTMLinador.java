@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import josq.cms.archivos.MiArchivo;
 import josq.cms.archivos.Ruta;
+import josq.cms.lenguajes.automatas.modelos.Indicador;
 import josq.cms.web.modelos.Pagina;
 import josq.cms.web.modelos.componentes.Imagen;
 import josq.cms.web.modelos.componentes.Menu;
@@ -46,7 +47,7 @@ public class HTMLinador
             Map<String,Object> componentes = miPagina.getComponentes();
             Set<String> idsComponentes = miPagina.getComponentes().keySet();
             //System.out.println("componentes: "+idsComponentes.toString());
-            for(String c : idsComponentes) html.append(getWidget(componentes.get(c)));
+            for(String c : idsComponentes) html.append(getWidgetHTML(componentes.get(c)));
 
             Set<String> etiquetas = miPagina.getEtiquetas();
             Set<String> paginas = miPagina.getPaginas();
@@ -57,6 +58,7 @@ public class HTMLinador
             
             html.append("</body></html>");
             
+            //System.out.println(html.toString());
             return  html.toString();
             
         }
@@ -67,41 +69,72 @@ public class HTMLinador
         return notFound;
     }
     
-    private static String getWidget(Object miWidget)
+    private static String getWidgetHTML(Object miWidget)
     {
         if(miWidget==null) return "";
                 
         if (miWidget instanceof Imagen)
         {
             Imagen w = (Imagen) miWidget;
-            return "<img src\""+w.getUrl()+"\"/>";
+            String src = "src=\""+w.getUrl()+"\"";
+            String width = "width:"+w.getSizeX()+"px;";
+            return "<img "+src+" style=\""+width+"\"/>";
         }
         else if (miWidget instanceof Menu)
         {
             Menu w = (Menu) miWidget;
             StringBuilder menu = new StringBuilder();
             Set<String> paginas = w.getPaginas();
+            
             menu.append("<ul>");
-            for (String p : paginas) menu.append("<li><a href=\"/cms-web-backend/paginas?id=").append(p).append("\">").append(p).append("</a></li>");
+            for (String p : paginas)
+            {
+                menu.append("<li>");
+                menu.append("<a href=\"/cms-web-backend/paginas?id=").append(p).append("\">").append(p).append("</a>");
+                menu.append("</li>");
+            }                        
             menu.append("</ul>");
+            
             return menu.toString();
         }
         else if (miWidget instanceof Parrafo)
         {
             Parrafo w = (Parrafo) miWidget;
-            return "<p>"+w.getText()+"</p>";
+            String backgroundColor = "background-color:"+w.getColor()+";";
+            String textAlign = getAlignStyle(w.getAlign())+";";
+            return "<p style=\""+backgroundColor+textAlign+"\">"+w.getText()+"</p>";
         }
         else if (miWidget instanceof Titulo)
         {
             Titulo w = (Titulo) miWidget;
-            return "<title>"+w.getText()+"</title>";
+            String backgroundColor = "background-color:"+w.getColor()+";";
+            String textAlign = getAlignStyle(w.getAlign())+";";
+            return "<title style=\""+backgroundColor+textAlign+"\">"+w.getText()+"</title>";
         }
         else if (miWidget instanceof Video)
         {
             Video w = (Video) miWidget;
-            return  "<video controls><source src=\""+w.getUrl()+"\" type=\"video/webm\"/></video>";
+            String width = "width: "+w.getSizeX()+";";
+            String src = "src=\""+w.getUrl()+"\"";
+            return  "<video "+src+" controls style=\""+width+"\"></video>";
         }
         return "";
     }
 
+    private static String getAlignStyle(Indicador align)
+    {
+        if(align == null) return "";
+        switch (align)
+        {
+            case T_CENTRAR:
+                return "text-align: center";
+            case T_IZQUIERDA:
+                return "text-align: left";
+            case T_DERECHA:
+                return "text-align: right";
+            case T_JUSTIFICAR:
+                return "text-align: justify";
+        }
+        return "";
+    }
 }
