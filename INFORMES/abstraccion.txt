@@ -1,3 +1,7 @@
+DICCIONARIO
+	case sensitive: escritura literal
+
+
 una publicacion = una pagina web 
 publicar contenido
 	escribir un archivo html
@@ -79,13 +83,16 @@ regex
 	misEtiquetas = miEtiqueta (| miEtiqueta)*
 
 escritura literal
-	permitido
-		acciones
-		parametros
-		atributos
-	no permitido
-		etiquetas
-		atributos xml 
+	acciones
+	parametros
+	atributos
+escritura NO literal
+	etiquetas:
+		grupo1
+		grupo2
+	atributos de nodos:
+		nodo.nombre
+		nodo.valor
 reservados
 	nodos
 		acciones
@@ -288,13 +295,13 @@ operadores
 				cada etiqueta de dicha pagina es eliminada 
 				y luego se le agrega cada etiqueta en <etiquetas>
 	sqcms
-		no es case sensitive
+		palabras reservadas: no son literalmente escritas
 		comandos
 			consultar visitas_sitio "sitio1", "sitio2";
 			consultar visitas_pagina "sitio1.pagina3", "sitio2.pagina2";
 			consultar PAGINAS_POPULARES "sitio2";
 			consultar COMPONENTE <clase> "sitio1.pagina1";
-				<clase>: TODOS | TITULO | MENU | ...
+				<clase> es uno de: TODOS, TITULO, MENU, IMAGEN, VIDEO, PARRAFO
 
 
 %#%#%#%#%#%#%#%#%# SEMANTICA %#%#%#%#%#%#%#%#%#

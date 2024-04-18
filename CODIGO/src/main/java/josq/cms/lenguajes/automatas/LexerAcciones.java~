@@ -17,7 +17,6 @@ import java_cup.runtime.ComplexSymbolFactory.Location;
 import java_cup.runtime.DefaultSymbolFactory;
 
 import josq.cms.archivos.MiArchivo;
-
 import josq.cms.lenguajes.automatas.ParserAccionesSym;
 import josq.cms.lenguajes.automatas.modelos.jflex.Punto;
 import josq.cms.lenguajes.controladores.EjecutarAcciones;
@@ -534,32 +533,7 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
         EjecutarAcciones.logSintaxis.append(text); 
         return EjecutarAcciones.logSintaxis; 
     }
-
-    // para debugear
-    private void print(String txt){ System.out.print(txt); }
-    private void print(int sym){ print(infoLexema(sym)); }
-
-    private String infoLexema(int sym) { return yytext()+":"+ParserAccionesSym.terminalNames[sym]; }
-    private String infoLexema2(Symbol mySymbol) { return "["+mySymbol.left+","+mySymbol.right+";"+infoLexema(mySymbol.sym)+"]"; }
     
-    // para manejos de lexemas
-    private StringBuffer buff = new StringBuffer();
-
-    void cleanBuffer()
-    {
-        buff.delete(0, buff.length());
-        buff.trimToSize();
-    }
-    String reduceBuffer(String texto)
-    {
-        buff.append(texto);
-        buff.deleteCharAt(buff.length()-1);
-        buff.deleteCharAt(0);
-        String temp = buff.toString();
-        cleanBuffer();
-        return temp;
-    }
-
     // para manejo de contextos lexicos
     private boolean accioncEsInpar = false;
     private boolean parametroEsInpar = false;
@@ -587,40 +561,23 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
         }
     }
 
-    // para guardar en un archivo los resultados del lexer
-    private void save(String txt)
-    {
-        String file = "C:\\Users\\JavierOswaldo\\Desktop\\jflexBORRAR-jjkjriijaxj.txt";
-        
-        try { MiArchivo.writeStringAtEnd(file, txt); }
-        catch (Exception ex) { print(ex.getMessage()); }
-    }
-
-/*
+    /*
     ComplexSymbolFactory myFactory = null;
 
-    public LexerAcciones(Reader in, ComplexSymbolFactory sf)
-    { this(in); myFactory = sf; }
+    public LexerAcciones(Reader in, ComplexSymbolFactory sf) { this(in); myFactory = sf; }
 
     private Symbol symbol(String name, int sym) {
         Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
         Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der);
-        //saveLexema(infoLexema(sym));
-        //print(sym);
         return mySymbol;
     }
     private Symbol symbol(String name, int sym, Object val) {
         Location izq = new Location(yyline+1, yycolumn+1, (int)yychar);
         Location der = new Location(yyline+1, yycolumn+yylength(), (int)yychar+yylength());
         Symbol mySymbol = myFactory.newSymbol(name, sym, izq, der, val);
-        //saveLexema(infoLexema(sym));
-        //print(sym);
         return mySymbol;
-    }
-
-*/
-
+    }*/
 
 
   /**
