@@ -20,71 +20,7 @@ public class Main
     public static void main(String[] args) throws Exception 
     {
         VistaInicio.main(args);
-        //readLenguaje("newSitio.xml");
-        new ArrayList<String>().add("asdasdasd");
-        
-        /*
-        testAccion("newSitio.xml");
-        testAccion("newPagina.xml");
-        //testAccion("delPagina.xml");
-        //testAccion("delSitio.xml");
-        //testAccion("modPagina.xml");
-        testAccion("newComp.xml");
-        //testAccion("delComp.xml");
-
-        HTMLinador.getWebPage("_MI-AGENDA");*/
     }
-    static void testAccion(String accion) 
-    {
-        String ruta = Ruta.acciones+accion;
-        try
-        {
-            EjecutarAcciones inst = new EjecutarAcciones();
-                inst.procesarDesdeArchivo(ruta);
-        }
-        catch (Exception ex)
-        {
-            print("\n<%#%#%#%#%#%#%#% ERRORES %#%#%#%#%#%#%#%>\n");
-            ex.printStackTrace();
-            //print(ex.getMessage());
-        }
-        print("<<<<<<<<<<<<<<<<");
-    }
-    static void readLenguaje(String xml) 
-    {
-        String ruta = Ruta.acciones+xml;
-        try
-        {
-            ArrayList<Accion> acciones = Procesar.accionesDesdeArchivo(ruta);
-            print(acciones.toString());
-        }
-        catch (Exception ex)
-        {
-            print("\n<+#%#%#%#%#%#%#% ERRORES %#%#%#%#%#%#%#+>\n");
-            ex.printStackTrace();
-            //print(ex.getMessage());
-        }
-        print("<<<<<<<<<<<<<<<<");
-    }
-
     
-    static void pruebas2()
-    {
-        ArrayList<String> list = new ArrayList<String>();
-        list.add("mnbmnb");
-        try
-        {
-            String file = "C:\\Users\\JavierOswaldo\\Desktop\\TjjkjYhfH-BORRAR.txt";
-            MiArchivo.writeString(file, " 111 ");
-            MiArchivo.writeStringAtEnd(file, "222 ");
-            MiArchivo.writeStringAtEnd(file, "333 ");
-            MiArchivo.writeStringAtEnd(file, "444 ");
-        }
-        catch (Exception ex)
-        {
-        }
-        
-    }
     private static void print(String txt){ System.out.println(txt); }
-    
 }

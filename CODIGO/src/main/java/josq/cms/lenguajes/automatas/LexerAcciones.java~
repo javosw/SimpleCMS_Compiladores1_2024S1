@@ -529,6 +529,11 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
 
     // para errores lexicos
     public Punto getPunto(){ return new Punto(yycolumn, yyline, yylength(), (int)yychar+1); };
+    StringBuilder log(String text) 
+    {
+        EjecutarAcciones.logSintaxis.append(text); 
+        return EjecutarAcciones.logSintaxis; 
+    }
 
     // para debugear
     private void print(String txt){ System.out.print(txt); }
@@ -1044,7 +1049,7 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { EjecutarAcciones.logSintaxis.append("@lexer: ").append(getPunto().toString()).append("\n"); return symbol("",ParserAccionesSym.error);
+            { log("@lexer: ").append(getPunto().toString()).append("\n"); return symbol("",ParserAccionesSym.error);
             }
           // fall through
           case 65: break;
