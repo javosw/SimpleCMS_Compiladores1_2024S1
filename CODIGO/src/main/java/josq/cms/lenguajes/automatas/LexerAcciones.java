@@ -1044,7 +1044,7 @@ public class LexerAcciones implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { EjecutarAcciones.logGramaticas.append("@lexer: ").append(getPunto().toString()).append("\n"); return symbol("",ParserAccionesSym.error);
+            { EjecutarAcciones.logSintaxis.append("@lexer: ").append(getPunto().toString()).append("\n"); return symbol("",ParserAccionesSym.error);
             }
           // fall through
           case 65: break;

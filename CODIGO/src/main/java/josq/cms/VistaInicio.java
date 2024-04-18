@@ -58,7 +58,7 @@ public class VistaInicio extends Application {
         myStage.show();
     }
 
-    void ejecutarAcciones(TextArea uiInstr, TextArea uiResult, TextArea uiGrammar, TextArea uiError)
+    void ejecutarAcciones(TextArea uiInstr, TextArea uiSintax, TextArea uiConSentido, TextArea uiSinSentido)
     {
         EjecutarAcciones.clearLogs();
         
@@ -66,28 +66,28 @@ public class VistaInicio extends Application {
         EjecutarAcciones ejecucion = new EjecutarAcciones();
         ejecucion.procesarDesdeString(acciones);
                         
-        uiResult.clear();
-        uiGrammar.clear();
-        uiError.clear();
+        uiConSentido.clear();
+        uiSintax.clear();
+        uiSinSentido.clear();
         
-        uiResult.appendText(EjecutarAcciones.logResultados.toString());
-        uiGrammar.appendText(EjecutarAcciones.logGramaticas.toString());
-        uiError.appendText(EjecutarAcciones.logErrores.toString());
+        uiConSentido.appendText(EjecutarAcciones.logConSentido.toString());
+        uiSintax.appendText(EjecutarAcciones.logSintaxis.toString());
+        uiSinSentido.appendText(EjecutarAcciones.logSinSentido.toString());
     }
 
     void vistaAcciones()
     {
         TextArea instr = new TextArea();
-        TextArea resut = new TextArea();
-        TextArea error = new TextArea();
-        TextArea pasos = new TextArea();
+        TextArea conSentido = new TextArea();
+        TextArea sinSentido = new TextArea();
+        TextArea sintaxis = new TextArea();
         Button ejecutar = new Button("EJECUTAR");
 
-        Label lResul = new Label("RESULTADOS");
-        Label lError = new Label("ERRORES");
-        Label lPasos = new Label("LEXER/PARSER");
+        Label lResul = new Label("SEMANTICA");
+        Label lError = new Label("ERRORES SEMANTICOS");
+        Label lPasos = new Label("ERRORES SINTACTICOS");
 
-        ejecutar.setOnAction(e->{ejecutarAcciones(instr, resut, pasos, error);});
+        ejecutar.setOnAction(e->{ejecutarAcciones(instr, sintaxis, conSentido, sinSentido);});
         
         GridPane lGrid = new GridPane();
         
@@ -97,9 +97,9 @@ public class VistaInicio extends Application {
         lGrid.add(lError, 2, 2);
                 
         lGrid.add(instr, 0, 1, 2, 1);
-        lGrid.add(resut, 2, 1, 2, 1);
-        lGrid.add(pasos, 0, 3, 2, 1);
-        lGrid.add(error, 2, 3, 2, 1);
+        lGrid.add(conSentido, 2, 1, 2, 1);
+        lGrid.add(sintaxis, 0, 3, 2, 1);
+        lGrid.add(sinSentido, 2, 3, 2, 1);
         
         // codigo repetitivo
         Scene yaScene = new Scene(lGrid);

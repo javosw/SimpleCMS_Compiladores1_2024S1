@@ -21,7 +21,7 @@ public class Main
     {
         VistaInicio.main(args);
         //readLenguaje("newSitio.xml");
-        
+        new ArrayList<String>().add("asdasdasd");
         
         /*
         testAccion("newSitio.xml");

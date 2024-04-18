@@ -21,15 +21,15 @@ import josq.cms.web.modelos.Sitio;
  */
 public class EjecutarAcciones
 {
-    public final static StringBuilder logGramaticas = new StringBuilder();
-    public final static StringBuilder logResultados = new StringBuilder();
-    public final static StringBuilder logErrores = new StringBuilder();
+    public final static StringBuilder logSintaxis = new StringBuilder();
+    public final static StringBuilder logConSentido = new StringBuilder();
+    public final static StringBuilder logSinSentido = new StringBuilder();
 
     public static void clearLogs()
     {
-        logGramaticas.delete(0, logGramaticas.length());
-        logResultados.delete(0, logResultados.length());
-        logErrores.delete(0, logErrores.length());
+        logSintaxis.delete(0, logSintaxis.length());
+        logConSentido.delete(0, logConSentido.length());
+        logSinSentido.delete(0, logSinSentido.length());
     }
     
     ArrayList<Sitio> newSitios;
@@ -81,7 +81,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@procesarDesdeString\n");
+            EjecutarAcciones.logSinSentido.append("@procesarDesdeString\n");
             System.out.println(ex.getMessage());
         }
     }
@@ -101,7 +101,7 @@ public class EjecutarAcciones
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@procesarDesdeArchivo\n");
+            EjecutarAcciones.logSinSentido.append("@procesarDesdeArchivo\n");
             System.out.println(ex.getMessage());
         }
     }
@@ -174,11 +174,11 @@ public class EjecutarAcciones
             Pagina rootPagina = new Pagina(miSitio.getIdPageRoot(), miSitio.getIdSite());
             newPaginaRoot(rootPagina);
             
-            EjecutarAcciones.logResultados.append("@exeNewSitio: ").append(ruta).append("\n");
+            EjecutarAcciones.logConSentido.append("@exeNewSitio: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeNewSitio: ").append(ex.getMessage()).append("\n");
+            EjecutarAcciones.logSinSentido.append("@exeNewSitio: ").append(ex.getMessage()).append("\n");
         }
     }
     // FINALIZADO 
@@ -192,11 +192,11 @@ public class EjecutarAcciones
             if (filePagina.exists()) filePagina.delete();
 
             MiArchivo.writeObjet(ruta, miPagina);
-            EjecutarAcciones.logResultados.append("@newPaginaRoot: ").append(ruta).append("\n");
+            EjecutarAcciones.logConSentido.append("@newPaginaRoot: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@newPaginaRoot: ").append(ex.getMessage()).append("\n");
+            EjecutarAcciones.logSinSentido.append("@newPaginaRoot: ").append(ex.getMessage()).append("\n");
         }
     }
     // FINALIZADO
@@ -216,11 +216,11 @@ public class EjecutarAcciones
             
             delPagina(((Sitio)sitioRaw).getIdPageRoot());
             sitioFile.delete();
-            EjecutarAcciones.logResultados.append("@exeDelSitio: ").append(ruta).append("\n");
+            EjecutarAcciones.logConSentido.append("@exeDelSitio: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeDelSitio: ").append(ex.getMessage()).append("\n");
+            EjecutarAcciones.logSinSentido.append("@exeDelSitio: ").append(ex.getMessage()).append("\n");
         }
     }
     // FINALIZADO
@@ -237,11 +237,11 @@ public class EjecutarAcciones
             else addSubPagina(miPagina.getIdPage(), miPagina.getIdPageRoot());
 
             MiArchivo.writeObjet(ruta, miPagina);
-            EjecutarAcciones.logResultados.append("@exeNewPagina: ").append(ruta).append("\n");
+            EjecutarAcciones.logConSentido.append("@exeNewPagina: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeNewPagina: ").append(ex.getMessage()).append("\n");
+            EjecutarAcciones.logSinSentido.append("@exeNewPagina: ").append(ex.getMessage()).append("\n");
         }
     }
     // FINALIZADO
@@ -263,11 +263,11 @@ public class EjecutarAcciones
             
             filePagina.delete();
             MiArchivo.writeObjet(ruta, miPagina);
-            EjecutarAcciones.logResultados.append("@addSubPagina: ").append(ruta).append("\n");
+            EjecutarAcciones.logConSentido.append("@addSubPagina: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@addSubPagina: ").append(ex.getMessage()).append("\n");
+            EjecutarAcciones.logSinSentido.append("@addSubPagina: ").append(ex.getMessage()).append("\n");
         }
 
     }
@@ -297,11 +297,11 @@ public class EjecutarAcciones
             
             paginaFile.delete();
             MiArchivo.writeObjet(ruta, oldPagina);
-            EjecutarAcciones.logResultados.append("@exeModPagina: ").append(ruta).append("\n");
+            EjecutarAcciones.logConSentido.append("@exeModPagina: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeModPagina: ").append(ex.getMessage()).append("\n");
+            EjecutarAcciones.logSinSentido.append("@exeModPagina: ").append(ex.getMessage()).append("\n");
         }
     }
     
@@ -330,11 +330,11 @@ public class EjecutarAcciones
             for(String p : subPaginas) delPagina(p);
             
             filePagina.delete();
-            EjecutarAcciones.logResultados.append("@delPagina: ").append(ruta).append("\n");
+            EjecutarAcciones.logConSentido.append("@delPagina: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@delPagina: ").append(ex.getMessage()).append("\n");
+            EjecutarAcciones.logSinSentido.append("@delPagina: ").append(ex.getMessage()).append("\n");
         }
     }
     
@@ -361,11 +361,11 @@ public class EjecutarAcciones
 
             binPage.delete();
             MiArchivo.writeObjet(ruta, miPagina);
-            EjecutarAcciones.logResultados.append("@exeNewComponente: ").append(ruta).append("\n");
+            EjecutarAcciones.logConSentido.append("@exeNewComponente: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeNewComponente: ").append(ex.getMessage()).append("\n");
+            EjecutarAcciones.logSinSentido.append("@exeNewComponente: ").append(ex.getMessage()).append("\n");
         }
     }
 
@@ -391,11 +391,11 @@ public class EjecutarAcciones
 
             binPagina.delete();
             MiArchivo.writeObjet(ruta, miPagina);
-            EjecutarAcciones.logResultados.append("@exeModComponente: ").append(ruta).append("\n");
+            EjecutarAcciones.logConSentido.append("@exeModComponente: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeModComponente: ").append(ex.getMessage()).append("\n");
+            EjecutarAcciones.logSinSentido.append("@exeModComponente: ").append(ex.getMessage()).append("\n");
         }
     }
 
@@ -422,11 +422,11 @@ public class EjecutarAcciones
 
             binPagina.delete();
             MiArchivo.writeObjet(ruta, miPagina);
-            EjecutarAcciones.logResultados.append("@exeDelComponente: ").append(ruta).append("\n");
+            EjecutarAcciones.logConSentido.append("@exeDelComponente: ").append(ruta).append("\n");
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logErrores.append("@exeDelComponente: ").append(ex.getMessage()).append("\n");
+            EjecutarAcciones.logSinSentido.append("@exeDelComponente: ").append(ex.getMessage()).append("\n");
         }
     }
 
