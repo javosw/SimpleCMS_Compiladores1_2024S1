@@ -1,0 +1,123 @@
+
+package josq.cms.lenguajes.automatas;
+
+// antes de la clase parser
+
+import java.util.ArrayList;
+//import java_cup.runtime.*;
+//import josq.cms.lenguajes.modelos.arbol.*;
+//import josq.cms.lenguajes.modelos.Indicador;
+import josq.cms.lenguajes.automatas.modelos.Indicador;
+import josq.cms.lenguajes.automatas.modelos.cup.Comando;
+import josq.cms.lenguajes.automatas.modelos.cup.Par;
+import josq.cms.lenguajes.automatas.modelos.cup.Atributo;
+import josq.cms.lenguajes.automatas.modelos.cup.Parametro;
+import josq.cms.lenguajes.automatas.modelos.cup.Accion;
+import josq.cms.lenguajes.controladores.EjecutarComandos;
+
+// NOTA: %cupsym en jflex
+// parser=MyParser, sym=MyParserSym
+class ParserComandos;
+
+// dentro de la clase parser
+// parser code {: :}
+
+// metodo user_init() de la clase parser generada
+// init with {: :}
+
+// metodo scan() de la clase parser generada
+// scan with {: :}
+
+// dentro de la clase action
+action code {:
+    void print(String texto){ System.out.print(texto); } 
+
+    StringBuilder log(String text) 
+    {
+        EjecutarComandos.logSintaxis.append(text); 
+        return EjecutarComandos.logSintaxis; 
+    }
+:}
+
+// #%#%#%#% SIMBOLOS #%#%#%#%
+// terminal Type2 mySymbol1, mySymbol2 ;
+// non terminal Type2 mySymbol1, mySymbol2 ;
+
+// #%#%#%#% TERMINALES #%#%#%#%
+
+terminal CONSULT, PUNCOM, COMI, COMA, DOT ;
+terminal SITE_VIEWS, PAGE_VIEWS, PAGE_POP ;
+terminal COMP, TODOS, TITULO, MENU, IMAGEN, VIDEO, PARRAFO ;
+terminal String ID ;
+
+// #%#%#%#% NO TERMINALES #%#%#%#%
+non terminal ArrayList<Comando> sqcms ;
+non terminal Comando comando ;
+non terminal Indicador operador ;
+non terminal Par argumentos ;
+non terminal String idWebModel ;
+non terminal ArrayList<String> idList ;
+non terminal ArrayList<String> path, dottedList ;
+non terminal ArrayList<ArrayList<String>> pathList ;
+
+// PRODUCCIONES
+
+// definicion de la produccion inicial
+start with sqcms ;
+
+sqcms ::=
+    comando:w1 {: ArrayList<Comando> list = new ArrayList<>(); list.add(w1); RESULT=list; :}
+    | sqcms:w1 comando:w2 {: w1.add(w2); RESULT=w1; :}
+;
+
+comando ::= 
+    CONSULT operador:w1 argumentos:w2 PUNCOM {: RESULT= new Comando(w1, w2);  :}
+    | error:w1 PUNCOM {: log("@parser: l="+w1left+",r="+w1right+"\n"); RESULT= new Comando(); :}
+;
+
+operador ::=
+    SITE_VIEWS     {: RESULT=Indicador.SQ_SITE_VIEWS; :}
+    | PAGE_VIEWS   {: RESULT=Indicador.SQ_PAGE_VIEWS; :}
+    | PAGE_POP     {: RESULT=Indicador.SQ_PAGE_POP; :}
+    | COMP TODOS   {: RESULT=Indicador.SQ_TODOS; :}
+    | COMP TITULO  {: RESULT=Indicador.SQ_TITULO; :}
+    | COMP MENU    {: RESULT=Indicador.SQ_MENU; :}
+    | COMP IMAGEN  {: RESULT=Indicador.SQ_IMAGEN; :}
+    | COMP VIDEO   {: RESULT=Indicador.SQ_VIDEO; :}
+    | COMP PARRAFO {: RESULT=Indicador.SQ_PARRAFO; :}
+;
+
+argumentos ::=          
+    idList:w1    {: RESULT= new Par(Indicador.SQ_SITE_LIST,w1); :}
+    | pathList:w1  {: RESULT= new Par(Indicador.SQ_PATH_LIST,w1); :}
+    | idWebModel:w1      {: RESULT= new Par(Indicador.SQ_SITE,w1); :}
+    | path:w1      {: RESULT= new Par(Indicador.SQ_PATH,w1); :}
+;
+
+idList ::= 
+    idWebModel:w1 COMA {: ArrayList<String> list = new ArrayList<>(); list.add(w1); RESULT=list; :}
+    | idList:w1 idWebModel:w2 COMA {: w1.add(w2); RESULT=w1; :}
+    | idList:w1 idWebModel:w2 {: w1.add(w2); RESULT=w1; :}
+;
+
+idWebModel ::= COMI ID:w1 COMI {: RESULT=w1; :}
+;
+
+pathList ::=
+    path:w1 COMA {:ArrayList<ArrayList<String>> list = new ArrayList<>(); list.add(w1); RESULT=list; :}
+    | pathList:w1 path:w2 COMA {: w1.add(w2); RESULT=w1; :}
+    | pathList:w1 path:w2 {: w1.add(w2); RESULT=w1; :}
+;
+
+path ::=
+    COMI dottedList:w1 ID:w2 COMI {: w1.add(w2); RESULT=w1; :}
+;
+
+dottedList ::= 
+    ID:w1 DOT {: ArrayList<String> list = new ArrayList<>(); list.add(w1); RESULT=list; :}
+    | dottedList:w1 ID:w2 DOT {: w1.add(w2); RESULT=w1; :}
+;
+
+// NOTAS
+// path fue elaborado para que estrictamente termine con un id
+// siteList y pathList se pueden terminar con coma

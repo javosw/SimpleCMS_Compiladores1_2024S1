@@ -15,7 +15,7 @@ import java_cup.runtime.DefaultSymbolFactory;
 import josq.cms.archivos.MiArchivo;
 import josq.cms.lenguajes.automatas.ParserAccionesSym;
 import josq.cms.lenguajes.automatas.modelos.jflex.Punto;
-import josq.cms.lenguajes.controladores.EjecutarAcciones;
+import josq.cms.lenguajes.controladores.EjecutarComandos;
 
 %%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
@@ -24,10 +24,10 @@ import josq.cms.lenguajes.controladores.EjecutarAcciones;
 //%debug
 %16bit
 // configuracion de la clase lexer
-%class LexerSQCMS
+%class LexerComandos
 %public
 //%apiprivate 
-%cupsym ParserSQCMSSym
+%cupsym ParserComandosSym
 %cup
 %line
 %column
@@ -35,7 +35,7 @@ import josq.cms.lenguajes.controladores.EjecutarAcciones;
 
 // codigo dentro de la clase lexer
 %{
-    public LexerSQCMS(Reader myReader, DefaultSymbolFactory myFactory) { this(myReader); this.myFactory = myFactory; }
+    public LexerComandos(Reader myReader, DefaultSymbolFactory myFactory) { this(myReader); this.myFactory = myFactory; }
 
     private DefaultSymbolFactory myFactory;
 
@@ -53,11 +53,11 @@ import josq.cms.lenguajes.controladores.EjecutarAcciones;
     }
 
     // para errores lexicos
-    public Punto getPunto(){ return new Punto(yycolumn, yyline, yylength(), (int)yychar+1); };
+    public Punto getPunto(){ return new Punto(yycolumn+1, yyline+1, yylength(), (int)yychar+1); };
     StringBuilder log(String text) 
     {
-        EjecutarSQCMS.logSintaxis.append(text); 
-        return EjecutarSQCMS.logSintaxis; 
+        EjecutarComandos.logSintaxis.append(text); 
+        return EjecutarComandos.logSintaxis; 
     }
 
     // para cambio de contexto lexico
@@ -94,32 +94,32 @@ video                =  [vV][iI][dD][eE][oO]
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
 
 <YYINITIAL> {
-{consultar}              { return symbol("",ParserSQCMSSym.CONSULT); }
-{visitas_sitio}          { return symbol("",ParserSQCMSSym.SITE_VIEWS); }
-{visitas_pagina}         { return symbol("",ParserSQCMSSym.PAGE_VIEWS); }
-{paginas_populares}      { return symbol("",ParserSQCMSSym.PAGE_POP); }
-{componente}             { return symbol("",ParserSQCMSSym.COMP); }
-{todos}                  { return symbol("",ParserSQCMSSym.TODOS); }
-{titulo}                 { return symbol("",ParserSQCMSSym.TITULO); }
-{menu}                   { return symbol("",ParserSQCMSSym.MENU); }
-{parrafo}                { return symbol("",ParserSQCMSSym.PARRAFO); }
-{imagen}                 { return symbol("",ParserSQCMSSym.IMAGEN); }
-{video}                  { return symbol("",ParserSQCMSSym.VIDEO); }
+{consultar}              { return symbol("",ParserComandosSym.CONSULT); }
+{visitas_sitio}          { return symbol("",ParserComandosSym.SITE_VIEWS); }
+{visitas_pagina}         { return symbol("",ParserComandosSym.PAGE_VIEWS); }
+{paginas_populares}      { return symbol("",ParserComandosSym.PAGE_POP); }
+{componente}             { return symbol("",ParserComandosSym.COMP); }
+{todos}                  { return symbol("",ParserComandosSym.TODOS); }
+{titulo}                 { return symbol("",ParserComandosSym.TITULO); }
+{menu}                   { return symbol("",ParserComandosSym.MENU); }
+{parrafo}                { return symbol("",ParserComandosSym.PARRAFO); }
+{imagen}                 { return symbol("",ParserComandosSym.IMAGEN); }
+{video}                  { return symbol("",ParserComandosSym.VIDEO); }
 
 }
 
 <MI_ID> {
-    {miID}     { return symbol("",ParserSQCMSSym.ID,yytext()); }
-    \"         { yybegin(YYINITIAL); return symbol("",ParserSQCMSSym.COMI); }
+    {miID}     { return symbol("",ParserComandosSym.ID,yytext()); }
+    \"         { yybegin(YYINITIAL); return symbol("",ParserComandosSym.COMI); }
 }
 
-\" { yybegin(MI_ID); return symbol("",ParserSQCMSSym.COMI); }
-\, { return symbol("",ParserSQCMSSym.COMA); }
-\. { return symbol("",ParserSQCMSSym.DOT); }
-\; { return symbol("",ParserSQCMSSym.PUNCOM); }
+\" { yybegin(MI_ID); return symbol("",ParserComandosSym.COMI); }
+\, { return symbol("",ParserComandosSym.COMA); }
+\. { return symbol("",ParserComandosSym.DOT); }
+\; { return symbol("",ParserComandosSym.PUNCOM); }
 
 // ignorados
 {Invisibles}  { }
 
 // error
-[^]  { log("@lexer: ").append(getPunto().toString()).append("\n"); return symbol("",ParserAccionesSym.error); }
+[^]  { log("@lexer: ").append(getPunto().toString()).append("\n"); return symbol("",ParserComandosSym.error); }

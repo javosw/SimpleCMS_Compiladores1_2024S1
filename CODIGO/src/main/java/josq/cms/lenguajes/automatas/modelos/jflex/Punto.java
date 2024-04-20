@@ -26,6 +26,11 @@ public class Punto
     @Override
     public String toString()
     {
-        return "h="+yycolumn+",v="+yyline+",l="+yylength+",c="+yychar;
+        return "line="+yyline+",col="+yycolumn+",leng="+yylength+",char="+yychar;
+    }
+    
+    public String printPunto()
+    {
+        return "v="+yyline+",h="+yycolumn+",l="+yylength+",c="+yychar;
     }
 }

@@ -14,6 +14,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.GridPane;
 import josq.cms.lenguajes.controladores.EjecutarAcciones;
+import josq.cms.lenguajes.controladores.EjecutarComandos;
 
 /**
  * JavaFX App
@@ -29,19 +30,18 @@ public class VistaInicio extends Application {
         myStage = stage;
         
         Button bAcciones = new Button("ACCIONES");
-        Button bSQCMS = new Button("SQCMS");
+        Button bComandos = new Button("COMANDOS");
         Label lJOSQ = new Label("Javier Oswaldo Sacor Quijivix");
-        bSQCMS.setOnAction((e)->{ vistaSQCMS();});
+        bComandos.setOnAction((e)->{ vistaComandos();});
         bAcciones.setOnAction((e)->{ vistaAcciones(); });
         
         //VBox miLayout = new VBox();
         GridPane lGrid = new GridPane();
         lGrid.setPadding(new Insets(6,4,6,4));
-
         
         lGrid.add(lJOSQ, 0, 0);
         lGrid.add(bAcciones, 0, 1);
-        lGrid.add(bSQCMS, 0, 2);
+        lGrid.add(bComandos, 0, 2);
 
         Insets miMargen = new Insets(4,5,4,5);
         ObservableList<Node> nodos =  lGrid.getChildren();
@@ -54,7 +54,7 @@ public class VistaInicio extends Application {
         // codigo repetitivo
         Scene myScene = new Scene(lGrid);
         myStage.setScene(myScene);
-        myStage.setTitle("EDITOR - UTF-8");
+        myStage.setTitle("BasicCMS (UTF-8)");
         myStage.show();
     }
 
@@ -64,7 +64,7 @@ public class VistaInicio extends Application {
         
         String acciones = uiInstr.getText();
         EjecutarAcciones ejecucion = new EjecutarAcciones();
-        ejecucion.procesarDesdeString(acciones);
+        ejecucion.desdeString(acciones);
                         
         uiConSentido.clear();
         uiSintax.clear();
@@ -112,10 +112,59 @@ public class VistaInicio extends Application {
         yaStage.show();  
     }
 
-    void vistaSQCMS()
+    void vistaComandos()
     {
+        TextArea instr = new TextArea();
+        TextArea conSentido = new TextArea();
+        TextArea sinSentido = new TextArea();
+        TextArea sintaxis = new TextArea();
+        Button ejecutar = new Button("EJECUTAR");
+
+        Label lResul = new Label("SEMANTICA");
+        Label lError = new Label("ERRORES SEMANTICOS");
+        Label lPasos = new Label("ERRORES SINTACTICOS");
+
+        ejecutar.setOnAction(e->{ejecutarComandos(instr, sintaxis, conSentido, sinSentido);});
+        
+        GridPane lGrid = new GridPane();
+        
+        lGrid.add(ejecutar, 0, 0);
+        lGrid.add(lResul, 2, 0);
+        lGrid.add(lPasos, 0, 2);
+        lGrid.add(lError, 2, 2);
+                
+        lGrid.add(instr, 0, 1, 2, 1);
+        lGrid.add(conSentido, 2, 1, 2, 1);
+        lGrid.add(sintaxis, 0, 3, 2, 1);
+        lGrid.add(sinSentido, 2, 3, 2, 1);
+        
+        // codigo repetitivo
+        Scene yaScene = new Scene(lGrid);
+        
+        Stage yaStage = new Stage();
+        yaStage.setTitle("COMANDOS");
+        yaStage.setScene(yaScene);
+        yaStage.sizeToScene();
+
+        yaStage.show();  
     }
     
+    void ejecutarComandos(TextArea uiInstr, TextArea uiSintax, TextArea uiConSentido, TextArea uiSinSentido)
+    {
+        EjecutarComandos.clearLogs();
+        
+        String comandos = uiInstr.getText();
+        EjecutarComandos ejecucion = new EjecutarComandos();
+        ejecucion.desdeString(comandos);
+                        
+        uiConSentido.clear();
+        uiSintax.clear();
+        uiSinSentido.clear();
+        
+        uiConSentido.appendText(EjecutarComandos.logConSentido.toString());
+        uiSintax.appendText(EjecutarComandos.logSintaxis.toString());
+        uiSinSentido.appendText(EjecutarComandos.logSinSentido.toString());
+    }
 
     private void showAlerta(AlertType tipo, String msj) 
     {
@@ -125,7 +174,6 @@ public class VistaInicio extends Application {
         alert.showAndWait();
     }
     
-        
     public static void main(String[] args)
     {
         launch(args);

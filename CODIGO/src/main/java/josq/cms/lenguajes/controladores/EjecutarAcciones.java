@@ -53,7 +53,7 @@ public class EjecutarAcciones
         this.delComponentes = new ArrayList<>();
     }
 
-    void clearAcciones()
+    private void clearAcciones()
     {
         newSitios.clear();
         newSitios.clear();
@@ -66,7 +66,7 @@ public class EjecutarAcciones
         delComponentes.clear();
     }
     
-    public void procesarDesdeString(String texto)
+    public void desdeString(String texto)
     {
         clearAcciones();
         try
@@ -86,7 +86,7 @@ public class EjecutarAcciones
         }
     }
 
-    public void procesarDesdeArchivo(String file)
+    public void desdeArchivo(String file)
     {
         clearAcciones();
         try
@@ -106,7 +106,7 @@ public class EjecutarAcciones
         }
     }
     
-    void ejecutarAcciones()
+    private void ejecutarAcciones()
     {
         // orden de ejecucion de acciones: del -> new -> mod  
         for(Sitio s : delSitios) exeDelSitio(s);
