@@ -27,7 +27,7 @@ public class HTMLinador
     {
         String ruta = Ruta.cms+idPagina;
         
-        String notFound = "<!DOCTYPE html><html><head></head><body><h1>PAGINA NO ENCONTRADA</h1></body></html>";
+        String notFound = "<!DOCTYPE html><html><head></head><body><img src=\"./404.png\" height=\"300\" alt=\"no encontrado\"/><h1>PAGINA NO ENCONTRADA</h1></body></html>";
 
         try
         {
@@ -38,11 +38,14 @@ public class HTMLinador
             boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
             System.out.println("isPagina="+isPagina);
             if(!isPagina) return notFound;
-            
+                        
             StringBuilder html = new StringBuilder();
             html.append("<!DOCTYPE html><html><head></head><body>");
             
             Pagina miPagina = (Pagina) rawPagina;
+            
+            miPagina.addVisita();
+            MiArchivo.writeObjet(ruta, miPagina);
  
             Map<String,Object> componentes = miPagina.getComponentes();
             Set<String> idsComponentes = miPagina.getComponentes().keySet();

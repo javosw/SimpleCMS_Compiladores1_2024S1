@@ -44,6 +44,7 @@ public class Pagina implements Serializable
         paginas = new HashSet<>();
         componentes = new HashMap<>();
         etiquetas = new HashSet<>();
+        visitas = 0;
     }
 
     public Pagina(String idPage)
@@ -184,5 +185,22 @@ public class Pagina implements Serializable
     {
         this.idSite = idSite;
     }
+    
+    
+    
+    
+    
+    // PARA ESTADISTICAS
+    int visitas;
+
+    public void addVisita()
+    {
+        visitas = visitas + 1;
+    }
+    public int getVisitas()
+    {
+        return visitas;
+    }
+    
     
 }
