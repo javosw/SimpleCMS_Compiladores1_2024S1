@@ -330,7 +330,7 @@ class CUP$ParserComandos$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()).right;
 		ArrayList<String> w1 = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$ParserComandos$stack.peek()).value;
-		 RESULT= new Par(Indicador.SQ_SITE_LIST,w1); 
+		 RESULT= new Par(Indicador.SQ_ARG_SITES,w1); 
               CUP$ParserComandos$result = parser.getSymbolFactory().newSymbol("argumentos",3, ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()), RESULT);
             }
           return CUP$ParserComandos$result;
@@ -342,7 +342,7 @@ class CUP$ParserComandos$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()).right;
 		ArrayList<ArrayList<String>> w1 = (ArrayList<ArrayList<String>>)((java_cup.runtime.Symbol) CUP$ParserComandos$stack.peek()).value;
-		 RESULT= new Par(Indicador.SQ_PATH_LIST,w1); 
+		 RESULT= new Par(Indicador.SQ_ARG_PATHS,w1); 
               CUP$ParserComandos$result = parser.getSymbolFactory().newSymbol("argumentos",3, ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()), RESULT);
             }
           return CUP$ParserComandos$result;
@@ -354,7 +354,7 @@ class CUP$ParserComandos$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()).right;
 		String w1 = (String)((java_cup.runtime.Symbol) CUP$ParserComandos$stack.peek()).value;
-		 RESULT= new Par(Indicador.SQ_SITE,w1); 
+		 RESULT= new Par(Indicador.SQ_ARG_SITE,w1); 
               CUP$ParserComandos$result = parser.getSymbolFactory().newSymbol("argumentos",3, ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()), RESULT);
             }
           return CUP$ParserComandos$result;
@@ -366,7 +366,7 @@ class CUP$ParserComandos$actions {
 		int w1left = ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()).left;
 		int w1right = ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()).right;
 		ArrayList<String> w1 = (ArrayList<String>)((java_cup.runtime.Symbol) CUP$ParserComandos$stack.peek()).value;
-		 RESULT= new Par(Indicador.SQ_PATH,w1); 
+		 RESULT= new Par(Indicador.SQ_ARG_PATH,w1); 
               CUP$ParserComandos$result = parser.getSymbolFactory().newSymbol("argumentos",3, ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()), ((java_cup.runtime.Symbol)CUP$ParserComandos$stack.peek()), RESULT);
             }
           return CUP$ParserComandos$result;

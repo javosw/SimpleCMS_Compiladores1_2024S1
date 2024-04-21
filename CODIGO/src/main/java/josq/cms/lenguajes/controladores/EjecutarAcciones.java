@@ -21,26 +21,6 @@ import josq.cms.web.modelos.Sitio;
  */
 public class EjecutarAcciones
 {
-    public final static StringBuilder logSintaxis = new StringBuilder();
-    public final static StringBuilder logConSentido = new StringBuilder();
-    public final static StringBuilder logSinSentido = new StringBuilder();
-
-    public static void clearLogs()
-    {
-        logSintaxis.delete(0, logSintaxis.length());
-        logConSentido.delete(0, logConSentido.length());
-        logSinSentido.delete(0, logSinSentido.length());
-    }
-    
-    ArrayList<Sitio> newSitios;
-    ArrayList<Sitio> delSitios;
-    ArrayList<Pagina> newPaginas;
-    ArrayList<Pagina> delPaginas;
-    ArrayList<Pagina> modPaginas;
-    ArrayList<Componente> newComponentes;
-    ArrayList<Componente> modComponentes;
-    ArrayList<Componente> delComponentes;
-
     public EjecutarAcciones()
     {
         this.newSitios = new ArrayList<>();
@@ -52,7 +32,16 @@ public class EjecutarAcciones
         this.modComponentes = new ArrayList<>();
         this.delComponentes = new ArrayList<>();
     }
-
+    
+    ArrayList<Sitio> newSitios;
+    ArrayList<Sitio> delSitios;
+    ArrayList<Pagina> newPaginas;
+    ArrayList<Pagina> delPaginas;
+    ArrayList<Pagina> modPaginas;
+    ArrayList<Componente> newComponentes;
+    ArrayList<Componente> modComponentes;
+    ArrayList<Componente> delComponentes;
+    
     private void clearAcciones()
     {
         newSitios.clear();
@@ -65,7 +54,7 @@ public class EjecutarAcciones
         modComponentes.clear();
         delComponentes.clear();
     }
-    
+
     public void desdeString(String texto)
     {
         clearAcciones();
@@ -74,7 +63,7 @@ public class EjecutarAcciones
             System.out.println("@procesarDesdeString > Procesar.procesarDesdeString: ");
             ArrayList<Accion> acciones = Procesar.accionesDesdeString(texto);
             System.out.println("@procesarDesdeString > setWebModel");
-            for(Accion a : acciones) getWebModel(a);
+            for(Accion a : acciones) model(a);
             System.out.println("@procesarDesdeString > ejecutarAcciones");
             ejecutarAcciones();
             System.out.println("@procesarDesdeString <");
@@ -94,7 +83,7 @@ public class EjecutarAcciones
             System.out.println("@procesarDesdeArchivo > Procesar.accionesDesdeArchivo: ");
             ArrayList<Accion> acciones = Procesar.accionesDesdeArchivo(file);
             System.out.println("@procesarDesdeArchivo > setWebModel");
-            for(Accion a : acciones) getWebModel(a);
+            for(Accion a : acciones) model(a);
             System.out.println("@procesarDesdeArchivo > ejecutarAcciones");
             ejecutarAcciones();
             System.out.println("@procesarDesdeArchivo <");
@@ -106,20 +95,9 @@ public class EjecutarAcciones
         }
     }
     
-    private void ejecutarAcciones()
-    {
-        // orden de ejecucion de acciones: del -> new -> mod  
-        for(Sitio s : delSitios) exeDelSitio(s);
-        for(Sitio s : newSitios) exeNewSitio(s);
-        for(Pagina p : delPaginas) exeDelPagina(p);
-        for(Pagina p : newPaginas) exeNewPagina(p);
-        for(Pagina p : modPaginas) exeModPagina(p);
-        for(Componente c : delComponentes) exeDelComponente(c);
-        for(Componente c : newComponentes) exeNewComponente(c);
-        for(Componente c : modComponentes) exeModComponente(c);
-    }
-    
-    private void getWebModel(Accion miAccion)
+    // aqui se extrae la informacion util de una accion y se guarda en un modelo,
+    // luego el modelo se agrega en una lista de modelos que tienen la misma accion
+    private void model(Accion miAccion)
     {
         Indicador tipo = miAccion.getTipo();
         
@@ -159,6 +137,19 @@ public class EjecutarAcciones
                 break;
         }
     }
+    private void ejecutarAcciones()
+    {
+        // orden de ejecucion de acciones: del -> new -> mod  
+        for(Sitio s : delSitios) exeDelSitio(s);
+        for(Sitio s : newSitios) exeNewSitio(s);
+        for(Pagina p : delPaginas) exeDelPagina(p);
+        for(Pagina p : newPaginas) exeNewPagina(p);
+        for(Pagina p : modPaginas) exeModPagina(p);
+        for(Componente c : delComponentes) exeDelComponente(c);
+        for(Componente c : newComponentes) exeNewComponente(c);
+        for(Componente c : modComponentes) exeModComponente(c);
+    }
+    
     
     // FINALIZADO
     private void exeNewSitio(Sitio miSitio)
@@ -430,4 +421,19 @@ public class EjecutarAcciones
         }
     }
 
+    
+    
+    
+    // logs
+    
+    public final static StringBuilder logSintaxis = new StringBuilder();
+    public final static StringBuilder logConSentido = new StringBuilder();
+    public final static StringBuilder logSinSentido = new StringBuilder();
+
+    public static void clearLogs()
+    {
+        logSintaxis.delete(0, logSintaxis.length());
+        logConSentido.delete(0, logConSentido.length());
+        logSinSentido.delete(0, logSinSentido.length());
+    }
 }

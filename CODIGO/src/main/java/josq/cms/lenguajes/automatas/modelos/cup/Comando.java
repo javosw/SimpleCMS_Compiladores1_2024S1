@@ -49,22 +49,22 @@ public class Comando
         
         if(usaSite)
         {
-            boolean esOperandoCorrecto = operandoTipo == Indicador.SQ_SITE;
+            boolean esOperandoCorrecto = operandoTipo == Indicador.SQ_ARG_SITE;
             if(!esOperandoCorrecto) operador = Indicador.ERROR;
         }
         else if(usaSiteList)
         {
-            boolean esOperandoCorrecto = operandoTipo == Indicador.SQ_SITE_LIST;
+            boolean esOperandoCorrecto = operandoTipo == Indicador.SQ_ARG_SITES;
             if(!esOperandoCorrecto) operador = Indicador.ERROR;
         }
         else if(usaPath)
         {
-            boolean esOperandoCorrecto = operandoTipo == Indicador.SQ_PATH;
+            boolean esOperandoCorrecto = operandoTipo == Indicador.SQ_ARG_PATH;
             if(!esOperandoCorrecto) operador = Indicador.ERROR;
         }
         else if(usaPathList)
         {
-            boolean esOperandoCorrecto = operandoTipo == Indicador.SQ_PATH_LIST;
+            boolean esOperandoCorrecto = operandoTipo == Indicador.SQ_ARG_PATHS;
             if(!esOperandoCorrecto) operador = Indicador.ERROR;
         }
         else { operador = Indicador.ERROR; }

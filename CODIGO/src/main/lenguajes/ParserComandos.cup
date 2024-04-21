@@ -88,10 +88,10 @@ operador ::=
 ;
 
 argumentos ::=          
-    idList:w1    {: RESULT= new Par(Indicador.SQ_SITE_LIST,w1); :}
-    | pathList:w1  {: RESULT= new Par(Indicador.SQ_PATH_LIST,w1); :}
-    | idWebModel:w1      {: RESULT= new Par(Indicador.SQ_SITE,w1); :}
-    | path:w1      {: RESULT= new Par(Indicador.SQ_PATH,w1); :}
+    idList:w1    {: RESULT= new Par(Indicador.SQ_ARG_SITES,w1); :}
+    | pathList:w1  {: RESULT= new Par(Indicador.SQ_ARG_PATHS,w1); :}
+    | idWebModel:w1      {: RESULT= new Par(Indicador.SQ_ARG_SITE,w1); :}
+    | path:w1      {: RESULT= new Par(Indicador.SQ_ARG_PATH,w1); :}
 ;
 
 idList ::= 

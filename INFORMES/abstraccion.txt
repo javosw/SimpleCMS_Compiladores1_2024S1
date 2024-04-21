@@ -302,6 +302,11 @@ operadores
 			consultar PAGINAS_POPULARES "sitio2";
 			consultar COMPONENTE <clase> "sitio1.pagina1";
 				<clase> es uno de: TODOS, TITULO, MENU, IMAGEN, VIDEO, PARRAFO
+		modelos
+			viewsPage(string[] idModelList)
+			popPage(string idModel)
+			viewsPage(string[][] pathList)
+			widgetX(string[] path)
 
 
 %#%#%#%#%#%#%#%#%# SEMANTICA %#%#%#%#%#%#%#%#%#
