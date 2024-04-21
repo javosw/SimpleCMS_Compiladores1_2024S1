@@ -4,11 +4,21 @@
  */
 package josq.cms.lenguajes.controladores;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import josq.cms.archivos.MiArchivo;
+import josq.cms.archivos.Ruta;
 import josq.cms.lenguajes.automatas.modelos.Indicador;
 import josq.cms.lenguajes.automatas.modelos.cup.Comando;
+import josq.cms.web.modelos.Pagina;
+import josq.cms.web.modelos.componentes.Imagen;
+import josq.cms.web.modelos.componentes.Menu;
+import josq.cms.web.modelos.componentes.Parrafo;
+import josq.cms.web.modelos.componentes.Titulo;
+import josq.cms.web.modelos.componentes.Video;
 
 /**
  *
@@ -60,7 +70,8 @@ public class EjecutarComandos
         try
         {
             ArrayList<Comando> comandos = Procesar.comandosDesdeString(texto);
-            for(Comando c : comandos) modelar(c);
+            for(Comando c : comandos) abstraerComando(c);
+            iniciarEjecucion();
         }
         catch (Exception ex)
         {
@@ -68,7 +79,7 @@ public class EjecutarComandos
         }
     }
 
-    private void modelar(Comando miComando)
+    private void abstraerComando(Comando miComando)
     {
         Indicador tipo = miComando.getOperador();
         switch (tipo)
@@ -101,6 +112,18 @@ public class EjecutarComandos
                 modelWidgetParrafo(miComando);
                 break;
         }
+    }
+    void iniciarEjecucion()
+    {
+        for(String s : viewsSite) exeSiteViews(s);
+        for(String s : viewsPage) exePageViews(s);
+        for(String s : widgetAll) exeWidgetAll(s);
+        for(String s : widgetMenu) exeWidgetMenu(s);
+        for(String s : widgetParrafo) exeWidgetParrafo(s);
+        for(String s : widgetImagen) exeWidgetImagen(s);
+        for(String s : widgetVideo) exeWidgetVideo(s);
+        for(String s : widgetTitulo) exeWidgetTitulo(s);
+        //for(String s : popPage)        
     }
     
     private void modelViewsSite(Comando miComando)
@@ -177,4 +200,238 @@ public class EjecutarComandos
         logSinSentido.delete(0, logSinSentido.length());
     }
 
+    void exePageViews(String idPage)
+    {
+        String ruta = Ruta.cms+idPage;
+        try
+        {
+            File modelFile = new File(ruta);
+            if (!modelFile.exists()) throw new Exception(ruta);
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+
+            if(!isPagina) throw new Exception(ruta);
+
+            Pagina miPagina = (Pagina) rawPagina;
+            
+            logConSentido.append("@exePageViews: ").append(idPage).append(" =");
+            logConSentido.append(miPagina.getVisitas()).append("\n");
+        }
+        catch (Exception e)
+        {
+            logSinSentido.append("@exeViewsPage: ").append(e.getMessage()).append("\n");
+        }
+    }
+    
+    void exeWidgetAll(String idPage)
+    {
+        String ruta = Ruta.cms+idPage;
+        try
+        {
+            File modelFile = new File(ruta);
+            if (!modelFile.exists()) throw new Exception(ruta);
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+
+            if(!isPagina) throw new Exception(ruta);
+
+            Pagina miPagina = (Pagina) rawPagina;
+            
+            Map<String,Object> rawWidgets = miPagina.getComponentes();
+            Set<String> ids = rawWidgets.keySet();
+            logConSentido.append("@exeWidgetAll: ").append(idPage).append(" =").append(ids.size()).append("\n");
+        }
+        catch (Exception e)
+        {
+            logSinSentido.append("@exeWidgetAll: ").append(e.getMessage()).append("\n");
+        }
+    }
+    
+    
+    void exeWidgetTitulo(String idPage)
+    {
+        String ruta = Ruta.cms+idPage;
+        try
+        {
+            File modelFile = new File(ruta);
+            if (!modelFile.exists()) throw new Exception(ruta);
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+
+            if(!isPagina) throw new Exception(ruta);
+
+            Pagina miPagina = (Pagina) rawPagina;
+            
+            int contador = 0;
+            Map<String,Object> rawWidgets = miPagina.getComponentes();
+            Set<String> ids = rawWidgets.keySet();
+            for(String id : ids)
+            {
+                if (rawWidgets.get(id) instanceof Titulo) contador = contador + 1;
+            }
+            logConSentido.append("@exeWidgetTitle: ").append(idPage).append(" =").append(contador).append("\n");
+        }
+        catch (Exception e)
+        {
+            logSinSentido.append("@exeWidgetTitle: ").append(e.getMessage()).append("\n");
+        }
+    }
+
+    void exeWidgetParrafo(String idPage)
+    {
+        String ruta = Ruta.cms+idPage;
+        try
+        {
+            File modelFile = new File(ruta);
+            if (!modelFile.exists()) throw new Exception(ruta);
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+
+            if(!isPagina) throw new Exception(ruta);
+
+            Pagina miPagina = (Pagina) rawPagina;
+            
+            int contador = 0;
+            Map<String,Object> rawWidgets = miPagina.getComponentes();
+            Set<String> ids = rawWidgets.keySet();
+            for(String id : ids)
+            {
+                if (rawWidgets.get(id) instanceof Parrafo) contador = contador + 1;
+            }
+            logConSentido.append("@exeWidgetParrafo: ").append(idPage).append(" =").append(contador).append("\n");
+        }
+        catch (Exception e)
+        {
+            logSinSentido.append("@exeWidgetParrafo: ").append(e.getMessage()).append("\n");
+        }
+    }
+    void exeWidgetMenu(String idPage)
+    {
+        String ruta = Ruta.cms+idPage;
+        try
+        {
+            File modelFile = new File(ruta);
+            if (!modelFile.exists()) throw new Exception(ruta);
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+
+            if(!isPagina) throw new Exception(ruta);
+
+            Pagina miPagina = (Pagina) rawPagina;
+            
+            int contador = 0;
+            Map<String,Object> rawWidgets = miPagina.getComponentes();
+            Set<String> ids = rawWidgets.keySet();
+            for(String id : ids)
+            {
+                if (rawWidgets.get(id) instanceof Menu) contador = contador + 1;
+            }
+            logConSentido.append("@exeWidgetMenu: ").append(idPage).append(" =").append(contador).append("\n");
+        }
+        catch (Exception e)
+        {
+            logSinSentido.append("@exeWidgetMenu: ").append(e.getMessage()).append("\n");
+        }
+    }
+    void exeWidgetImagen(String idPage)
+    {
+        String ruta = Ruta.cms+idPage;
+        try
+        {
+            File modelFile = new File(ruta);
+            if (!modelFile.exists()) throw new Exception(ruta);
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+
+            if(!isPagina) throw new Exception(ruta);
+
+            Pagina miPagina = (Pagina) rawPagina;
+            
+            int contador = 0;
+            Map<String,Object> rawWidgets = miPagina.getComponentes();
+            Set<String> ids = rawWidgets.keySet();
+            for(String id : ids)
+            {
+                if (rawWidgets.get(id) instanceof Imagen) contador = contador + 1;
+            }
+            logConSentido.append("@exeWidgetImagen: ").append(idPage).append(" =").append(contador).append("\n");
+        }
+        catch (Exception e)
+        {
+            logSinSentido.append("@exeWidgetImagen: ").append(e.getMessage()).append("\n");
+        }
+    }
+    void exeWidgetVideo(String idPage)
+    {
+        String ruta = Ruta.cms+idPage;
+        try
+        {
+            File modelFile = new File(ruta);
+            if (!modelFile.exists()) throw new Exception(ruta);
+
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+
+            if(!isPagina) throw new Exception(ruta);
+
+            Pagina miPagina = (Pagina) rawPagina;
+            
+            int contador = 0;
+            Map<String,Object> rawWidgets = miPagina.getComponentes();
+            Set<String> ids = rawWidgets.keySet();
+            for(String id : ids)
+            {
+                if (rawWidgets.get(id) instanceof Video) contador = contador + 1;
+            }
+            logConSentido.append("@exeWidgetVideo: ").append(idPage).append(" =").append(contador).append("\n");
+        }
+        catch (Exception e)
+        {
+            logSinSentido.append("@exeWidgetVideo: ").append(e.getMessage()).append("\n");
+        }
+    }
+    
+    private void exeSiteViews(String idSite)
+    {
+        Integer contador = 0;
+        String homePage = "~"+idSite;        
+        collectViews(homePage, contador);
+        logConSentido.append("@exeSiteViews: ").append(idSite).append(" =").append(contador).append("\n");
+    }
+    
+    private void collectViews(String idPage, Integer contador)
+    {
+        String ruta = Ruta.cms+idPage;
+        try
+        {
+            File filePagina = new File(ruta); 
+            if (!filePagina.exists()) throw new Exception(ruta);
+            
+            Object rawPagina = MiArchivo.readObject(ruta);
+            boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
+            
+            // si el objeto leido no es una pagina, puede que sea un sitio: NO ELIMINAR EL ARCHIVO
+            if(!isPagina) throw new Exception(ruta);
+            
+            Pagina miPagina = (Pagina)rawPagina;
+            Set<String> subPaginas = miPagina.getPaginas();
+            
+            contador = contador + miPagina.getVisitas();
+            
+            for(String p : subPaginas) collectViews(p,contador);
+            
+            //EjecutarAcciones.logConSentido.append("@pageViews: ").append(ruta).append("\n");
+        }
+        catch (Exception ex)
+        {
+            EjecutarAcciones.logSinSentido.append("@collectViews: ").append(ex.getMessage()).append("\n");
+        }
+    }
+    
 }

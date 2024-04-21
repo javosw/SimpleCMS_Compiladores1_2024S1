@@ -117,10 +117,10 @@ import josq.cms.lenguajes.controladores.EjecutarAcciones;
 
 // macros para regex
 
-InvisiblesVertical    =  \r|\n|\r\n
-InvisiblesHorizontal  =  [ \t\f]
-Invisibles            =  ({InvisiblesHorizontal} | {InvisiblesVertical})+
-_                     =  {Invisibles}
+InvisibleVertical    =  \r|\n|\r\n
+InvisibleHorizontal  =  [ \t\f]
+Invisible            =  {InvisibleHorizontal} | {InvisibleVertical}
+_                    =  {Invisible}
 
 pre  =  _ | - | \$
 id   =  {pre}([a-zA-Z0-9]|{pre})*
@@ -129,12 +129,13 @@ id   =  {pre}([a-zA-Z0-9]|{pre})*
 //idComponente 
 //idUsuario
 
-miTexto  =  [a-zA-Z0-9]({_}|[a-zA-Z0-9]+)+
+miChar      =  [a-zA-Z0-9\:\;\,\.\!\@\#\$\%\&\+\*\/\-\_\(\)]
+miTexto     =  {_}*({miChar}+{_}*)+
 //miTitulo
 
 miNumero      =  [1-9][0-9]*
 miColor       =  #[0-9a-fA-F]{6}
-miURL         =  ((http|https)\:\/\/)?[a-zA-Z0-9\.\/]+
+miURL         =  [a-zA-Z0-9\:\.\/\?\=]+
 miFecha       =  [0-9]{4}\-[0-9]{2}\-[0-9]{2}
 miEtiqueta    =  [a-zA-Z0-9]+
 
@@ -229,7 +230,7 @@ miEtiqueta    =  [a-zA-Z0-9]+
     {miFecha}       { return symbol("",ParserAccionesSym.MI_FECHA, yytext()); }
 }
 <MI_TEXTO> {
-    {_}?{miTexto}    { return symbol("",ParserAccionesSym.MI_TEXTO, yytext()); }
+    {miTexto}    { return symbol("",ParserAccionesSym.MI_TEXTO, yytext()); }
 }
 <MI_COLOR> {
     {miColor}       { return symbol("",ParserAccionesSym.MI_COLOR, yytext()); }
@@ -241,7 +242,7 @@ miEtiqueta    =  [a-zA-Z0-9]+
     {miURL}         { return symbol("",ParserAccionesSym.MI_URL, yytext()); }
 }
 <MI_ETIQUETA>{
-{miEtiqueta}        { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.MI_ETIQUETA, yytext()); }
+{miEtiqueta}        { yybegin(YYINITIAL); return symbol("",ParserAccionesSym.MI_ETIQUETA, yytext().toLowerCase()); }
 }
 <MIS_ETIQUETAS> {
 {miEtiqueta}        { return symbol("",ParserAccionesSym.MI_ETIQUETA, yytext()); }
@@ -258,7 +259,7 @@ miEtiqueta    =  [a-zA-Z0-9]+
 \=   { return symbol("",ParserAccionesSym.IGUAL); }
 
 // ignorados
-{Invisibles}  { }
+{Invisible}+  { }
 
 // error
 [^]  { log("@lexer: ").append(getPunto().toString()).append("\n"); return symbol("",ParserAccionesSym.error); }

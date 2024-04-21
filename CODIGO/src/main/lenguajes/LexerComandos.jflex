@@ -70,10 +70,10 @@ import josq.cms.lenguajes.controladores.EjecutarComandos;
 
 // macros para regex
 
-InvisiblesVertical    =  \r|\n|\r\n
-InvisiblesHorizontal  =  [ \t\f]
-Invisibles            =  ({InvisiblesHorizontal} | {InvisiblesVertical})+
-_                     =  {Invisibles}
+InvisibleVertical    =  \r|\n|\r\n
+InvisibleHorizontal  =  [ \t\f]
+Invisible            =  {InvisibleHorizontal} | {InvisibleVertical}
+_                    =  {Invisible}
 
 pre    =  _ | - | \$
 miID   =  {pre}([a-zA-Z0-9]|{pre})*
@@ -119,7 +119,7 @@ video                =  [vV][iI][dD][eE][oO]
 \; { return symbol("",ParserComandosSym.PUNCOM); }
 
 // ignorados
-{Invisibles}  { }
+{Invisible}  { }
 
 // error
 [^]  { log("@lexer: ").append(getPunto().toString()).append("\n"); return symbol("",ParserComandosSym.error); }

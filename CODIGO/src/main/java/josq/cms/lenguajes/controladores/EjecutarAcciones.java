@@ -60,18 +60,13 @@ public class EjecutarAcciones
         clearAcciones();
         try
         {
-            System.out.println("@procesarDesdeString > Procesar.procesarDesdeString: ");
             ArrayList<Accion> acciones = Procesar.accionesDesdeString(texto);
-            System.out.println("@procesarDesdeString > setWebModel");
-            for(Accion a : acciones) model(a);
-            System.out.println("@procesarDesdeString > ejecutarAcciones");
-            ejecutarAcciones();
-            System.out.println("@procesarDesdeString <");
+            for(Accion a : acciones) abstraerAccion(a);
+            iniciarEjecucion();
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logSinSentido.append("@procesarDesdeString\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logSinSentido.append("@EjecutarAcciones.desdeString: ").append(ex.getMessage()).append("\n");
         }
     }
 
@@ -80,24 +75,19 @@ public class EjecutarAcciones
         clearAcciones();
         try
         {
-            System.out.println("@procesarDesdeArchivo > Procesar.accionesDesdeArchivo: ");
             ArrayList<Accion> acciones = Procesar.accionesDesdeArchivo(file);
-            System.out.println("@procesarDesdeArchivo > setWebModel");
-            for(Accion a : acciones) model(a);
-            System.out.println("@procesarDesdeArchivo > ejecutarAcciones");
-            ejecutarAcciones();
-            System.out.println("@procesarDesdeArchivo <");
+            for(Accion a : acciones) abstraerAccion(a);
+            iniciarEjecucion();
         }
         catch (Exception ex)
         {
-            EjecutarAcciones.logSinSentido.append("@procesarDesdeArchivo\n");
-            System.out.println(ex.getMessage());
+            EjecutarAcciones.logSinSentido.append("@EjecutarAcciones.desdeArchivo: ").append(ex.getMessage()).append("\n");
         }
     }
     
     // aqui se extrae la informacion util de una accion y se guarda en un modelo,
     // luego el modelo se agrega en una lista de modelos que tienen la misma accion
-    private void model(Accion miAccion)
+    private void abstraerAccion(Accion miAccion)
     {
         Indicador tipo = miAccion.getTipo();
         
@@ -137,7 +127,7 @@ public class EjecutarAcciones
                 break;
         }
     }
-    private void ejecutarAcciones()
+    private void iniciarEjecucion()
     {
         // orden de ejecucion de acciones: del -> new -> mod  
         for(Sitio s : delSitios) exeDelSitio(s);
@@ -343,12 +333,13 @@ public class EjecutarAcciones
             boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
             
             if(!isPagina) throw new Exception(ruta);
-            
             Pagina miPagina = (Pagina)rawPagina;
+            
+            String idComp = miComp.getIdComponente();            
             Set<String> idsComponentes = miPagina.getComponentes().keySet();
-            if (idsComponentes.contains(miComp.getIdComponente())) throw new Exception(ruta);
+            if (idsComponentes.contains(idComp)) throw new Exception(" @widget: "+idComp+": "+ruta);
 
-            miPagina.addComponente(miComp.getIdComponente(), miComp.getWidget());
+            miPagina.addComponente(idComp, miComp.getWidget());
 
             binPage.delete();
             MiArchivo.writeObjet(ruta, miPagina);
