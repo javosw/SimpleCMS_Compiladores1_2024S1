@@ -129,7 +129,7 @@ id   =  {pre}([a-zA-Z0-9]|{pre})*
 //idComponente 
 //idUsuario
 
-miChar      =  [a-zA-Z0-9\:\;\,\.\!\@\#\$\%\&\+\*\/\-\_\(\)\<\>\{\}\[\]]
+miChar      =  [a-zA-Z0-9\:\;\,\.\!\@\#\%\&\+\*\(\)]
 miTexto     =  {_}*({miChar}+{_}*)+
 //miTitulo
 
