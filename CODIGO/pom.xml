@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>josq</groupId>
     <artifactId>basicCMS-backend</artifactId>
-    <version>2024-abril-1</version>
+    <version>2024.04.22</version>
     <packaging>war</packaging>
     <name>basicCMS-backend</name>
     

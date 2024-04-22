@@ -23,11 +23,13 @@ import josq.cms.web.modelos.componentes.Video;
  */
 public class HTMLinador
 {
+    private static final String CONTEXT = "basicCMS";
+    
     public static String getWebPage(String idPagina)
     {
         String ruta = Ruta.cms+idPagina;
         
-        String notFound = "<!DOCTYPE html><html><head></head><body><img src=\"./404.png\" height=\"300\" alt=\"no encontrado\"/><h1>PAGINA NO ENCONTRADA</h1></body></html>";
+        String notFound = "<!DOCTYPE html><html><head></head><body><img src=\"./404.png\" height=\"300\" alt=\"no encontrado\"/><h1>Pagina NO encontrada. :(</h1></body></html>";
 
         try
         {
@@ -93,7 +95,7 @@ public class HTMLinador
             for (String p : paginas)
             {
                 menu.append("<li>");
-                menu.append("<a href=\"/cms-web-backend/paginas?id=").append(p).append("\">").append(p).append("</a>");
+                menu.append("<a href=\"/").append(CONTEXT).append("/paginas?id=").append(p).append("\">").append(p).append("</a>");
                 menu.append("</li>");
             }                        
             menu.append("</ul>");
