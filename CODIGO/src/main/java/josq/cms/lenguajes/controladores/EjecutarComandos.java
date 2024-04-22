@@ -399,19 +399,19 @@ public class EjecutarComandos
     
     private void exeSiteViews(String idSite)
     {
-        Integer contador = 0;
+        Contador views = new Contador();
         String homePage = "~"+idSite;        
-        collectViews(homePage, contador);
-        logConSentido.append("@exeSiteViews: ").append(idSite).append(" =").append(contador).append("\n");
+        collectViews(homePage, views);
+        logConSentido.append("@exeSiteViews: ").append(idSite).append(" =").append(views.getViews()).append("\n");
     }
     
-    private void collectViews(String idPage, Integer contador)
+    private void collectViews(String idPage, Contador views)
     {
         String ruta = Ruta.cms+idPage;
         try
         {
-            File filePagina = new File(ruta); 
-            if (!filePagina.exists()) throw new Exception(ruta);
+            File bin = new File(ruta); 
+            if (!bin.exists()) throw new Exception(ruta);
             
             Object rawPagina = MiArchivo.readObject(ruta);
             boolean isPagina = rawPagina != null && rawPagina instanceof Pagina;
@@ -420,11 +420,11 @@ public class EjecutarComandos
             if(!isPagina) throw new Exception(ruta);
             
             Pagina miPagina = (Pagina)rawPagina;
+            
+            views.addViews(miPagina.getVisitas());
+            
             Set<String> subPaginas = miPagina.getPaginas();
-            
-            contador = contador + miPagina.getVisitas();
-            
-            for(String p : subPaginas) collectViews(p,contador);
+            for(String p : subPaginas) collectViews(p,views);
             
             //EjecutarAcciones.logConSentido.append("@pageViews: ").append(ruta).append("\n");
         }

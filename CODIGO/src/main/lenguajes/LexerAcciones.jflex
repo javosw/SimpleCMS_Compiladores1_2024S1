@@ -129,7 +129,7 @@ id   =  {pre}([a-zA-Z0-9]|{pre})*
 //idComponente 
 //idUsuario
 
-miChar      =  [a-zA-Z0-9\:\;\,\.\!\@\#\$\%\&\+\*\/\-\_\(\)]
+miChar      =  [a-zA-Z0-9\:\;\,\.\!\@\#\$\%\&\+\*\/\-\_\(\)\<\>\{\}\[\]]
 miTexto     =  {_}*({miChar}+{_}*)+
 //miTitulo
 
@@ -138,6 +138,10 @@ miColor       =  #[0-9a-fA-F]{6}
 miURL         =  [a-zA-Z0-9\:\.\/\?\=]+
 miFecha       =  [0-9]{4}\-[0-9]{2}\-[0-9]{2}
 miEtiqueta    =  [a-zA-Z0-9]+
+
+
+nombre    =  [nN][oO][mM][bB][rR][eE]
+valor     =  [vV][aA][lL][oO][rR]
 
 %%
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%
@@ -155,13 +159,13 @@ miEtiqueta    =  [a-zA-Z0-9]+
 "etiquetas"   { return symbol("",ParserAccionesSym.ETIQS); }
 "etiqueta"    { return symbol("",ParserAccionesSym.ETIQ); }
 // etiqueta.valor
-"valor"       { yybegin(MI_ETIQUETA); return symbol("",ParserAccionesSym.VALOR); }
+{valor}       { yybegin(MI_ETIQUETA); return symbol("",ParserAccionesSym.VALOR); }
 }
 
 
 <MI_ACCION, MI_PARAMETRO, MI_ATRIBUTO> {
 // nodo.nombre
-"nombre" { return symbol("",ParserAccionesSym.NOMBRE); }
+{nombre} { return symbol("",ParserAccionesSym.NOMBRE); }
 }
 
 <MI_ACCION>{

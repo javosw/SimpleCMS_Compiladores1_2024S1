@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>josq</groupId>
     <artifactId>basicCMS</artifactId>
-    <version>2024-abril-1</version>
+    <version>2024.04.22</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>11</maven.compiler.source>
@@ -72,6 +72,25 @@
                 <version>3.8.0</version>
                 <configuration>
                     <release>11</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <!-- mvn clean compile assembly:single -->
+                <!-- mvn package -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>josq.cms.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <!-- "-jar-with-dependencies" suffix -->
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                 </configuration>
             </plugin>
             <plugin>
